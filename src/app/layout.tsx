@@ -3,7 +3,7 @@ import "./globals.scss";
 import Sidebar from "@/app/shared/sidebar";
 import Image from "next/image";
 import { BiSidebar, BiArrowBack, BiSearch } from "react-icons/bi";
-import { IoNotifications } from "react-icons/io5";
+import { IoChevronDown, IoNotifications } from "react-icons/io5";
 
 import { Inter } from "next/font/google";
 
@@ -49,12 +49,13 @@ export default function RootLayout({
                                 </div>
                             </div>
                             <div className="flex justify-center items-center gap-5">
-                                <button>
-                                    <IoNotifications className="fill-gray-600" />
+                                <button className="flex justify-center items-center rounded-full hover:bg-blue-100 p-3 group transition duration-150 ease-in-out">
+                                    <IoNotifications className="fill-gray-600 group-hover:fill-blue-700" />
                                 </button>
                                 <div className="flex items-center gap-2">
                                     <Image src={imagen} alt="Description" width={40} height={40} className="bg-gray-300 rounded-full border border-blue-050 shadow-sm" />
                                     <p className="font-inter text-sm font-medium text-gray-700">Isael Diroche</p>
+                                    <IoChevronDown />
                                 </div>
                             </div>
                         </div>
