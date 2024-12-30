@@ -61,6 +61,7 @@ export default function Home() {
             });
             setProducts([...products, response.data]);
             setNewProduct({
+                image_url: null,
                 details: '',
                 category: 'none',
                 price: 0,
@@ -75,8 +76,6 @@ export default function Home() {
         }
     };
 
-
-
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -90,101 +89,107 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Dirochéck - Inventory</h1>
-            <ul>
-                {products.map((product, index) => (
-                    <li key={index}>
-                        {product.image_url && (
-                            <img
-                                src={product.image_url}
-                                alt={product.details}
-                                className="w-32 h-32 object-cover"
-                            />
-                        )}
-                        {product.details} - {product.price} - {product.category}
+        <>
+            <div className="container mx-auto p-4">
+                <h1 className="text-4xl font-bold mb-6 text-center">Dirochéck - Inventory</h1>
+
+                <ul className="grid grid-cols-4 gap-4">
+                    <li className='flex border-b-2 border-gray-300 col-span-4'>
+                        <div className="py-2 px-4 font-bold font-inter">Cantidad</div>
+                        <div className="py-2 px-4 font-bold font-inter">Detalles</div>
+                        <div className="py-2 px-4 font-bold font-inter">Costo</div>
+                        <div className="py-2 px-4 font-bold font-inter">Total</div>
                     </li>
-                ))}
-            </ul>
-            <form onSubmit={handleSubmit} className="mb-4">
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Details</label>
-                    <input
-                        type="text"
-                        name="details"
-                        value={newProduct.details}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Category</label>
-                    <input
-                        type="text"
-                        name="category"
-                        value={newProduct.category}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Price</label>
-                    <input
-                        type="number"
-                        name="price"
-                        value={newProduct.price}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Stock</label>
-                    <input
-                        type="number"
-                        name="stock"
-                        value={newProduct.stock}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Unit Type</label>
-                    <select
-                        name="unit_type"
-                        value={newProduct.unit_type}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                    {products.map((product, index) => (
+                        <li key={index} className="flex border-b-2 border-gray-300 text-gray-600 hover:bg-gray-100 text-base col-span-4">
+                            <div className="py-2 px-4 font-medium font-inter">{product.stock}</div>
+                            <div className="py-2 px-4 font-medium font-inter">{product.details}</div>
+                            <div className="py-2 px-4 font-medium font-inter">{product.price}</div>
+                            <div className="py-2 px-4 font-inter text-gray-900 font-bold">${product.total}</div>
+                        </li>
+                    ))}
+                </ul>
+                <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Details</label>
+                        <input
+                            type="text"
+                            name="details"
+                            value={newProduct.details || ''}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Category</label>
+                        <input
+                            type="text"
+                            name="category"
+                            value={newProduct.category || ''}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Price</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={newProduct.price || 0}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Stock</label>
+                        <input
+                            type="number"
+                            name="stock"
+                            value={newProduct.stock || 0}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Unit Type</label>
+                        <select
+                            name="unit_type"
+                            value={newProduct.unit_type}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        >
+                            <option value="units">Unidades</option>
+                            <option value="lbs">Libras</option>
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
+                        <input
+                            type="date"
+                            name="expiration_date"
+                            value={newProduct.expiration_date || ''}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">Image</label>
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleFileChange}
+                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full py-2 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600"
                     >
-                        <option value="units">Unidades</option>
-                        <option value="lbs">Libras</option>
-                    </select>
-                </div>
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
-                    <input
-                        type="date"
-                        name="expiration_date"
-                        value={newProduct.expiration_date || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                <div className="mb-2">
-                    <label className="block text-sm font-medium text-gray-700">Image</label>
-                    <input
-                        type="file"
-                        name="image"
-                        onChange={handleFileChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
-                >
-                    Add Product
-                </button>
-            </form>
-        </div>
+                        Add Product
+                    </button>
+                </form>
+            </div>
+        </>
     );
 }
