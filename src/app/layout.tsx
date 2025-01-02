@@ -9,6 +9,7 @@ import { Inter } from "next/font/google";
 
 import imagen from "@/app/favicon.ico";
 import ForwardBackButtons from "./shared/navigation/ForwardBack";
+import Link from "next/link";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -33,9 +34,9 @@ export default function RootLayout({
                     <div className="w-full h-screen flex flex-col items-start gap-2 self-stretch pt-2">
                         <div className="flex h-10 items-center justify-between py-1 px-6 self-stretch">
                             <div className="flex items-center gap-6 h-full">
-                                <button>
+                                <Link href={"/"}>
                                     <BiSidebar className="size-[18px] fill-gray-800" />
-                                </button>
+                                </Link>
                                 <ForwardBackButtons />
                                 <hr className="rotate-90 w-[33px] h-px" />
 
@@ -59,7 +60,7 @@ export default function RootLayout({
                                 </div>
                             </div>
                         </div>
-                        <div className="flex p-6 flex-col items-start gap-4 self-stretch rounded-tl-xl bg-white border border-[#DFDFDF] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] overflow-y-scroll">
+                        <div className="flex h-full w-full p-6 flex-col items-start gap-4 rounded-tl-xl bg-white border border-[#DFDFDF] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] overflow-y-scroll">
                             {children}
                         </div>
                     </div>
