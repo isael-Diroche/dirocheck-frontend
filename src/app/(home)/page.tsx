@@ -19,7 +19,7 @@ export default function Home() {
                     </button>
                 </div>
 
-                <div className="">
+                <div className="flex flex-col h-full w-full">
                     <ShopList />
                 </div>
                 

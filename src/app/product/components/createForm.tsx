@@ -1,16 +1,19 @@
-import { Shop } from '@/app/shop/lib/model';
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '@/app/axiosConfig';
 import { Product } from '@/app/product/lib/model';
 
+interface ProductCreationFormProps {
+    shopId: string;
+    onProductCreated: (product: Product) => void;
+}
 
-const ProductCreationForm: React.FC = () => {
+const ProductCreationForm: React.FC<ProductCreationFormProps & { onCancel: () => void }> = ({ shopId, onProductCreated, onCancel }) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [newProduct, setNewProduct] = useState<Product>({
         id: 0,
-        shop: '0',
+        shop: shopId,
         image_url: null,
         details: '',
         category: 'none',
@@ -52,10 +55,11 @@ const ProductCreationForm: React.FC = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            setProducts([...products, response.data]);
+            const createdProduct = response.data;
+            setProducts([...products, createdProduct]);
             setNewProduct({
                 id: 0,
-                shop: '0',
+                shop: shopId,
                 image_url: null,
                 details: '',
                 category: 'none',
@@ -66,6 +70,7 @@ const ProductCreationForm: React.FC = () => {
                 image: null,
                 total: 0,
             });
+            onProductCreated(createdProduct);
         } catch (error) {
             console.error('Error creating product:', error);
         }
@@ -82,7 +87,6 @@ const ProductCreationForm: React.FC = () => {
         };
         fetchProducts();
     }, []);
-
 
     return (
         <>
@@ -113,7 +117,7 @@ const ProductCreationForm: React.FC = () => {
                     <input
                         type="number"
                         name="price"
-                        value={newProduct.price || 0}
+                        value={newProduct.price}
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
@@ -123,7 +127,7 @@ const ProductCreationForm: React.FC = () => {
                     <input
                         type="number"
                         name="stock"
-                        value={newProduct.stock || 0}
+                        value={newProduct.stock}
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
@@ -145,7 +149,7 @@ const ProductCreationForm: React.FC = () => {
                     <input
                         type="date"
                         name="expiration_date"
-                        value={newProduct.expiration_date || ''}
+                        value={newProduct.expiration_date || Date.now()}
                         onChange={handleInputChange}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
@@ -159,6 +163,11 @@ const ProductCreationForm: React.FC = () => {
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                     />
                 </div>
+                <button
+                    onClick={onCancel}
+                >
+                    Cancelar
+                </button>
                 <button
                     type="submit"
                     className="w-full py-2 bg-blue-500 text-white rounded-md font-semibold hover:bg-blue-600"

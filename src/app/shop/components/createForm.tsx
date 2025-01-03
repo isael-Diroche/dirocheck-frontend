@@ -11,7 +11,7 @@ const shopService = new ShopService();
 const ShopCreate: React.FC = () => {
     const [shops, setShops] = useState<Shop[]>([]);
     const [newShop, setNewShop] = useState<Shop>({
-        id: 0,
+        id: "0",
         name: '',
         address: '',
     });
@@ -33,7 +33,7 @@ const ShopCreate: React.FC = () => {
             const createdShop = await shopService.createShop(newShop);
             setShops([...shops, createdShop]);
             setNewShop({
-                id: 0,
+                id: "0",
                 name: '',
                 address: '',
             });
@@ -86,8 +86,6 @@ const ShopCreate: React.FC = () => {
                     </div>
                 </motion.div>
             )}
-
-
 
             <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4">Add New Shop</h2>

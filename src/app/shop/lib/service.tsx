@@ -45,14 +45,14 @@ export class ShopService implements IShopService {
   }
 
   async updateShop(shopId: string, shop: Shop): Promise<void> {
-    const success = await this.shopService.updateItem(`${API}/shop/${shopId}`, shop);
+    const success = await this.shopService.updateItem(`${API}/shop/${shopId}/`, shop);
     if (!success) {
       throw new Error("No se pudo actualizar el negocio");
     }
   }
 
   async deleteShop(shopId: string): Promise<void> {
-    const url = `${API}/shop/${shopId}`.toString();
+    const url = `${API}/shop/${shopId}/`;
     const success = await this.shopService.deleteItem(url);
     if (!success) {
       throw new Error("No se pudo eliminar el negocio");

@@ -4,14 +4,16 @@ import { useParams } from 'next/navigation';
 import { Shop } from '@/app/shop/lib/model';
 import { ShopService } from '@/app/shop/lib/service';
 import ProductList from '@/app/product/components/productList';
+import ProductCreationForm from '@/app/product/components/createForm';
 
 const shopService = new ShopService();
 
 const ShopPage: React.FC = () => {
     const { shopId } = useParams<{ shopId: string }>();
-
+    const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
     const [shop, setShop] = useState<Shop | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [refresh, setRefresh] = useState<boolean>(false);
 
     const fetchShop = async () => {
         try {
@@ -27,22 +29,51 @@ const ShopPage: React.FC = () => {
         }
     };
 
+    const handleCreate = () => {
+        setCreatingProduct(true);
+    };
+
+    const handleCancelCreate = () => {
+        setCreatingProduct(false);
+    };
+
     useEffect(() => {
         fetchShop();
-    }, []);
+    }, [refresh]);
+
+    const handleProductCreated = () => {
+        setRefresh(!refresh);
+    };
 
     return (
         <>
-            <div className='w-full'>
-                <h2 className='text-3xl font-inter font-semibold mb-3'>{shop?.name}</h2>
+            <div className='w-full h-svh'>
+                <div className="flex w-full justify-between items-center">
+                    <h1 className='text-2xl font-inter font-medium text-gray-800'>{shop?.name}</h1>
+                    <button 
+                        onClick={() => handleCreate()}
+                        className='bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded'
+                    >
+                        Crear Producto
+                    </button>
+                </div>
 
                 {shop ? (
                     <div className='w-full'>
-                        <ProductList shopId={shopId} />
+                        <ProductList shopId={shopId} onProductCreated={handleProductCreated} />
                     </div>
                 ) : (
                     <p>{error ? error : "Loading..."}</p>
                 )}
+
+                {creatingProduct && (
+                    <ProductCreationForm
+                        shopId={shopId}
+                        onProductCreated={handleProductCreated}
+                        onCancel={handleCancelCreate}
+                    />
+                )}
+
             </div>
         </>
     );
