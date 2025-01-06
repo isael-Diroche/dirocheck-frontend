@@ -87,7 +87,7 @@ const ShopCreate: React.FC = () => {
                 </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
+            <form onSubmit={handleSubmit} className="">
                 <h2 className="text-2xl font-bold mb-4">Add New Shop</h2>
                 <div className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">Name</label>

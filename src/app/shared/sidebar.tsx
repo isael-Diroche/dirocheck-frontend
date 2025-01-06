@@ -1,50 +1,135 @@
+'use client';
+
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Link from "next/link";
+
 import { IoIosAlbums, IoIosArchive, IoMdContact, IoMdCube } from "react-icons/io";
-import { IoDocumentText, IoReceipt, IoBarChart, IoSettings } from "react-icons/io5";
+import { IoDocumentText, IoReceipt, IoBarChart, IoSettings, IoLockClosed } from "react-icons/io5";
+import { Shop } from '../shop/lib/model';
+import { ShopService } from '../shop/lib/service';
+// import { useShop } from '../shop/ShopContext';
+
+const shopService = new ShopService();
+
+export default function Sidebar() {
+    // const [selectedShop, setSelectedShop] = );
+    // const { setSelectedShop } = useShop();
+    const [shop, setShop] = useState<Shop | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
+
+    const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
+
+    const links = [
+        {
+            name: "Tablero",
+            href: "/",
+            icon: <IoIosAlbums size={18} />,
+            disabled: selectedShop ? false : true
+        },
+        {
+            name: "Productos",
+            href: "/products",
+            icon: <IoMdCube size={18} />,
+            disabled: selectedShop ? false : true
+        },
+        {
+            name: "Inventarios",
+            href: "/inventory",
+            icon: <IoDocumentText size={18} />,
+            disabled: selectedShop ? false : true
+        },
+        {
+            name: "Facturas",
+            href: "/invoices",
+            icon: <IoReceipt size={18} />,
+            disabled: true
+        },
+        {
+            name: "Otros",
+            href: "/others",
+            icon: <IoBarChart size={18} />,
+            disabled: true
+        },
+    ];
+
+    const linksFooter = [
+        {
+            name: "Soporte",
+            href: "/support",
+            icon: <IoMdContact size={18} />,
+            disabled: true
+        },
+        {
+            name: "Configuración",
+            href: "/settings",
+            icon: <IoSettings size={18} />,
+            disabled: true
+        },
+    ];
+
+    const fetchShop = async (shopId: string) => {
+        try {
+            const data = await shopService.getShop(shopId);
+            setShop(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("Ha ocurrido un error desconocido");
+            }
+            console.error("Error obteniendo negocio:", error);
+        }
+    };
 
 
-const links = [
-    {
-        name: "Tablero",
-        href: "/dashboard",
-        icon: <IoIosAlbums size={18} />
-    },
-    {
-        name: "Productos",
-        href: "/products",
-        icon: <IoMdCube size={18} />
-    },
-    {
-        name: "Inventarios",
-        href: "/inventory",
-        icon: <IoDocumentText size={18} />
-    },
-    {
-        name: "Facturas",
-        href: "/invoices",
-        icon: <IoReceipt size={18} />
-    },
-    {
-        name: "Otros",
-        href: "/others",
-        icon: <IoBarChart size={18} />
-    },
-]
+    // const handleDeselectShop = () => {
+    //     // Eliminar el negocio seleccionado del localStorage
+    //     localStorage.removeItem('selectedShop');
+    //     setSelectedShop(null);
 
-const linksFooter = [
-    {
-        name: "Soporte",
-        href: "/support",
-        icon: <IoMdContact size={18} />
-    },
-    {
-        name: "Configuración",
-        href: "/settings",
-        icon: <IoSettings size={18} />
-    },
-]
+    //     // Redirigir a /shop-selection
+    //     router.replace('/shop-selection');
+    // };
 
-export default function OldSidebar() {
+    // const handleSelectShop = (shopId: string) => {
+    // Guardar el negocio seleccionado en el localStorage
+    //     localStorage.setItem('selectedShop', shopId);
+    //     setSelectedShop(shopId);
+
+    // Obtener los datos del negocio inmediatamente
+    //     fetchShop(shopId);
+    // };
+
+    // const handleDeselectShop = () => {
+    //     localStorage.removeItem('selectedShop');
+    //     setSelectedShop(null);
+    // };
+
+    // const handleSelectShop = (shopId: string) => {
+    //     setSelectedShop(shopId);
+    //     localStorage.setItem('selectedShop', shopId); // Opcional, para persistencia
+    // };
+
+    const handleDeselectShop = () => {
+        localStorage.removeItem('selectedShop');
+        setSelectedShop(null);
+        router.push('/shop-selection'); // Navegar a la página principal o al dashboard
+    };
+
+    useEffect(() => {
+        if (selectedShop) {
+            fetchShop(selectedShop);
+        }
+
+        const handleShopUpdate = () => {
+            setSelectedShop(localStorage.getItem('selectedShop'));
+        };
+
+        window.addEventListener('shop-updated', handleShopUpdate);
+        return () => window.removeEventListener('shop-updated', handleShopUpdate);
+    }, [fetchShop]);
 
     return (
         <>
@@ -53,18 +138,47 @@ export default function OldSidebar() {
                     <div className="flex h-full flex-col justify-between items-start self-stretch">
                         <div className="flex flex-col items-start gap-6 self-stretch">
                             <div className="flex py-2 px-6 items-center gap-[10px] self-stretch">
-
+                                <div className="flex flex-col items-start cursor-default select-none">
+                                    <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">Diro<span className='text-green-500'>check</span> <span className='text-2xl mb-1'>✅</span></h1>
+                                    <span className='text-xs font-golos text-gray-600'>Administra tu negocio</span>
+                                </div>
                             </div>
                             <div className="flex px-[14px] flex-col items-start gap-4 self-stretch">
-
+                                {selectedShop ? (
+                                    <div className="flex items-center justify-between w-full gap-4">
+                                        <div className="flex flex-col">
+                                            <span className='text-[10px] font-inter text-gray-600 font-semibold tracking-wider uppercase'>Negocio</span>
+                                            <p className='font-inter font-semibold text-gray-800'>{shop?.name}</p>
+                                        </div>
+                                        <button
+                                            onClick={handleDeselectShop}
+                                            className="text-xs font-open font-medium text-gray-500 hover:text-gray-900 px-2"
+                                        >
+                                            Cambiar
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="">Sin selecionar</div>
+                                )
+                                }
                             </div>
                             <ul className="flex w-full flex-col pb-3 px-4 items-start gap-1 content-center">
                                 {links.map((link, index) => (
                                     <li key={index} className="w-full">
-                                        <Link href={link.href} className="flex items-center gap-3 font-golos h-11 py-2 px-3 font-medium self-stretch text-sm text-gray-500 hover:text-blue-600 rounded-lg cursor-pointer hover:bg-blue-100 transition duration-150 ease-linear">
-                                            {link.icon}
-                                            {link.name}
-                                        </Link>
+                                        {link.disabled ? (
+                                            <div className="flex items-center justify-between gap-3 font-golos h-11 py-2 px-3 font- self-stretch text-sm text-gray-400 cursor-not-allowed">
+                                                <div className="flex items-center gap-3">
+                                                    {link.icon}
+                                                    {link.name}
+                                                </div>
+                                                <IoLockClosed size={14} />
+                                            </div>
+                                        ) : (
+                                            <Link href={link.href} className="flex items-center gap-3 font-golos h-11 py-2 px-3 font-medium self-stretch text-sm text-gray-500 hover:text-blue-600 rounded-lg cursor-pointer hover:bg-blue-100 transition duration-150 ease-linear">
+                                                {link.icon}
+                                                {link.name}
+                                            </Link>
+                                        )}
                                     </li>
                                 ))}
                             </ul>
@@ -73,10 +187,17 @@ export default function OldSidebar() {
                             <ul className="flex w-full flex-col px-4 items-start gap-1 content-center">
                                 {linksFooter.map((link, index) => (
                                     <li key={index} className="w-full">
-                                        <Link href={link.href} className="flex items-center gap-3 font-golos h-11 py-2 px-3 font-medium self-stretch text-sm text-gray-500 hover:text-blue-600 rounded-lg cursor-pointer hover:bg-blue-100 transition duration-150 ease-linear">
-                                            {link.icon}
-                                            {link.name}
-                                        </Link>
+                                        {link.disabled ? (
+                                            <div className="flex items-center gap-3 font-golos h-11 py-2 px-3 font-medium self-stretch text-sm text-gray-400 cursor-not-allowed">
+                                                <IoLockClosed size={18} />
+                                                {link.name}
+                                            </div>
+                                        ) : (
+                                            <Link href={link.href} className="flex items-center gap-3 font-golos h-11 py-2 px-3 font-medium self-stretch text-sm text-gray-500 hover:text-blue-600 rounded-lg cursor-pointer hover:bg-blue-100 transition duration-150 ease-linear">
+                                                {link.icon}
+                                                {link.name}
+                                            </Link>
+                                        )}
                                     </li>
                                 ))}
                             </ul>

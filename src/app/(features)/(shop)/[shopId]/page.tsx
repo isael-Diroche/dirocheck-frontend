@@ -50,7 +50,7 @@ const ShopPage: React.FC = () => {
             <div className='w-full h-svh'>
                 <div className="flex w-full justify-between items-center">
                     <h1 className='text-2xl font-inter font-medium text-gray-800'>{shop?.name}</h1>
-                    <button 
+                    <button
                         onClick={() => handleCreate()}
                         className='bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded'
                     >
