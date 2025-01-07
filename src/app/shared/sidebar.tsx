@@ -19,7 +19,12 @@ export default function Sidebar() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
+    const [selectedShop, setSelectedShop] = useState<string | null>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('selectedShop');
+        }
+        return null;
+    });
 
     const links = [
         {
@@ -83,39 +88,10 @@ export default function Sidebar() {
         }
     };
 
-
-    // const handleDeselectShop = () => {
-    //     // Eliminar el negocio seleccionado del localStorage
-    //     localStorage.removeItem('selectedShop');
-    //     setSelectedShop(null);
-
-    //     // Redirigir a /shop-selection
-    //     router.replace('/shop-selection');
-    // };
-
-    // const handleSelectShop = (shopId: string) => {
-    // Guardar el negocio seleccionado en el localStorage
-    //     localStorage.setItem('selectedShop', shopId);
-    //     setSelectedShop(shopId);
-
-    // Obtener los datos del negocio inmediatamente
-    //     fetchShop(shopId);
-    // };
-
-    // const handleDeselectShop = () => {
-    //     localStorage.removeItem('selectedShop');
-    //     setSelectedShop(null);
-    // };
-
-    // const handleSelectShop = (shopId: string) => {
-    //     setSelectedShop(shopId);
-    //     localStorage.setItem('selectedShop', shopId); // Opcional, para persistencia
-    // };
-
     const handleDeselectShop = () => {
         localStorage.removeItem('selectedShop');
         setSelectedShop(null);
-        router.push('/shop-selection'); // Navegar a la página principal o al dashboard
+        router.push('/shop-selection');
     };
 
     useEffect(() => {
@@ -137,12 +113,19 @@ export default function Sidebar() {
                 <div className="flex h-full flex-col items-start self-stretch">
                     <div className="flex h-full flex-col justify-between items-start self-stretch">
                         <div className="flex flex-col items-start gap-6 self-stretch">
+
                             <div className="flex py-2 px-6 items-center gap-[10px] self-stretch">
                                 <div className="flex flex-col items-start cursor-default select-none">
-                                    <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">Diro<span className='text-green-500'>check</span> <span className='text-2xl mb-1'>✅</span></h1>
-                                    <span className='text-xs font-golos text-gray-600'>Administra tu negocio</span>
+                                    <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">
+                                        Diro<span className='text-green-500'>check</span>
+                                        <span className='text-2xl mb-1'>✅</span>
+                                    </h1>
+                                    <span className='text-xs font-golos text-gray-600'>
+                                        Administra tu negocio
+                                    </span>
                                 </div>
                             </div>
+
                             <div className="flex px-[14px] flex-col items-start gap-4 self-stretch">
                                 {selectedShop ? (
                                     <div className="flex items-center justify-between w-full gap-4">
@@ -202,7 +185,7 @@ export default function Sidebar() {
                                 ))}
                             </ul>
                             <hr className="h-[1px] fill-[#e4e7ec] w-full" />
-                            <p className="text-[#98a2b3] text-xs font-normal font-['Open Sans']">©2024 Vantar, v1.29-beta</p>
+                            <p className="text-[#98a2b3] text-xs font-normal font-['Open Sans']">©2024 Dirocheck, v1.2</p>
                         </div>
                     </div>
                 </div>

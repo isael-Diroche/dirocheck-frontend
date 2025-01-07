@@ -63,7 +63,7 @@ const ProductsPage: React.FC = () => {
     return (
         <>
             <div className="flex w-full items-center">
-                <div className='container w-full flex flex-col items-start justify-center'>
+                <div className='container w-full flex flex-col items-start justify-between'>
                     <h1 className='text-3xl font-medium font-open text-gray-700 mb-2'>Productos de <b className='font-bold text-gray-800'>{shop?.name}</b></h1>
                     <p className='text-base text-gray-500 font-inter'>Bienvenido a la página de productos. Aquí puedes encontrar una variedad de artículos disponibles para administrar.</p>
                 </div>
@@ -79,10 +79,13 @@ const ProductsPage: React.FC = () => {
             <div className='container w-full h-full flex flex-col items-center'>
                 {shop ? (
                     <div className='w-full'>
-                        <ProductList shopId={shop.id} onProductCreated={handleProductCreated} />
+                        <ProductList
+                            shopId={shop.id}
+                            onProductCreated={handleProductCreated}
+                        />
                     </div>
                 ) : (
-                    <p>{error ? error : "Loading..."}</p>
+                    <p>{error ? error : "Cargando..."}</p>
                 )}
             </div>
 
