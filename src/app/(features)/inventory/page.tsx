@@ -11,8 +11,6 @@ const shopService = new ShopService();
 
 
 import { InventoryService } from "@/app/inventory/lib/service";
-// import { Inventory } from "@/app/inventory/lib/model";
-// import { useEffect, useState } from "react";
 const inventoryService = new InventoryService();
 
 const InventoryPage = () => {
@@ -65,30 +63,6 @@ const InventoryPage = () => {
     const handleInventoryCreated = () => {
         setRefresh(!refresh);
     };
-
-
-    // ---------------------------------------------------------
-
-    // const [inventory, setInventory] = useState<Inventory | null>(null);
-    // const [inventoryName, setInventoryName] = useState<string>('');
-
-    // if (!selectedShop) {
-    //     return <p>No se ha seleccionado un inventario.</p>;
-    // }
-
-    // if (!selectedShop) return null;
-
-    // const handleFormSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     if (shop) {
-    //         try {
-    //             await inventoryService.createInventory(shop.id, Inventory);
-    //             handleInventoryCreated();
-    //         } catch (error) {
-    //             setError('Error creando inventario');
-    //         }
-    //     }
-    // };
 
     return (
         <>

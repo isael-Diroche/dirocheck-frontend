@@ -1,72 +1,92 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 interface IGenericService<T> {
-  getAllItems(url: string): Promise<T[]>;
-  getItem(url: string): Promise<T | null>;
-  createItem(url: string, item: T): Promise<T | null>;
-  updateItem(url: string, item: T): Promise<boolean>;
-  deleteItem(url: string): Promise<boolean>;
+	getAllItems(url: string): Promise<T[]>;
+	getItem(url: string): Promise<T | null>;
+	createItem(url: string, item: T): Promise<T | null>;
+	updateItem(url: string, item: T): Promise<boolean>;
+	deleteItem(url: string): Promise<boolean>;
 }
 
 export class GenericService<T> implements IGenericService<T> {
-  constructor() {}
+	constructor() { }
 
-  async getAllItems(url: string): Promise<T[]> {
-    try {
-      const { data } = await axios.get<T[]>(url);
-      return data;
-    } catch (error) {
-      this.handleError(error, 'GET', url);
-      return []; // Retorna un array vacío en caso de error
-    }
-  }
+	async getAllItems(url: string): Promise<T[]> {
+		try {
+			const { data } = await axios.get<T[]>(url);
+			if (!data) {
+				throw new Error("No data received.");
+			}
+			return data;
+		} catch (error) {
+			this.handleError(error, 'GET', url);
+			return []; // Return an empty array on error
+		}
+	}
 
-  async getItem(url: string): Promise<T | null> {
-    try {
-      const { data } = await axios.get<T>(url);
-      return data;
-    } catch (error) {
-      this.handleError(error, 'GET', url);
-      return null; // Retorna null en caso de error
-    }
-  }
+	async getItem(url: string): Promise<T | null> {
+		try {
+			const { data } = await axios.get<T>(url);
+			if (!data) {
+				throw new Error("No data found.");
+			}
+			return data;
+		} catch (error) {
+			this.handleError(error, 'GET', url);
+			return null; // Return null on error
+		}
+	}
 
-  async createItem(url: string, item: T): Promise<T | null> {
-    try {
-      const { data } = await axios.post<T>(url, item);
-      return data;
-    } catch (error) {
-      this.handleError(error, 'POST', url);
-      return null; // Retorna null en caso de error
-    }
-  }
+	async createItem(url: string, item: T): Promise<T | null> {
+		try {
+			const { data } = await axios.post<T>(url, item);
+			if (!data) {
+				throw new Error("Failed to create item.");
+			}
+			return data;
+		} catch (error) {
+			this.handleError(error, 'POST', url);
+			return null; // Return null on error
+		}
+	}
 
-  async updateItem(url: string, item: T): Promise<boolean> {
-    try {
-      await axios.put(url, item);
-      return true;
-    } catch (error) {
-      this.handleError(error, 'PUT', url);
-      return false; // Retorna false en caso de error
-    }
-  }
+	async updateItem(url: string, item: T): Promise<boolean> {
+		try {
+			const response = await axios.put(url, item);
+			if (response.status !== 200) {
+				throw new Error(`Failed to update item. Status code: ${response.status}`);
+			}
+			return true;
+		} catch (error) {
+			this.handleError(error, 'PUT', url);
+			return false; // Return false on error
+		}
+	}
 
-  async deleteItem(url: string): Promise<boolean> {
-    try {
-      await axios.delete(url);
-      return true;
-    } catch (error) {
-      this.handleError(error, 'DELETE', url);
-      return false; // Retorna false en caso de error
-    }
-  }
+	async deleteItem(url: string): Promise<boolean> {
+		try {
+			const response = await axios.delete(url);
+			if (response.status !== 200) {
+				throw new Error(`Failed to delete item. Status code: ${response.status}`);
+			}
+			return true;
+		} catch (error) {
+			this.handleError(error, 'DELETE', url);
+			return false; // Return false on error
+		}
+	}
 
-  private handleError(error: unknown, method: string, url: string) {
-    // Manejo de errores centralizado
-    if (axios.isAxiosError(error)) {
-      console.error(`Error during ${method} request at ${url}: ${error.message}`);
-    } else {
-      console.error(`Unexpected error during ${method} request at ${url}:`, error);
-    }
-  }
+	private handleError(error: unknown, method: string, url: string) {
+		if (axios.isAxiosError(error)) {
+			const axiosError = error as AxiosError;
+			console.error(`Error during ${method} request at ${url}: ${axiosError.message}`);
+			if (axiosError.response) {
+				// Log the response details
+				console.error(`Response data: ${axiosError.response.data}`);
+				console.error(`Response status: ${axiosError.response.status}`);
+			}
+		} else {
+			console.error(`Unexpected error during ${method} request at ${url}:`, error);
+		}
+	}
 }

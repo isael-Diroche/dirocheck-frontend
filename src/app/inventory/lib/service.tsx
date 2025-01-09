@@ -29,7 +29,7 @@ export class InventoryService implements IInventoryService {
         return shop_inventories;
     }
 
-    async getInventory(shopId: string, inventoryId: string): Promise<Inventory> {
+    async getInventory(shopId?: string, inventoryId?: string): Promise<Inventory> {
         const inventory = await this.inventoryService.getItem(`${API}/inventory/${inventoryId}`);
         if (!inventory) {
             throw new Error("No se encontró el inventario");

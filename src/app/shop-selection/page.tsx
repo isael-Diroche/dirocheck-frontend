@@ -1,19 +1,18 @@
-'use client';
+"use client"
 
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { Shop } from '../shop/lib/model';
-import { ShopService } from '../shop/lib/service';
-import ShopCreateForm from '../shop/components/createForm';
+import { useEffect, useState } from "react"
+import ShopCard from "@/app/shop/components/ShopCard"
+import { CreateShopForm } from "@/app/shop/components/CreateShopForm"
+import { Button } from "@/components/ui/button"
+import { Shop } from "../shop/lib/model"
+import { ShopService } from "../shop/lib/service"
 
 const shopService = new ShopService();
 
-export default function ShopSelection() {
+export default function ShopSelectionPage() {
     const [shops, setShops] = useState<Shop[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const [isFormVisible, setIsFormVisible] = useState(false);
-    // const [selectedShop, setSelectedShop] = useState<string | null>(null);
-    const router = useRouter();
+    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
 
     const fetchShops = async () => {
         try {
@@ -29,78 +28,23 @@ export default function ShopSelection() {
         }
     };
 
-
-    // const handleShopSelection = (shopId: string) => {
-    //     // Guardar el negocio seleccionado en localStorage
-    //     localStorage.setItem('selectedShop', shopId);
-    //     setSelectedShop(shopId);
-
-    //     // Recargar la página
-    //     // window.location.reload();
-
-    //     // Redirigir al Home principal
-    //     router.replace('/');
-    // };
-
-
-    const handleAddShopClick = () => {
-        setIsFormVisible(true);
-    };
-
-    const handleCloseForm = () => {
-        setIsFormVisible(false);
-    };
-
-    const handleSelectShop = (shopId: string) => {
-        localStorage.setItem('selectedShop', shopId);
-        window.dispatchEvent(new Event('shop-updated')); // Evento personalizado
-        router.push('/');
-    };
-
     useEffect(() => {
         fetchShops();
     }, []);
 
     return (
-        <>
-            <div className="container w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-lg">
-                <h1 className="text-3xl font-bold mb-10 font-open text-gray-800">Selecciona un negocio</h1>
-                {shops.length === 0 ? (
-                    <p>Cargando negocios...</p>
-                ) : (
-                    <div className="grid w-[80%] grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {shops.map((shop: any) => (
-                            <button
-                                key={shop.id}
-                                onClick={() => handleSelectShop(shop.id)}
-                                className="p-4 border rounded shadow hover:bg-gray-200"
-                            >
-                                {shop.name}
-                            </button>
-                        ))}
-                        <button
-                            onClick={handleAddShopClick}
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md text-base font-inter hover:bg-blue-600 transition duration-100 ease-linear"
-                        >
-                            Añadir Negocio
-                        </button>
-                    </div>
-                )}
+        <div className="container mx-auto px-4 py-8">
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold">Select a Business</h1>
+                <Button onClick={() => setIsCreateFormOpen(true)}>Create New Shop</Button>
             </div>
-
-            {isFormVisible && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <ShopCreateForm />
-                        <button
-                            onClick={handleCloseForm}
-                            className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md text-base font-inter hover:bg-red-600 transition duration-100 ease-linear"
-                        >
-                            Cerrar
-                        </button>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {shops.map((shop) => (
+                    <ShopCard key={shop.id} shop={shop} />
+                ))}
+            </div>
+            <CreateShopForm isOpen={isCreateFormOpen} onClose={() => setIsCreateFormOpen(false)} />
+        </div>
+    )
 }
+

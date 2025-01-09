@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, use, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ShopContextType {
     selectedShop: string | null;
@@ -9,7 +9,11 @@ interface ShopContextType {
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
-export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface ShopProviderProps {
+    children: ReactNode;
+}
+
+export const ShopProvider: React.FC<ShopProviderProps> = ({ children }) => {
     const [selectedShop, setSelectedShop] = useState<string | null>(null);
 
     return (
@@ -19,7 +23,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 };
 
-export const useShop = () => {
+export const useShop = (): ShopContextType => {
     const context = useContext(ShopContext);
     if (!context) {
         throw new Error('useShop debe usarse dentro de un ShopProvider');

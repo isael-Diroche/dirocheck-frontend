@@ -1,20 +1,17 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from "next/link";
 
-import { IoIosAlbums, IoIosArchive, IoMdContact, IoMdCube } from "react-icons/io";
+import { IoIosAlbums, IoMdContact, IoMdCube } from "react-icons/io";
 import { IoDocumentText, IoReceipt, IoBarChart, IoSettings, IoLockClosed } from "react-icons/io5";
-import { Shop } from '../shop/lib/model';
-import { ShopService } from '../shop/lib/service';
-// import { useShop } from '../shop/ShopContext';
+import { Shop } from '@/app/shop/lib/model';
+import { ShopService } from '@/app/shop/lib/service';
 
 const shopService = new ShopService();
 
 export default function Sidebar() {
-    // const [selectedShop, setSelectedShop] = );
-    // const { setSelectedShop } = useShop();
     const [shop, setShop] = useState<Shop | null>(null);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
