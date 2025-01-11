@@ -7,7 +7,7 @@ export interface IShopService {
     getAllShop(): Promise<Shop[]>;
     getShop(shopId: string): Promise<Shop>;
     createShop(formData: FormData): Promise<Shop>;
-    updateShop(shopId: string, shop: Shop): Promise<void>;
+    updateShop(updatedShop: Shop): Promise<Shop>;
     deleteShop(shopId: string): Promise<void>;
 }
 
@@ -58,15 +58,56 @@ export class ShopService implements IShopService {
         return response.json(); // Asumiendo que el backend devuelve los datos de la tienda creada
     }
 
-    async updateShop(shopId: string, shop: Shop): Promise<void> {
-        try {
-            const success = await this.shopService.updateItem(this.getShopUrl(shopId), shop);
-            if (!success) {
-                throw new Error("No se pudo actualizar el negocio.");
-            }
-        } catch (error) {
-            throw new Error(`Error al actualizar el negocio: ${error instanceof Error ? error.message : "Desconocido"}`);
+    // async updateShop(formData: FormData, shop: Shop): Promise<void> {
+
+    //     const response = await this.shopService.updateItem(this.getShopUrl(shop.id), shop);
+
+        // const response = await fetch(this.getShopUrl(), {
+        //     method: 'PUT',
+        //     body: formData,
+        // });
+        // if (!response.ok) {
+        //     throw new Error('Error actualizando la tienda');
+        // }
+        // return response.json(); 
+
+        // try {
+        //     const success = await this.shopService.updateItem(this.getShopUrl(shop.id), shop);
+        //     if (!success) {
+        //         throw new Error("No se pudo actualizar el negocio.");
+        //     }
+        // } catch (error) {
+        //     throw new Error(`Error al actualizar el negocio: ${error instanceof Error ? error.message : "Desconocido"}`);
+        // }
+    // }
+
+    async updateShop(updatedShop: Shop): Promise<Shop> {
+        if (!updatedShop.id) {
+            throw new Error("El ID de la tienda es obligatorio para actualizarla.");
         }
+
+        const formData = new FormData();
+
+        // Agrega los campos al FormData
+        Object.entries(updatedShop).forEach(([key, value]) => {
+            if (value !== null && value !== undefined) {
+                formData.append(key, value as any);
+            }
+        });
+
+        // Realiza la solicitud PUT o PATCH
+        const url = this.getShopUrl(updatedShop.id)
+        const response = await fetch(url, {
+            method: "PATCH", // Usa PATCH si solo deseas actualizar campos específicos
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al actualizar la tienda. Revisa la información enviada.");
+        }
+
+        // Devuelve la tienda actualizada
+        return response.json();
     }
 
     // async updateShop(formData: FormData, shopId: string ): Promise<boolean> {

@@ -14,7 +14,15 @@ export default function ShopSelectionPage() {
     const [error, setError] = useState<string | null>(null);
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
 
+    const handleUpdateShop = async (updatedShop: Shop) => {
+        // Actualizar el estado con el negocio modificado
+        setShops(prevShops =>
+            prevShops.map(shop => (shop.id === updatedShop.id ? updatedShop : shop))
+        );
+    };
+
     const fetchShops = async () => {
+        handleUpdateShop;
         try {
             const data = await shopService.getAllShop();
             setShops(data);
@@ -40,7 +48,7 @@ export default function ShopSelectionPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {shops.map((shop) => (
-                    <ShopCard key={shop.id} shop={shop} />
+                    <ShopCard key={shop.id} shop={shop} onUpdate={handleUpdateShop} />
                 ))}
             </div>
             <CreateShopForm isOpen={isCreateFormOpen} onClose={() => setIsCreateFormOpen(false)} />

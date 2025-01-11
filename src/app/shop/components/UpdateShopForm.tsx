@@ -14,15 +14,12 @@ interface UpdateShopFormProps {
     isOpen: boolean
     onClose: () => void
     shop: Shop
+    onUpdate: (updatedShop: Shop) => void;
 }
 
-export function UpdateShopForm({ isOpen, onClose, shop }: UpdateShopFormProps) {
+export function UpdateShopForm({ isOpen, onClose, shop, onUpdate }: UpdateShopFormProps) {
     const [formData, setFormData] = useState(shop)
-    const [imageFile, setImageFile] = useState<File | null>(null)
-
-    useEffect(() => {
-        setFormData(shop)
-    }, [shop])
+    const [imageFile, setImageFile] = useState<File>()
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -38,44 +35,26 @@ export function UpdateShopForm({ isOpen, onClose, shop }: UpdateShopFormProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        // Crear un objeto FormData
-        const form = new FormData()
-        
-		// Añadir solo los campos que tienen valores
-		Object.entries(formData).forEach(([key, value]) => {
-			if (key === 'image' && !value) {
-				return;
-			}
-			form.append(key, value as any);
-		});
-
-        // Si se seleccionó una imagen, agregarla al FormData
-        if (imageFile) {
-            form.append("image", imageFile)
+        // Actualizar el objeto Shop con los nuevos datos
+        const updatedShop: Shop = {
+            ...formData,
+            image: imageFile || undefined,
         }
 
-        // Enviar los datos al backend (aquí simplemente se imprime para ejemplo)
         try {
-            // Aquí normalmente enviarías el FormData al backend usando fetch o axios
-            // Ejemplo con fetch:
-            if(!shop.id)
-                return;
-            const response = await shopService.updateShop(shop.id, shop)
-
-            // if (!response) {
-            //     throw new Error("Error al actualizar la tienda")
-            // }
-
-            // Si la respuesta es correcta, puedes procesar los datos como sea necesario
-            const updatedShop = await response
+            // Llamar al servicio para actualizar la tienda
+            await shopService.updateShop(updatedShop)
+            onUpdate(updatedShop);
             console.log("Tienda actualizada:", updatedShop)
-
-            // Cerrar el formulario después de la actualización
             onClose()
         } catch (error) {
             console.error("Error actualizando la tienda:", error)
         }
     }
+
+    useEffect(() => {
+        setFormData(shop)
+    }, [shop])
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -114,10 +93,10 @@ export function UpdateShopForm({ isOpen, onClose, shop }: UpdateShopFormProps) {
                             />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="contactNumber">Teléfono</Label>
+                            <Label htmlFor="contact_number">Teléfono</Label>
                             <Input
-                                id="contactNumber"
-                                name="contactNumber"
+                                id="contact_number"
+                                name="contact_number"
                                 value={formData.contact_number}
                                 onChange={handleInputChange}
                             />

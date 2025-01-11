@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -10,33 +10,16 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { UpdateShopForm } from "./UpdateShopForm"
 import { Shop } from "../lib/model"
 import { useRouter } from "next/navigation"
-import { ShopService } from "../lib/service"
-
-const shopService = new ShopService();
+import default_image from "@/public/image/image_default.webp"
 
 interface ShopCardProps {
     shop: Shop
+    onUpdate: (updatedShop: Shop) => void;
 }
 
-export default function ShopCard({ shop }: ShopCardProps) {
+export default function ShopCard({ shop, onUpdate }: ShopCardProps) {
     const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false)
-    const [shops, setShops] = useState<Shop[]>([]);
-    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-
-    const fetchShops = async () => {
-        try {
-            const data = await shopService.getAllShop();
-            setShops(data);
-        } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Ha ocurrido un error desconocido");
-            }
-            console.error("Error obteniendo negocio:", error);
-        }
-    };
 
     const handleSelectShop = (shopId: string) => {
         localStorage.setItem('selectedShop', shopId);
@@ -44,21 +27,30 @@ export default function ShopCard({ shop }: ShopCardProps) {
         router.push('/');
     };
 
-    useEffect(() => {
-        fetchShops();
-    }, []);
-
-
     return (
         <Card className="overflow-hidden">
             <div className="relative">
-                <Image
-                    src={shop.image}
-                    alt={shop.name}
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover"
-                />
+                {
+                    shop.image ? (
+                        <Image
+                            src={shop.image}
+                            alt={shop.name}
+                            width={300}
+                            height={200}
+                            className="w-full h-48 object-cover"
+                        />
+
+                    ) : (
+                        <Image
+                            src={default_image}
+                            alt={shop.name}
+                            width={300}
+                            height={200}
+                            className="w-full h-48 object-cover"
+                        />
+                    )
+                }
+
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>
@@ -116,10 +108,12 @@ export default function ShopCard({ shop }: ShopCardProps) {
                     Seleccionar
                 </Button>
             </CardFooter>
+
             <UpdateShopForm
                 isOpen={isUpdateFormOpen}
                 onClose={() => setIsUpdateFormOpen(false)}
                 shop={shop}
+                onUpdate={onUpdate}
             />
         </Card>
     )

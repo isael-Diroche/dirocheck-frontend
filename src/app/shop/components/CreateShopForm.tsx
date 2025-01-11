@@ -13,6 +13,7 @@ const shopService = new ShopService();
 export function CreateShopForm({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
 	const [shops, setShops] = useState<Shop[]>([]);
 	const [formData, setFormData] = useState<Shop>({
+		id: "0",
 		name: "",
 		address: "",
 		contact_number: "",
@@ -56,6 +57,7 @@ export function CreateShopForm({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
 			setShops([...shops, createdShop]);
 			setFormData({
+				id: "0",
 				name: "",
 				address: "",
 				contact_number: "",
