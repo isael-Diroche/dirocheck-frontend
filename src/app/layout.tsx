@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { ShopProvider } from "@/app/shop/ShopContext";
-import Sidebar from "@/app/shared/navigation/sideBar"
+import Sidebar from "@/shared/navigation/sideBar"
+import TopBar from "@/shared/navigation/topBar";
 
 const inter = Inter({
     variable: "--font-inter",
@@ -24,6 +25,7 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <Sidebar />
                         <div className="w-full h-screen flex flex-col items-start gap-2 self-stretch pt-2">
                             {/* Main Content */}
+                            <TopBar />
                             <div className="flex h-full w-full p-6 flex-col items-start gap-4 rounded-tl-xl bg-white border border-[#DFDFDF] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] overflow-y-scroll">
                                 {children}
                             </div>

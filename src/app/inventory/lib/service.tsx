@@ -1,4 +1,4 @@
-import { GenericService } from "@/app/shared/generic/service";
+import { GenericService } from "@/shared/generic/service";
 import { Inventory } from "./model";
 
 const API = "http://127.0.0.1:8000/api/v1";
