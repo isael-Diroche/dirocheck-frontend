@@ -110,18 +110,20 @@ export default function Sidebar() {
                 <div className="flex h-full flex-col items-start self-stretch">
                     <div className="flex h-full flex-col justify-between items-start self-stretch">
                         <div className="flex flex-col items-start gap-6 self-stretch">
-
-                            <div className="flex py-2 px-6 items-center gap-[10px] self-stretch">
-                                <div className="flex flex-col items-start cursor-default select-none">
-                                    <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">
-                                        Diro<span className='text-green-500'>check</span>
-                                        <span className='text-2xl mb-1'>✅</span>
-                                    </h1>
-                                    <span className='text-xs font-golos text-gray-600'>
-                                        Administra tu negocio
-                                    </span>
+                            <Link href={"/"} className='group'>
+                                <div className="flex py-2 px-6 items-center gap-[10px] self-stretch group-hover:scale-105 transition-all duration-150 ease-linear">
+                                    <div className="flex flex-col items-start select-none">
+                                        <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">
+                                            Diro<span className='text-green-500'>check</span>
+                                            <span className='text-2xl mb-1'>✅</span>
+                                        </h1>
+                                        <span className='text-xs font-golos text-gray-600'>
+                                            Administra tu negocio
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
+
+                            </Link>
 
                             <div className="flex px-[14px] flex-col items-start gap-4 self-stretch">
                                 {selectedShop ? (

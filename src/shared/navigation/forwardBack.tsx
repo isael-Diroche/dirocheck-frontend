@@ -9,13 +9,17 @@ const ForwardBackButtons: React.FC = () => {
 
     useEffect(() => {
         const updateNavigationState = () => {
-            setCanGoBack(window.history.state !== null);
-            setCanGoForward(window.history.length > 1);
+            setCanGoBack(window.history.state !== null && window.history.length > 1);
+            setCanGoForward(false); // La API del navegador no ofrece un acceso directo al estado de "puedo ir hacia adelante"
         };
 
-        window.addEventListener('popstate', updateNavigationState);
+        // Actualiza el estado inicial al montar el componente
         updateNavigationState();
 
+        // Escucha eventos de navegación (hacia atrás/adelante)
+        window.addEventListener('popstate', updateNavigationState);
+
+        // Limpia el evento al desmontar
         return () => {
             window.removeEventListener('popstate', updateNavigationState);
         };
@@ -23,16 +27,22 @@ const ForwardBackButtons: React.FC = () => {
 
     return (
         <div className="flex items-center gap-5">
+            {/* Botón para ir hacia atrás */}
             <button
                 onClick={() => canGoBack && window.history.back()}
-                className={`transition-opacity ${canGoBack ? 'opacity-100 cursor-pointer' : 'opacity-50 cursor-default'}`}
+                disabled={!canGoBack} // Deshabilita si no se puede ir hacia atrás
+                className={`transition-opacity ${canGoBack ? 'opacity-100 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
                 type="button"
             >
                 <BiArrowBack className="w-4 h-4 text-gray-800" />
             </button>
+
+            {/* Botón para ir hacia adelante */}
             <button
                 onClick={() => canGoForward && window.history.forward()}
-                className={`transition-opacity ${canGoForward ? 'opacity-100 cursor-pointer' : 'opacity-50 cursor-default'}`}
+                disabled={!canGoForward} // Deshabilita si no se puede ir hacia adelante
+                className={`transition-opacity ${canGoForward ? 'opacity-100 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+                type="button"
             >
                 <BiArrowBack className="w-4 h-4 text-gray-800 rotate-180" />
             </button>
