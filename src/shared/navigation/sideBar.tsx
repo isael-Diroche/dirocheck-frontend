@@ -92,17 +92,24 @@ export default function Sidebar() {
     };
 
     useEffect(() => {
-        if (selectedShop) {
-            fetchShop(selectedShop);
-        }
-
         const handleShopUpdate = () => {
-            setSelectedShop(localStorage.getItem('selectedShop'));
+            const updatedShop = localStorage.getItem('selectedShop');
+            setSelectedShop(updatedShop);
         };
-
+    
+        // Verifica si hay un negocio seleccionado inicialmente y lo carga
+        if (selectedShop) {
+            fetchShop(selectedShop); // Carga la información del negocio seleccionado
+        }
+    
+        // Escucha eventos de actualización del negocio
         window.addEventListener('shop-updated', handleShopUpdate);
-        return () => window.removeEventListener('shop-updated', handleShopUpdate);
-    }, [fetchShop]);
+    
+        return () => {
+            window.removeEventListener('shop-updated', handleShopUpdate); // Limpieza
+        };
+    }, [selectedShop]); // Solo vuelve a ejecutar si cambia `selectedShop`
+    
 
     return (
         <>

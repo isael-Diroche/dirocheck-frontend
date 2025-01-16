@@ -1,8 +1,8 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import { InventoryService } from "../lib/service";
 import { Inventory } from "../lib/model";
-// import UpdateForm from './updateForm';
 import { ShopService } from '@/app/shop/lib/service';
 import { Shop } from '@/app/shop/lib/model';
 
@@ -14,13 +14,9 @@ const shopService = new ShopService();
 
 const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }> = ({ shopId, onInventoryCreated }) => {
     const [inventories, setInventories] = useState<Inventory[]>([]);
-    // const [updatingInventory, setUpdatingInventory] = useState<Inventory | null>(null);
     const [shops, setShops] = useState<Shop[]>([]);
 
-    const [error, setError] = useState<string | null>(null);
-    const [selectedInventory, setSelectedInventory] = useState<Inventory | null>(null);
-    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-
+    // Fetch all shops once when the component mounts
     const fetchShops = async () => {
         try {
             const data = await shopService.getAllShop();
@@ -30,7 +26,7 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
         }
     };
 
-
+    // Fetch inventories for the current shop
     const fetchInventories = async () => {
         try {
             const data = await inventoryService.getAllInventories(shopId);
@@ -40,20 +36,18 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
         }
     };
 
+    // First useEffect to fetch data on mount
     useEffect(() => {
         fetchShops();
         fetchInventories();
-    }, []);
+    }, [shopId]);  // Depend only on shopId to re-fetch inventories when it changes
 
-    useEffect(() => {
-        fetchInventories();
-    }, [onInventoryCreated]);
-
+    // Handle delete inventory
     const handleDelete = async (inventoryId: number) => {
         try {
             if (window.confirm("¿Está seguro de que desea eliminar este inventario?")) {
-                // setInventories(inventories.filter(shop => shop.id !== inventoryId));
                 await inventoryService.deleteInventory(shopId, inventoryId.toString());
+                fetchInventories(); // Refresh inventory list after deletion
             }
         } catch (error) {
             console.error("Error eliminando inventario:", error);
@@ -67,7 +61,7 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
                     {inventories.map((inventory, index) => (
                         <li key={index} className='w-full flex'>
                             <Link href={`/inventory/${inventory.id}`} className="w-full h-full text-blue-600 hover:underline rounded-md border p-4">
-                                <div key={inventory.id} className="">
+                                <div key={inventory.id}>
                                     {inventory.name}
                                 </div>
                             </Link>
@@ -83,24 +77,6 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
             ) : (
                 <p>No hay inventarios disponibles.</p>
             )}
-
-            {/* {updatingProduct && (
-                <UpdateForm
-                    product={updatingProduct}
-                    onSubmit={handleUpdateFormSubmit}
-                    onCancel={handleCancelUpdate}
-                    shops={shops}
-                />
-            )} */}
-
-            {/* ELIMINAR */}
-            {/* {isPopupOpen && selectedInventory && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-4 rounded-md">
-                        <UpdateForm inventory={selectedInventory} onClose={closePopup} onUpdate={handleUpdate} />
-                    </div>
-                </div>
-            )} */}
         </>
     );
 };

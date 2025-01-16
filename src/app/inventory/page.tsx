@@ -4,7 +4,7 @@ import { Shop } from "@/app/shop/lib/model";
 import { ShopService } from "@/app/shop/lib/service";
 import React, { useEffect, useState } from 'react';
 import InventoryList from "@/app/inventory/components/inventoryList";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const shopService = new ShopService();
 
@@ -20,36 +20,33 @@ const InventoryPage = () => {
 
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
 
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!selectedShop) {
-            router.replace('/shop-selection');
-        }
-    }, [router, selectedShop]);
-
-    useEffect(() => {
-        const shop = localStorage.getItem('selectedShop');
-        setSelectedShop(shop);
-
-        const fetchShop = async (shopId: string) => {
-            try {
-                const data = await shopService.getShop(shopId);
-                setShop(data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                } else {
-                    setError("Ha ocurrido un error desconocido");
-                }
-                console.error("Error obteniendo negocio:", error);
+    const fetchShop = async (shopId: string) => {
+        try {
+            const data = await shopService.getShop(shopId);
+            setShop(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("Ha ocurrido un error desconocido");
             }
-        };
-
-        if (shop) {
-            fetchShop(shop);
+            console.error("Error obteniendo negocio:", error);
         }
-    }, [shop, refresh]);
+    };
+
+    useEffect(() => {
+        const shopFromStorage = localStorage.getItem('selectedShop');
+        if (shopFromStorage) {
+            setSelectedShop(shopFromStorage);
+            fetchShop(shopFromStorage);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectedShop) {
+            fetchShop(selectedShop);
+        }
+    }, [selectedShop, refresh]);
 
     const handleCreate = () => {
         setCreatingInventory(true);

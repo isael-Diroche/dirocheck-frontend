@@ -6,57 +6,50 @@ import React, { useEffect, useState } from 'react';
 import ProductList from '@/app/products/components/productList';
 import CreateProductForm from '@/app/products/components/actions/createProductForm';
 import { useRouter } from 'next/navigation';
+import ProductsTable from '@/app/products/components/improved-products-table';
 
 const shopService = new ShopService();
 
 const ProductsPage: React.FC = () => {
     const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
-    const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
+
     const [shop, setShop] = useState<Shop | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [refresh, setRefresh] = useState<boolean>(false);
-    
-    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
-    
+
+
+
     const router = useRouter();
 
     useEffect(() => {
         if (!selectedShop) {
-            // Si no hay un negocio seleccionado, redirigir a /shop-selection
             router.replace('/shop-selection');
         }
     }, [router, selectedShop]);
+
+    const fetchShop = async (shopId: string) => {
+        try {
+            const data = await shopService.getShop(shopId);
+            setShop(data); // Actualiza la información del negocio
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message); // Manejo del error
+            } else {
+                setError("Ha ocurrido un error desconocido");
+            }
+            console.error("Error obteniendo negocio:", error);
+        }
+    };
 
     useEffect(() => {
         const shop = localStorage.getItem('selectedShop');
         setSelectedShop(shop);
 
-        const fetchShop = async (shopId: string) => {
-            try {
-                const data = await shopService.getShop(shopId);
-                setShop(data);
-            } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                } else {
-                    setError("Ha ocurrido un error desconocido");
-                }
-                console.error("Error obteniendo negocio:", error);
-            }
-        };
-
         if (shop) {
             fetchShop(shop);
         }
-    }, [shop, refresh]);
+    }, [refresh]);
 
-    const handleCreate = () => {
-        setCreatingProduct(true);
-    };
-
-    const handleCancelCreate = () => {
-        setCreatingProduct(false);
-    };
 
     const handleProductCreated = () => {
         setRefresh(!refresh);
@@ -64,41 +57,8 @@ const ProductsPage: React.FC = () => {
 
     return (
         <>
-            <div className="flex w-full items-center">
-                <div className='container w-full flex flex-col items-start justify-between'>
-                    <h1 className='text-3xl font-medium font-open text-gray-700 mb-2'>Productos de <b className='font-bold text-gray-800'>{shop?.name}</b></h1>
-                    <p className='text-base text-gray-500 font-inter'>Bienvenido a la página de productos. Aquí puedes encontrar una variedad de artículos disponibles para administrar.</p>
-                </div>
-                <div className=''>
-                    <button
-                        onClick={() => setIsCreateFormOpen(true)}
-                        className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded whitespace-nowrap'
-                    >
-                        Nuevo producto
-                    </button>
-                </div>
-            </div>
-            <div className='container w-full h-full flex flex-col items-center'>
-                {shop ? (
-                    <div className='w-full'>
-                        <ProductList
-                            shopId={shop.id}
-                            onProductCreated={handleProductCreated}
-                        />
-                    </div>
-                ) : (
-                    <p>{error ? error : "Cargando..."}</p>
-                )}
-            </div>
-
             {shop && (
-                <CreateProductForm
-                    isOpen={isCreateFormOpen}
-                    onClose={() => setIsCreateFormOpen(false)}
-                    shopId={shop.id}
-                    onProductCreated={handleProductCreated}
-                    onCancel={handleCancelCreate}
-                />
+                <ProductsTable shopId={shop.id} onProductCreated={handleProductCreated} />
             )}
         </>
     );
