@@ -36,7 +36,21 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		colors: {}
+  		colors: {
+			mantis: {
+				'50': '#f3fbf2',
+				'100': '#e2f7e1',
+				'200': '#c7eec4',
+				'300': '#9bdf96',
+				'400': '#76cd70',
+				'500': '#42ac3b',
+				'600': '#318e2b',
+				'700': '#297025',
+				'800': '#255922',
+				'900': '#1f491e',
+				'950': '#0b280b',
+			},
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
