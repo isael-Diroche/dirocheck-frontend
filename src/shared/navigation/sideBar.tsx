@@ -16,12 +16,57 @@ export default function Sidebar() {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const [selectedShop, setSelectedShop] = useState<string | null>(() => {
+    const [isClient, setIsClient] = useState(false); // Detecta si estamos en el cliente
+    const [selectedShop, setSelectedShop] = useState<string | null>(null);
+
+    useEffect(() => {
+        setIsClient(true); // Marcamos que estamos en el cliente
+
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('selectedShop');
+            const shop = localStorage.getItem('selectedShop');
+            setSelectedShop(shop);
         }
-        return null;
-    });
+    }, []);
+
+    useEffect(() => {
+        const handleShopUpdate = () => {
+            const updatedShop = localStorage.getItem('selectedShop');
+            setSelectedShop(updatedShop);
+        };
+
+        if (selectedShop) {
+            fetchShop(selectedShop);
+        }
+
+        window.addEventListener('shop-updated', handleShopUpdate);
+        return () => {
+            window.removeEventListener('shop-updated', handleShopUpdate);
+        };
+    }, [selectedShop]);
+
+    const fetchShop = async (shopId: string) => {
+        try {
+            const data = await shopService.getShop(shopId);
+            setShop(data);
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("Ha ocurrido un error desconocido");
+            }
+            console.error("Error obteniendo negocio:", error);
+        }
+    };
+
+    const handleDeselectShop = () => {
+        localStorage.removeItem('selectedShop');
+        setSelectedShop(null);
+        router.push('/shop-selection');
+    };
+
+    if (!isClient) {
+        return null; // Renderiza solo después de que el cliente esté listo
+    }
 
     const links = [
         {
@@ -71,46 +116,6 @@ export default function Sidebar() {
         },
     ];
 
-    const fetchShop = async (shopId: string) => {
-        try {
-            const data = await shopService.getShop(shopId);
-            setShop(data);
-        } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Ha ocurrido un error desconocido");
-            }
-            console.error("Error obteniendo negocio:", error);
-        }
-    };
-
-    const handleDeselectShop = () => {
-        localStorage.removeItem('selectedShop');
-        setSelectedShop(null);
-        router.push('/shop-selection');
-    };
-
-    useEffect(() => {
-        const handleShopUpdate = () => {
-            const updatedShop = localStorage.getItem('selectedShop');
-            setSelectedShop(updatedShop);
-        };
-    
-        // Verifica si hay un negocio seleccionado inicialmente y lo carga
-        if (selectedShop) {
-            fetchShop(selectedShop); // Carga la información del negocio seleccionado
-        }
-    
-        // Escucha eventos de actualización del negocio
-        window.addEventListener('shop-updated', handleShopUpdate);
-    
-        return () => {
-            window.removeEventListener('shop-updated', handleShopUpdate); // Limpieza
-        };
-    }, [selectedShop]); // Solo vuelve a ejecutar si cambia `selectedShop`
-    
-
     return (
         <>
             <div className="flex w-[293px] flex-col justify-between items-center shrink-0 self-stretch pt-2">
@@ -148,7 +153,7 @@ export default function Sidebar() {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="">Sin selecionar</div>
+                                        <div>Sin selecionar</div>
                                     </>
                                 )
                                 }
