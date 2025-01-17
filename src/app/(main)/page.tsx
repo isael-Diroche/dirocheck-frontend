@@ -13,9 +13,9 @@ export default function Home() {
     const [error, setError] = useState<string | null>(null);
 
     const router = useRouter();
-    const selectedShop = localStorage.getItem('selectedShop');
-
+    
     const fetchShops = async () => {
+        const selectedShop = localStorage.getItem('selectedShop');
         // handleUpdateShop;
         try {
             if (selectedShop) {
@@ -30,16 +30,17 @@ export default function Home() {
             }
             console.error("Error obteniendo negocio:", error);
         }
+        
+        if (!selectedShop) return null;
+
+        if (!selectedShop) {
+            router.replace('/shop-selection');
+        }
     };
 
     useEffect(() => {
         fetchShops();
-        if (!selectedShop) {
-            router.replace('/shop-selection');
-        }
     }, [router]);
-
-    if (!selectedShop) return null;
 
     return (
         <>
