@@ -77,7 +77,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
                 total: 0,
             });
             onProductCreated(createdProduct);
-            onClose(); // Cerrar el formulario (opcional)
+            onClose();
         } catch (error) {
             console.error('Error creating product:', error);
         }

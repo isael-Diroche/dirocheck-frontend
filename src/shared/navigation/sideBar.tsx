@@ -123,6 +123,7 @@ export default function Sidebar() {
                     <div className="flex h-full flex-col justify-between items-start self-stretch">
                         <div className="flex flex-col items-start gap-6 self-stretch">
                             <Link href={"/"} className='group'>
+                                {/* Logo */}
                                 <div className="flex py-2 px-6 items-center gap-[10px] self-stretch group-hover:scale-105 transition-all duration-150 ease-linear">
                                     <div className="flex flex-col items-start select-none">
                                         <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">
@@ -134,7 +135,6 @@ export default function Sidebar() {
                                         </span>
                                     </div>
                                 </div>
-
                             </Link>
 
                             <div className="flex px-[14px] flex-col items-start gap-4 self-stretch">

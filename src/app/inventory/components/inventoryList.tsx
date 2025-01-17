@@ -8,6 +8,8 @@ import { Shop } from '@/app/shop/lib/model';
 
 import Link from 'next/link';
 import { BiTrash, BiEdit } from 'react-icons/bi';
+import CreateInventoryForm from './actions/createInventoryForm';
+import { Button } from '@/app/shop/components/ui/button';
 
 const inventoryService = new InventoryService();
 const shopService = new ShopService();
@@ -15,6 +17,7 @@ const shopService = new ShopService();
 const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }> = ({ shopId, onInventoryCreated }) => {
     const [inventories, setInventories] = useState<Inventory[]>([]);
     const [shops, setShops] = useState<Shop[]>([]);
+    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
 
     // Fetch all shops once when the component mounts
     const fetchShops = async () => {
@@ -40,7 +43,7 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
     useEffect(() => {
         fetchShops();
         fetchInventories();
-    }, [shopId]);  // Depend only on shopId to re-fetch inventories when it changes
+    }, [shopId]);
 
     // Handle delete inventory
     const handleDelete = async (inventoryId: number) => {
@@ -54,28 +57,66 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
         }
     };
 
+    const handleInventoryCreated = (newInventory: Inventory) => {
+        setInventories((prevInventories) => [...prevInventories, newInventory]);
+    };
+
+    const [creatingInventory, setCreatingInventory] = useState<boolean>(false);
+
+    const handleCancelCreate = () => {
+        setCreatingInventory(false);
+    };
+
     return (
         <>
             {inventories.length > 0 ? (
-                <ul className="grid grid-cols-3 gap-4">
-                    {inventories.map((inventory, index) => (
-                        <li key={index} className='w-full flex'>
-                            <Link href={`/inventory/${inventory.id}`} className="w-full h-full text-blue-600 hover:underline rounded-md border p-4">
-                                <div key={inventory.id}>
-                                    {inventory.name}
-                                </div>
-                            </Link>
-                            <button onClick={() => handleDelete(inventory.id)}>
-                                <BiTrash />
-                            </button>
-                            {/* <button onClick={() => handleUpdate(inventory)}>
+                <>
+                    <Button
+                        onClick={() => setIsCreateFormOpen(true)}
+                        className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded whitespace-nowrap'
+                    >
+                        Crear Inventario
+                    </Button>
+                    
+                    <ul className="grid grid-cols-3 gap-4">
+                        {inventories.map((inventory, index) => (
+                            <li key={index} className='w-full flex'>
+                                <Link href={`/inventory/${inventory.id}`} className="w-full h-full text-blue-600 hover:underline rounded-md border p-4">
+                                    <div key={inventory.id}>
+                                        {inventory.name}
+                                    </div>
+                                </Link>
+                                <button onClick={() => handleDelete(inventory.id)}>
+                                    <BiTrash />
+                                </button>
+                                {/* <button onClick={() => handleUpdate(inventory)}>
                                 <BiEdit />
                             </button> */}
-                        </li>
-                    ))}
-                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </>
             ) : (
-                <p>No hay inventarios disponibles.</p>
+                <div className="">
+                    <p>No hay inventarios disponibles.</p>
+                    <Button
+                        onClick={() => setIsCreateFormOpen(true)}
+                        className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded whitespace-nowrap'
+                    >
+                        Crear Inventario
+                    </Button>
+                </div>
+
+            )}
+
+            {shopId && (
+                <CreateInventoryForm
+                    isOpen={isCreateFormOpen}
+                    onClose={() => setIsCreateFormOpen(false)}
+                    shopId={shopId}
+                    onInventoryCreated={handleInventoryCreated}
+                    onCancel={handleCancelCreate}
+                />
             )}
         </>
     );
