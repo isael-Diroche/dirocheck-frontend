@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import axiosInstance from '@/core/axiosConfig';
+// import axiosInstance from '@/core/axiosConfig';
 import { Product } from '@/app/products/lib/model';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
 import { Button } from "@/app/shop/components/ui/button";
+import { ProductService } from '../../lib/service';
 
+const productService = new ProductService();
 interface CreateProductFormProps {
     shopId: string;
     onProductCreated: (product: Product) => void;
@@ -55,13 +57,12 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
         });
 
         try {
-            const response = await axiosInstance.post('product/', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            const createdProduct = response.data;
-            setProducts([...products, createdProduct]);
+            const createdProduct = await productService.createProduct(shopId, formData);
+
+            // Actualizar la lista de productos
+            setProducts((prevProducts) => [...prevProducts, createdProduct]);
+
+            // Limpiar el formulario
             setFormData({
                 id: 0,
                 shop: shopId,
@@ -76,6 +77,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
                 total: 0,
             });
             onProductCreated(createdProduct);
+            onClose(); // Cerrar el formulario (opcional)
         } catch (error) {
             console.error('Error creating product:', error);
         }
@@ -84,8 +86,8 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axiosInstance.get('product/');
-                setProducts(response.data);
+                const data = products;
+                setProducts(data);
             } catch (error) {
                 console.error('Error fetching products:', error);
             }

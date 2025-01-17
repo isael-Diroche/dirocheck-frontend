@@ -42,3 +42,4 @@ next-env.d.ts
 
 .sh # for shell scripts
 *.sh
+api.js

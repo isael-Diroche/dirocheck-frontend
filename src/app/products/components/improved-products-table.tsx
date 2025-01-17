@@ -10,8 +10,6 @@ import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filte
 import { ProductService } from "@/app/products/lib/service";
 import CreateProductForm from "@/app/products/components/actions/createProductForm";
 import { Product } from "../lib/model";
-import Image from "next/image";
-
 const productService = new ProductService();
 
 const ITEMS_PER_PAGE = 9
@@ -86,12 +84,12 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 		}
 	}
 
-	const [refresh, setRefresh] = useState<boolean>(false);
 	const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
 	const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
-	const handleProductCreated = () => {
-		setRefresh(!refresh);
-	};
+
+	const handleProductCreated = (newProduct: Product) => {
+        setProducts((prevProducts) => [...prevProducts, newProduct]);
+    };
 	const handleCancelCreate = () => {
 		setCreatingProduct(false);
 	};

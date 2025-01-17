@@ -62,7 +62,6 @@ export function CreateShopForm({ isOpen, onClose }: { isOpen: boolean; onClose: 
 				type: "",
 			});
 			setImageFile(null);
-			alert("Formulario enviado con exito!");
 		} catch (error) {
 			console.error("Error creando la tienda:", error);
 		}

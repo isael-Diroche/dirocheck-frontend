@@ -1,5 +1,6 @@
-import { Product } from "@/app/product/lib/model";
+
 import { GenericService } from "@/shared/generic/service";
+import { Product } from "./model";
 
 const API = "http://127.0.0.1:8000/api/v1";
 
