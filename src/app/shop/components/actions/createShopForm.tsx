@@ -10,7 +10,14 @@ import { Shop } from "../../lib/model"
 
 const shopService = new ShopService();
 
-export function CreateShopForm({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+interface CreateShopFormProps {
+	onShopCreated: (shop: Shop) => void;
+	isOpen: boolean;
+	// onCancel: () => void;
+	onClose: () => void;
+}
+
+const CreateShopForm: React.FC<CreateShopFormProps> = ({ isOpen, onShopCreated, onClose}) => {
 	const [shops, setShops] = useState<Shop[]>([]);
 	const [formData, setFormData] = useState<Shop>({
 		id: "0",
@@ -62,6 +69,7 @@ export function CreateShopForm({ isOpen, onClose }: { isOpen: boolean; onClose: 
 				type: "",
 			});
 			setImageFile(null);
+			onShopCreated(createdShop);
 		} catch (error) {
 			console.error("Error creando la tienda:", error);
 		}
@@ -138,3 +146,4 @@ export function CreateShopForm({ isOpen, onClose }: { isOpen: boolean; onClose: 
 	)
 }
 
+export default CreateShopForm;

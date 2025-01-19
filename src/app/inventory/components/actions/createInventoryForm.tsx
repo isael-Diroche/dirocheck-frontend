@@ -16,7 +16,7 @@ interface CreateInventoryFormProps {
     onClose: () => void;
 }
 
-const CreateInventoryForm: React.FC<CreateInventoryFormProps & { onCancel: () => void }> = ({ shopId, onInventoryCreated, isOpen, onCancel, onClose }) => {
+const CreateInventoryForm: React.FC<CreateInventoryFormProps> = ({ shopId, onInventoryCreated, isOpen, onCancel, onClose }) => {
     const [inventories, setInventories] = useState<Inventory[]>([]);
     const [formData, setFormData] = useState<Inventory>({
         id: 0,

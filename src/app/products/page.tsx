@@ -11,21 +11,13 @@ import ProductsTable from '@/app/products/components/improved-products-table';
 const shopService = new ShopService();
 
 const ProductsPage: React.FC = () => {
-    const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
+    // const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
 
     const [shop, setShop] = useState<Shop | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [refresh, setRefresh] = useState<boolean>(false);
 
-
-
     const router = useRouter();
-
-    useEffect(() => {
-        if (!selectedShop) {
-            router.replace('/shop-selection');
-        }
-    }, [router, selectedShop]);
 
     const fetchShop = async (shopId: string) => {
         try {
@@ -43,7 +35,10 @@ const ProductsPage: React.FC = () => {
 
     useEffect(() => {
         const shop = localStorage.getItem('selectedShop');
-        setSelectedShop(shop);
+        if (!shop) {
+            router.replace('/shop-selection');
+        }
+        // setSelectedShop(shop);
 
         if (shop) {
             fetchShop(shop);

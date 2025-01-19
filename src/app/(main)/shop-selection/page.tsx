@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import ShopCard from "@/app/shop/components/ShopCard"
-import { CreateShopForm } from "@/app/shop/components/actions/createShopForm"
+import CreateShopForm from "@/app/shop/components/actions/createShopForm"
 import { Button } from "@/app/shop/components/ui/button"
 import { Shop } from "../../shop/lib/model"
 import { ShopService } from "../../shop/lib/service"
@@ -36,6 +36,10 @@ export default function ShopSelectionPage() {
         }
     };
 
+    const handleShopCreated = (newShop: Shop) => {
+        setShops((prevShops) => [...prevShops, newShop]);
+    };
+
     useEffect(() => {
         fetchShops();
     }, []);
@@ -44,14 +48,24 @@ export default function ShopSelectionPage() {
         <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-3xl font-bold">Select a Business</h1>
-                <Button onClick={() => setIsCreateFormOpen(true)}>Crear negocio</Button>
+                <Button
+                    onClick={() => setIsCreateFormOpen(true)}
+                >
+                    Crear negocio
+                </Button>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {shops.map((shop) => (
                     <ShopCard key={shop.id} shop={shop} onUpdate={handleUpdateShop} />
                 ))}
             </div>
-            <CreateShopForm isOpen={isCreateFormOpen} onClose={() => setIsCreateFormOpen(false)} />
+
+            <CreateShopForm
+                isOpen={isCreateFormOpen}
+                onShopCreated={handleShopCreated}
+                onClose={() => setIsCreateFormOpen(false)}
+            />
         </div>
     )
 }

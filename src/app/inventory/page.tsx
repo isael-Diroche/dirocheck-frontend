@@ -7,15 +7,11 @@ import InventoryList from "@/app/inventory/components/inventoryList";
 
 const shopService = new ShopService();
 
-import { Button } from "../shop/components/ui/button";
-
 const InventoryPage = () => {
-    const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
-    const [creatingInventory, setCreatingInventory] = useState<boolean>(false);
+    // const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
     const [shop, setShop] = useState<Shop | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [refresh, setRefresh] = useState<boolean>(false);
-
 
     const fetchShop = async (shopId: string) => {
         try {
@@ -34,24 +30,16 @@ const InventoryPage = () => {
     useEffect(() => {
         const shopFromStorage = localStorage.getItem('selectedShop');
         if (shopFromStorage) {
-            setSelectedShop(shopFromStorage);
+            // setSelectedShop(shopFromStorage);
             fetchShop(shopFromStorage);
         }
     }, []);
 
-    useEffect(() => {
-        if (selectedShop) {
-            fetchShop(selectedShop);
-        }
-    }, [selectedShop, refresh]);
-
-    const handleCreate = () => {
-        setCreatingInventory(true);
-    };
-
-    const handleCancelCreate = () => {
-        setCreatingInventory(false);
-    };
+    // useEffect(() => {
+    //     if (selectedShop) {
+    //         fetchShop(selectedShop);
+    //     }
+    // }, [selectedShop, refresh]);
 
     const handleInventoryCreated = () => {
         setRefresh(!refresh);
