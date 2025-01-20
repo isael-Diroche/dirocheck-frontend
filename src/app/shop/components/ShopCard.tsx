@@ -15,9 +15,10 @@ import default_image from "@/public/image/image_default.webp"
 interface ShopCardProps {
     shop: Shop
     onUpdate: (updatedShop: Shop) => void;
+    onDelete: (id: string) => void;
 }
 
-export default function ShopCard({ shop, onUpdate }: ShopCardProps) {
+export default function ShopCard({ shop, onUpdate, onDelete }: ShopCardProps) {
     const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false)
     const router = useRouter();
 
@@ -114,6 +115,7 @@ export default function ShopCard({ shop, onUpdate }: ShopCardProps) {
                 onClose={() => setIsUpdateFormOpen(false)}
                 shop={shop}
                 onUpdate={onUpdate}
+                onDelete={onDelete}
             />
         </Card>
     )

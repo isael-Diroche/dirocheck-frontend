@@ -58,29 +58,6 @@ export class ShopService implements IShopService {
         return response.json(); // Asumiendo que el backend devuelve los datos de la tienda creada
     }
 
-    // async updateShop(formData: FormData, shop: Shop): Promise<void> {
-
-    //     const response = await this.shopService.updateItem(this.getShopUrl(shop.id), shop);
-
-        // const response = await fetch(this.getShopUrl(), {
-        //     method: 'PUT',
-        //     body: formData,
-        // });
-        // if (!response.ok) {
-        //     throw new Error('Error actualizando la tienda');
-        // }
-        // return response.json(); 
-
-        // try {
-        //     const success = await this.shopService.updateItem(this.getShopUrl(shop.id), shop);
-        //     if (!success) {
-        //         throw new Error("No se pudo actualizar el negocio.");
-        //     }
-        // } catch (error) {
-        //     throw new Error(`Error al actualizar el negocio: ${error instanceof Error ? error.message : "Desconocido"}`);
-        // }
-    // }
-
     async updateShop(updatedShop: Shop): Promise<Shop> {
         if (!updatedShop.id) {
             throw new Error("El ID de la tienda es obligatorio para actualizarla.");
@@ -109,24 +86,7 @@ export class ShopService implements IShopService {
         // Devuelve la tienda actualizada
         return response.json();
     }
-
-    // async updateShop(formData: FormData, shopId: string ): Promise<boolean> {
-    //     try {
-    //         const response = await fetch(this.getShopUrl(shopId), {
-    //             method: "PUT",
-    //             body: formData,
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error("Error en la solicitud de actualización");
-    //         }
-    //         return true; 
-    //     } catch (error) {
-    //         console.error("Error al actualizar el item:", error);
-    //         return false;
-    //     }
-    // }
-
+    
     async deleteShop(shopId: string): Promise<void> {
         try {
             const success = await this.shopService.deleteItem(this.getShopUrl(shopId));

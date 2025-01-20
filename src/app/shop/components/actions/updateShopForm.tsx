@@ -15,9 +15,10 @@ interface UpdateShopFormProps {
     onClose: () => void
     shop: Shop
     onUpdate: (updatedShop: Shop) => void;
+    onDelete: (id: string) => void;
 }
 
-export function UpdateShopForm({ isOpen, onClose, shop, onUpdate }: UpdateShopFormProps) {
+export function UpdateShopForm({ isOpen, onClose, shop, onUpdate, onDelete }: UpdateShopFormProps) {
     const [formData, setFormData] = useState(shop)
     const [imageFile, setImageFile] = useState<File>()
 
@@ -31,6 +32,31 @@ export function UpdateShopForm({ isOpen, onClose, shop, onUpdate }: UpdateShopFo
             setImageFile(e.target.files[0])
         }
     }
+
+    // const handleDelete = async (id: string) => {
+    //     try {
+    //         await shopService.deleteShop(id); // Asegúrate de que esto sea una operación asíncrona
+    //         console.log(`Tienda con ID ${id} eliminada correctamente.`);
+
+    //         // Filtra el negocio eliminado de la lista
+    //         onUpdate({ ...formData, id: "" }); // Notifica al componente padre que se eliminó
+    //     } catch (error) {
+    //         console.error("Error eliminando la tienda:", error);
+    //     } finally {
+    //         onClose(); // Cierra el formulario
+    //     }
+    // };
+
+    const handleDelete = async (id: string) => {
+        try {
+            await shopService.deleteShop(id);
+            onDelete(id); // Notifica al componente padre que se eliminó
+        } catch (error) {
+            console.error("Error eliminando la tienda:", error);
+        } finally {
+            onClose();
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -111,13 +137,18 @@ export function UpdateShopForm({ isOpen, onClose, shop, onUpdate }: UpdateShopFo
                             />
                         </div>
                     </div>
-                    <DialogFooter>
-                        <Button type="button" variant="outline" onClick={onClose}>
-                            Cancelar
+                    <DialogFooter className="flex flex-col justify-between items-center">
+                        <Button type="button" variant="destructive" onClick={() => handleDelete(shop.id)}>
+                            Eliminar
                         </Button>
-                        <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
-                            Actualizar Tienda
-                        </Button>
+                        <div className="flex gap-2 justify-end w-full">
+                            <Button type="button" variant="outline" onClick={onClose}>
+                                Cancelar
+                            </Button>
+                            <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
+                                Actualizar Tienda
+                            </Button>
+                        </div>
                     </DialogFooter>
                 </form>
             </DialogContent>

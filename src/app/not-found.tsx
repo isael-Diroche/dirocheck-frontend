@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Button } from "./shop/components/ui/button";
 
 const NotFound = () => {
     return (
@@ -9,9 +10,7 @@ const NotFound = () => {
                 Lo sentimos, la página que estás buscando no existe.
             </p>
             <Link href="/">
-                <button className="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-150">
-                    Volver al Inicio
-                </button>
+                <Button>Volver al Inicio</Button>
             </Link>
         </div>
     );

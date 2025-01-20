@@ -21,6 +21,10 @@ export default function ShopSelectionPage() {
         );
     };
 
+    const handleDelete = async (id: string) => {
+        setShops(prevShops => prevShops.filter(shop => shop.id !== id));
+    };
+
     const fetchShops = async () => {
         handleUpdateShop;
         try {
@@ -57,7 +61,12 @@ export default function ShopSelectionPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {shops.map((shop) => (
-                    <ShopCard key={shop.id} shop={shop} onUpdate={handleUpdateShop} />
+                    <ShopCard
+                        key={shop.id}
+                        shop={shop}
+                        onUpdate={handleUpdateShop}
+                        onDelete={handleDelete}
+                    />
                 ))}
             </div>
 
