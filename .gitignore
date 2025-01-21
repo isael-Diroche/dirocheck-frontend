@@ -42,4 +42,5 @@ next-env.d.ts
 
 .sh # for shell scripts
 *.sh
-api.js
+api.tsx
+pnpm-lock.yaml
