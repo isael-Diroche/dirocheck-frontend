@@ -4,7 +4,7 @@ import { BiSearch, BiSidebar } from "react-icons/bi";
 import { IoChevronDown, IoNotifications } from "react-icons/io5";
 import ForwardBackButtons from "@/shared/navigation/forwardBack";
 
-import imagen from "@/public/favicon.ico";
+import imagen from "@/public/icons/favicon.ico";
 
 // Component: NotificationButton
 const NotificationButton = () => (

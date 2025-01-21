@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { ProductService } from "../lib/service";
-import { Product } from "../lib/model";
+import { ProductService } from "../services/productService";
+import { Product } from "../types/productTypes";
 
 const productService = new ProductService();
 
@@ -9,7 +9,7 @@ const ProductList: React.FC<{ shopId: string; onProductCreated: () => void }> = 
     onProductCreated,
 }) => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [editingProductId, setEditingProductId] = useState<number | null>(null);
+    const [editingProductId, setEditingProductId] = useState<string | null>(null);
     const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
 
     const fetchProducts = async () => {
@@ -54,7 +54,7 @@ const ProductList: React.FC<{ shopId: string; onProductCreated: () => void }> = 
         }));
     };
 
-    const handleDelete = async (productId: number) => {
+    const handleDelete = async (productId: string) => {
         try {
             await productService.deleteProduct(shopId, productId);
             fetchProducts();

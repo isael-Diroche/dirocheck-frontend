@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 // import axiosInstance from '@/core/axiosConfig';
-import { Product } from '@/app/products/lib/model';
+import { Product } from '@/app/products/types/productTypes';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
 import { Button } from "@/app/shop/components/ui/button";
-import { ProductService } from '../../lib/service';
+import { ProductService } from '../../services/productService';
 
 const productService = new ProductService();
 interface CreateProductFormProps {
@@ -19,7 +19,7 @@ interface CreateProductFormProps {
 const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProductCreated, isOpen, onClose, onCancel }) => {
     const [products, setProducts] = useState<Product[]>([]);
     const [formData, setFormData] = useState<Product>({
-        id: 0,
+        id: "0",
         shop: shopId,
         image_url: null,
         details: '',
@@ -64,7 +64,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
 
             // Limpiar el formulario
             setFormData({
-                id: 0,
+                id: "0",
                 shop: shopId,
                 image_url: null,
                 details: '',

@@ -10,7 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/
 import { UpdateShopForm } from "./actions/updateShopForm"
 import { Shop } from "../lib/model"
 import { useRouter } from "next/navigation"
-import default_image from "@/public/image/image_default.webp"
+import default_image from "@/public/images/image_default.webp"
 
 interface ShopCardProps {
     shop: Shop

@@ -62,7 +62,7 @@ export class InventoryService implements IInventoryService {
     }
 
     async deleteInventory(shopId: string, inventoryId: string ): Promise<void> {
-        await this.getInventory(shopId, inventoryId); // Verifica que el inventario exista
+        await this.getInventory(shopId, inventoryId);
         const success = await this.inventoryService.deleteItem(`${API}/inventory/${inventoryId}/`);
 
         if (!success) {

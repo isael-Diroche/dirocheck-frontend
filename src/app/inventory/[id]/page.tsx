@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Inventory } from '@/app/inventory/lib/model';
 import { InventoryService } from "@/app/inventory/lib/service";
 import { Shop } from '@/app/shop/lib/model';
-import { ProductService } from '@/app/products/lib/service'; // Servicio para obtener detalles de los productos
+import { ProductService } from '@/app/products/services/productService'; // Servicio para obtener detalles de los productos
 
 const inventoryService = new InventoryService();
 const productService = new ProductService(); // Instancia del servicio de productos

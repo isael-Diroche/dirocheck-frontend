@@ -13,10 +13,7 @@ export interface IShopService {
 
 export class ShopService implements IShopService {
     private shopService: GenericService<Shop>;
-
-    constructor() {
-        this.shopService = new GenericService<Shop>();
-    }
+    constructor() { this.shopService = new GenericService<Shop>(); }
 
     // Utility to generate the full API URL
     private getShopUrl(shopId?: string): string {
@@ -86,7 +83,7 @@ export class ShopService implements IShopService {
         // Devuelve la tienda actualizada
         return response.json();
     }
-    
+
     async deleteShop(shopId: string): Promise<void> {
         try {
             const success = await this.shopService.deleteItem(this.getShopUrl(shopId));

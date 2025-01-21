@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Product } from '../../lib/model';
+import { Product } from '../../types/productTypes';
 import { Shop } from '@/app/shop/lib/model';
 
 interface UpdateProductFormProps {
