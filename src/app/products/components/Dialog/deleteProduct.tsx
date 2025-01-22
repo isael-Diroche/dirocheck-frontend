@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { ProductService } from '../../services/productService';
-import { Product } from '../../types/productTypes';
+import { Product } from '../../types/productType';
 interface DeleteProductDialogProps {
     product: Product;
     shopId: string;
     onSubmit: (product: Product) => void;
-    onCancel: () => void;
-    onProductDeleted: () => void;
 }
 
 const productService = new ProductService();
 
-const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({ product, shopId, onSubmit, onCancel, onProductDeleted }) => {
+const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({ product, shopId, onSubmit }) => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [deletedProduct, setDeletedProduct] = useState<Product>(product);
+    // const [deletedProduct, setDeletedProduct] = useState<Product>(product);
 
     const handleDelete = async (productId: string) => {
         try {
@@ -36,7 +34,7 @@ const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({ product, shop
 
     useEffect(() => {
         fetchProducts();
-    }, [shopId, onProductDeleted]);
+    }, [shopId]);
 
     return (
         <>

@@ -1,8 +1,8 @@
 
 export type Inventory = {
-    id: number;
+    id: string;
     shop: string;
-    products?: string[];
+    products?: number[];
     name: string;
     total?: number;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Product } from '@/app/products/types/productTypes';
+import { Product } from '@/app/products/types/productType';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
 import { Button } from "@/app/shop/components/ui/button";
 import { ProductService } from '../../services/productService';

@@ -1,6 +1,5 @@
-
 import { GenericService } from "@/shared/generic/service";
-import { Product } from "../types/productTypes";
+import { Product } from "../types/productType";
 import API from "@/core/api";
 
 export interface IProductService {
@@ -13,8 +12,11 @@ export interface IProductService {
 
 export class ProductService implements IProductService {
     private productService: GenericService<Product>;
-    constructor() { this.productService = new GenericService<Product>(); }
     static getAllProducts: any;
+    
+    constructor() {
+        this.productService = new GenericService<Product>();
+    }
 
     private getProductUrl(productId?: string): string {
         return productId ? `${API}/product/${productId}/` : `${API}/product/`;
@@ -37,7 +39,6 @@ export class ProductService implements IProductService {
             return product;
         } else {
             throw new Error("No se encontró producto para este negocio");
-            // throw new Error("No se encontró el producto");
         }
     }
 

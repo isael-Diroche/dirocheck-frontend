@@ -9,14 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filter } from "lucide-react"
 import { ProductService } from "@/app/products/services/productService";
 // import CreateProductForm from "@/app/products/components/Form/createProduct";
-import { Product } from "../types/productTypes";
+import { Product } from "../types/productType";
 import { useProduct } from "../hooks/useProduct";
 const productService = new ProductService();
 
 const ITEMS_PER_PAGE = 8
 interface ProductsTableProps {
 	shopId: string;
-	// onProductCreated: (newProduct: Product) => void;
 }
 
 export default function ProductsTable({ shopId }: ProductsTableProps) {
@@ -47,8 +46,6 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 	// };
 
 	useEffect(() => {
-		// Llamada inicial para cargar productos
-		// fetchProducts();
 		fetchProducts(shopId); // Llamada inicial para cargar los productos
 	}, []);
 

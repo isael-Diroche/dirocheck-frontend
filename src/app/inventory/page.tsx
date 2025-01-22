@@ -1,72 +1,43 @@
 'use client'
 
-import { Shop } from "@/app/shop/lib/model";
-import { ShopService } from "@/app/shop/lib/service";
+import { Shop } from '@/app/shop/lib/model';
+import { ShopService } from '@/app/shop/lib/service';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import InventoryList from "@/app/inventory/components/inventoryList";
 
 const shopService = new ShopService();
 
 const InventoryPage = () => {
-    // const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
     const [shop, setShop] = useState<Shop | null>(null);
-    const [error, setError] = useState<string | null>(null);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const router = useRouter();
 
     const fetchShop = async (shopId: string) => {
         try {
             const data = await shopService.getShop(shopId);
             setShop(data);
         } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Ha ocurrido un error desconocido");
-            }
             console.error("Error obteniendo negocio:", error);
         }
     };
 
     useEffect(() => {
-        const shopFromStorage = localStorage.getItem('selectedShop');
-        if (shopFromStorage) {
-            // setSelectedShop(shopFromStorage);
-            fetchShop(shopFromStorage);
+        const shop = localStorage.getItem('selectedShop');
+
+        if (!shop) {
+            router.replace('/shop-selection');
+        } else {
+            fetchShop(shop);
         }
-    }, []);
-
-    // useEffect(() => {
-    //     if (selectedShop) {
-    //         fetchShop(selectedShop);
-    //     }
-    // }, [selectedShop, refresh]);
-
-    const handleInventoryCreated = () => {
-        setRefresh(!refresh);
-    };
+    }, [refresh]);
 
     return (
         <>
-            <div>
-                <div className="flex w-full items-center">
-                    <div className="container w-full flex flex-col items-start justify-center">
-                        <h1 className="text-2xl text-gray-800 font-semibold font-open">Inventarios de {shop?.name}</h1>
-                        <p className='text-base text-gray-500 font-inter'>Bienvenido a la página de inventarios. Aquí encontrarás los diferentes inventarios de tu negocio seleccionado.</p>
-                    </div>
-                </div>
-                <div className="container w-full h-full flex flex-col items-center">
-                    {shop ? (
-                        <div className='w-full'>
-                            <InventoryList
-                                shopId={shop.id}
-                                onInventoryCreated={handleInventoryCreated}
-                            />
-                            <p>Listando inventarios para el negocio: {shop.name}</p>
-                        </div>
-                    ) : (
-                        <p>{error ? error : "Cargando..."}</p>
-                    )}
-                </div>
+            <div className="w-full h-full">
+                {shop && (
+                    <InventoryList shopId={shop.id} />
+                )}
             </div>
         </>
     );

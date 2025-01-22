@@ -64,17 +64,6 @@ export class GenericService<T> implements IGenericService<T> {
 	}
 
 	async deleteItem(url: string): Promise<boolean> {
-		// 	try {
-		// 		const response = await axios.delete(url);
-		// 		if (response.status !== 200) {
-		// 			throw new Error(`Failed to delete item. Status code: ${response.status}`);
-		// 		}
-		// 		return true;
-		// 	} catch (error) {
-		// 		this.handleError(error, 'DELETE', url);
-		// 		return false; // Return false on error
-		// 	}
-
 		try {
 			const response = await axios.delete(url);
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState } from "react";
-import { Product } from "../types/productTypes";
+import { Product } from "../types/productType";
 import { ProductService } from "../services/productService";
 
 type ProductContextType = {

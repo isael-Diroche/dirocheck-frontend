@@ -1,83 +1,103 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { InventoryService } from "../lib/service";
-import { Inventory } from "../lib/model";
+import { InventoryService } from "../services/inventoryService";
+import Link from 'next/link';
+import { BiTrash } from 'react-icons/bi';
+import { useInventory } from '../hooks/useInventory';
+
+// import { Inventory } from "../types/inventoryType";
 import { ShopService } from '@/app/shop/lib/service';
 import { Shop } from '@/app/shop/lib/model';
-
-import Link from 'next/link';
-import { BiTrash, BiEdit } from 'react-icons/bi';
-import CreateInventoryForm from './actions/createInventoryForm';
-import { Button } from '@/app/shop/components/ui/button';
+// import CreateInventoryForm from './Form/createInventory';
+// import { Button } from '@/app/shop/components/ui/button';
+// import { useProduct } from '@/app/products/hooks/useProduct';
 
 const inventoryService = new InventoryService();
-const shopService = new ShopService();
+// const shopService = new ShopService();
 
-const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }> = ({ shopId, onInventoryCreated }) => {
-    const [inventories, setInventories] = useState<Inventory[]>([]);
-    const [shops, setShops] = useState<Shop[]>([]);
-    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
+interface InventoryListProps {
+	shopId: string;
+}
+
+export default function InventoryList({ shopId }: InventoryListProps) {
+    const { inventories, fetchInventories, deleteInventory } = useInventory();
+    // const [inventories, setInventories] = useState<Inventory[]>([]);
+    // const [shops, setShops] = useState<Shop[]>([]);
+    // const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
 
     // Fetch all shops once when the component mounts
-    const fetchShops = async () => {
-        try {
-            const data = await shopService.getAllShop();
-            setShops(data);
-        } catch (error) {
-            console.error("Error obteniendo tiendas:", error);
-        }
-    };
+    // const fetchShops = async () => {
+    //     try {
+    //         const data = await shopService.getAllShop();
+    //         setShops(data);
+    //     } catch (error) {
+    //         console.error("Error obteniendo tiendas:", error);
+    //     }
+    // };
 
     // Fetch inventories for the current shop
-    const fetchInventories = async () => {
-        try {
-            const data = await inventoryService.getAllInventories(shopId);
-            setInventories(data);
-        } catch (error) {
-            console.error("Error obteniendo inventarios:", error);
-        }
-    };
+    // const fetchInventories = async () => {
+    //     try {
+    //         const data = await inventoryService.getAllInventories(shopId);
+    //         setInventories(data);
+    //     } catch (error) {
+    //         console.error("Error obteniendo inventarios:", error);
+    //     }
+    // };
 
-    // First useEffect to fetch data on mount
     useEffect(() => {
-        fetchShops();
-        fetchInventories();
-    }, [shopId]);
+        fetchInventories(shopId); // Llamada inicial para cargar inventarios
+    }, []);
 
     // Handle delete inventory
-    const handleDelete = async (inventoryId: number) => {
-        try {
-            if (window.confirm("¿Está seguro de que desea eliminar este inventario?")) {
-                await inventoryService.deleteInventory(shopId, inventoryId.toString());
-                fetchInventories(); // Refresh inventory list after deletion
-            }
-        } catch (error) {
-            console.error("Error eliminando inventario:", error);
-        }
-    };
+    // const handleDelete = async (inventoryId: string) => {
+    //     try {
+    //         if (window.confirm("¿Está seguro de que desea eliminar este inventario?")) {
+    //             await inventoryService.deleteInventory(shopId, inventoryId);
+    //             fetchInventories(); // Refresh inventory list after deletion
+    //         }
+    //     } catch (error) {
+    //         console.error("Error eliminando inventario:", error);
+    //     }
+    // };
 
-    const handleInventoryCreated = (newInventory: Inventory) => {
-        setInventories((prevInventories) => [...prevInventories, newInventory]);
-    };
+    const handleDelete = async (inventoryId: string) => {
+		try {
+			await inventoryService.deleteInventory(shopId, inventoryId); // Llamada al backend para eliminar el producto
+			deleteInventory(inventoryId); // Actualiza el estado global para que se muestre instantaneamente
+		} catch (error) {
+			console.error("Error eliminando inventario:", error);
+		}
+	};
 
-    const [creatingInventory, setCreatingInventory] = useState<boolean>(false);
+    // const handleInventoryCreated = (newInventory: Inventory) => {
+    //     setInventories((prevInventories) => [...prevInventories, newInventory]);
+    // };
 
-    const handleCancelCreate = () => {
-        setCreatingInventory(false);
-    };
+    // const [creatingInventory, setCreatingInventory] = useState<boolean>(false);
+
+    // const handleCancelCreate = () => {
+    //     setCreatingInventory(false);
+    // };
 
     return (
         <>
-            {inventories.length > 0 ? (
+            {inventories.length === 0 ? (
                 <>
-                    <Button
+                    <div className="flex w-full h-full items-center justify-center flex-col gap-4">
+                        <h1 className="text-xl font-open font-semibold text-gray-800">No hay inventarios disponibles para este negocio.</h1>
+                    </div>
+                </>
+            ) : (
+                <>
+                    {/* <Button
                         onClick={() => setIsCreateFormOpen(true)}
                         className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded whitespace-nowrap'
                     >
                         Crear Inventario
-                    </Button>
-                    
+                    </Button> */}
+
                     <ul className="grid grid-cols-3 gap-4">
                         {inventories.map((inventory, index) => (
                             <li key={index} className='w-full flex'>
@@ -90,36 +110,13 @@ const InventoryList: React.FC<{ shopId: string, onInventoryCreated: () => void }
                                     <BiTrash />
                                 </button>
                                 {/* <button onClick={() => handleUpdate(inventory)}>
-                                <BiEdit />
-                            </button> */}
+                                    <BiEdit />
+                                </button> */}
                             </li>
                         ))}
                     </ul>
                 </>
-            ) : (
-                <div className="">
-                    <p>No hay inventarios disponibles.</p>
-                    <Button
-                        onClick={() => setIsCreateFormOpen(true)}
-                        className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded whitespace-nowrap'
-                    >
-                        Crear Inventario
-                    </Button>
-                </div>
-
-            )}
-
-            {shopId && (
-                <CreateInventoryForm
-                    isOpen={isCreateFormOpen}
-                    onClose={() => setIsCreateFormOpen(false)}
-                    shopId={shopId}
-                    onInventoryCreated={handleInventoryCreated}
-                    onCancel={handleCancelCreate}
-                />
             )}
         </>
     );
 };
-
-export default InventoryList;

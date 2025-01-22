@@ -3,10 +3,10 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { Inventory } from '@/app/inventory/lib/model';
-import { InventoryService } from "@/app/inventory/lib/service";
-import { Shop } from '@/app/shop/lib/model';
-import { ProductService } from '@/app/products/services/productService'; // Servicio para obtener detalles de los productos
+import { Inventory } from '@/app/inventory/types/inventoryType';
+import { InventoryService } from "@/app/inventory/services/inventoryService";
+// import { Shop } from '@/app/shop/lib/model';
+import { ProductService } from '@/app/products/services/productService'; 
 
 const inventoryService = new InventoryService();
 const productService = new ProductService(); // Instancia del servicio de productos
@@ -16,7 +16,7 @@ const InventoryDetails = () => {
     const inventoryId = params.id;
 
     const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
-    const [shop, setShop] = useState<Shop | null>(null);
+    // const [shop, setShop] = useState<Shop | null>(null);
     const [selectedInventoryProducts, setSelectedInventoryProducts] = useState<any[]>([]); // Array de productos con información detallada
     const [inventory, setInventory] = useState<Inventory>({
         id: 0,
@@ -54,7 +54,7 @@ const InventoryDetails = () => {
                 const productDetails = await Promise.all(
                     productIds.map(async (productId) => {
                         // Llamar al método getProduct con los parámetros correctos (shopId y productId)
-                        return await productService.getProduct(selectedShop, productId);
+                        return await productService.getProduct(selectedShop, productId.toString());
                     })
                 );
                 setSelectedInventoryProducts(productDetails); // Guardar los productos detallados

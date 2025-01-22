@@ -1,22 +1,21 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { Inventory } from "../../lib/model";
+import { Inventory } from "../../types/inventoryType";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
 import { Button } from "@/app/shop/components/ui/button";
 
-import { InventoryService } from "@/app/inventory/lib/service";
+import { InventoryService } from "@/app/inventory/services/inventoryService";
 const inventoryService = new InventoryService();
 
 interface CreateInventoryFormProps {
     shopId: string;
     onInventoryCreated: (inventory: Inventory) => void;
     isOpen: boolean;
-    onCancel: () => void;
     onClose: () => void;
 }
 
-const CreateInventoryForm: React.FC<CreateInventoryFormProps> = ({ shopId, onInventoryCreated, isOpen, onCancel, onClose }) => {
+const CreateInventoryForm: React.FC<CreateInventoryFormProps> = ({ shopId, onInventoryCreated, isOpen, onClose }) => {
     const [inventories, setInventories] = useState<Inventory[]>([]);
     const [formData, setFormData] = useState<Inventory>({
         id: 0,
@@ -83,7 +82,7 @@ const CreateInventoryForm: React.FC<CreateInventoryFormProps> = ({ shopId, onInv
                         </div>
 
                         <DialogFooter>
-                            <Button type="button" variant="outline" onClick={onCancel}>
+                            <Button type="button" variant="outline" onClick={onClose}>
                                 Cancelar
                             </Button>
                             <Button type="submit" onClick={onClose} className="bg-green-500 hover:bg-green-600 text-white">
