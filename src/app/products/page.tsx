@@ -42,7 +42,7 @@ const ProductsPage: React.FC = () => {
         <>
             <div className="w-full h-full">
                 {shop && (
-                    <ProductsTable shopId={shop.id} onProductCreated={handleProductCreated} />
+                    <ProductsTable shopId={shop.id} />
                 )}
             </div>
         </>

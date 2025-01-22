@@ -20,7 +20,7 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =
     const router = useRouter();
 
     const handleProductCreated = (newProduct: Product) => {
-        addProduct(newProduct); // Actualiza los productos en el contexto
+        addProduct(newProduct);
     };
 
     const fetchShop = async (shopId: string) => {

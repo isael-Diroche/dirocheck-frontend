@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-// import axiosInstance from '@/core/axiosConfig';
+import React, { useState } from 'react';
 import { Product } from '@/app/products/types/productTypes';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
 import { Button } from "@/app/shop/components/ui/button";
@@ -17,8 +16,7 @@ interface CreateProductFormProps {
 }
 
 const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProductCreated, isOpen, onClose }) => {
-    // const [products, setProducts] = useState<Product[]>([]);
-    const { fetchProducts, addProduct } = useProduct();
+    const { fetchProducts } = useProduct();
     const [formData, setFormData] = useState<Product>({
         id: "0",
         shop: shopId,
@@ -59,10 +57,6 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
 
         try {
             const createdProduct = await productService.createProduct(shopId, formData);
-            // const createdProduct = await addProduct(form);
-
-            // Actualizar la lista de productos
-            // setProducts((prevProducts) => [...prevProducts, createdProduct]);
             fetchProducts(shopId);
 
             // Limpiar el formulario
@@ -85,18 +79,6 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
             console.error('Error creating product:', error);
         }
     };
-
-    // useEffect(() => {
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const data = products;
-    //             setProducts(data);
-    //         } catch (error) {
-    //             console.error('Error fetching products:', error);
-    //         }
-    //     };
-    //     fetchProducts();
-    // }, []);
 
     return (
         <>

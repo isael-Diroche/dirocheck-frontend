@@ -46,7 +46,7 @@ export class ProductService implements IProductService {
         if (product.shop != shopId) {
             throw new Error("Error agregando producto a este negocio");
         }
-        const created_product = await this.productService.createItem(`${API}/product/`, product);
+        const created_product = await this.productService.createItem(this.getProductUrl(), product);
 
         if (!created_product) {
             throw new Error("No se puedo crear el producto");
@@ -56,7 +56,7 @@ export class ProductService implements IProductService {
 
     async updateProduct(shopId: string, productId: string, product: Product): Promise<void> {
         await this.getProduct(shopId, productId); // Verifica que el producto exista
-        const success = await this.productService.updateItem(`${API}/product/${productId}/`, product);
+        const success = await this.productService.updateItem(this.getProductUrl(productId), product);
 
         if (!success) {
             throw new Error("No se pudo actualizar el producto");
