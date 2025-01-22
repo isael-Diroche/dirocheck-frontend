@@ -6,20 +6,28 @@ import { Button } from "@/app/products/components/Shared/button"
 import { Input } from "@/app/products/components/Shared/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/app/products/components/Shared/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/products/components/Shared/select"
-import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filter, Plus } from "lucide-react"
+import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filter } from "lucide-react"
 import { ProductService } from "@/app/products/services/productService";
-import CreateProductForm from "@/app/products/components/Form/createProduct";
+// import CreateProductForm from "@/app/products/components/Form/createProduct";
 import { Product } from "../types/productTypes";
+import { useProduct } from "../hooks/useProduct";
 const productService = new ProductService();
 
-const ITEMS_PER_PAGE = 9
+const ITEMS_PER_PAGE = 8
+interface ProductsTableProps {
+	shopId: string;
+	// onProductCreated: (newProduct: Product) => void;
+}
 
-const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> = ({ shopId, onProductCreated }) => {
-	const [products, setProducts] = useState<Product[]>([]);
+export default function ProductsTable({ shopId }: ProductsTableProps) {
+	// const [products, setProducts] = useState<Product[]>([]);
+	// const { products } = useProduct();
+	const { products, fetchProducts, deleteProduct } = useProduct();
 	const [editingProductId, setEditingProductId] = useState<string | null>(null)
 	const [editedProduct, setEditedProduct] = useState<Product | null>(null)
 
-	const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
+	// const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
+	const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 	const [filters, setFilters] = useState({
 		stock: "",
 		price: "",
@@ -27,19 +35,21 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 	})
 	const [currentPage, setCurrentPage] = useState(1)
 	const [showFilters, setShowFilters] = useState(false)
+	// const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
 
-	const fetchProducts = async () => {
-		try {
-			const data = await productService.getAllProducts(shopId);
-			setProducts(data);
-		} catch (error) {
-			console.error("Error obteniendo productos:", error);
-		}
-	};
+	// const fetchProducts = async () => {
+	// 	try {
+	// 		const data = await productService.getAllProducts(shopId);
+	// 		setProducts(data);
+	// 	} catch (error) {
+	// 		console.error("Error obteniendo productos:", error);
+	// 	}
+	// };
 
 	useEffect(() => {
 		// Llamada inicial para cargar productos
-		fetchProducts();
+		// fetchProducts();
+		fetchProducts(shopId); // Llamada inicial para cargar los productos
 	}, []);
 
 	useEffect(() => {
@@ -76,7 +86,7 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 
 		try {
 			await productService.updateProduct(shopId, editingProductId, editedProduct as Product);
-			fetchProducts();
+			fetchProducts(shopId);
 			setEditingProductId(null);
 			setEditedProduct(null)
 		} catch (error) {
@@ -84,30 +94,29 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 		}
 	}
 
-	const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
-	const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
-
-	const handleProductCreated = (newProduct: Product) => {
-		setProducts((prevProducts) => [...prevProducts, newProduct]);
-	};
-	const handleCancelCreate = () => {
-		setCreatingProduct(false);
-	};
-
 	const handleCancelEdit = () => {
 		setEditingProductId(null)
 		setEditedProduct(null)
 	}
 
+	// const handleDelete = async (productId: string) => {
+	// 	setProducts(products.filter((p) => p.id !== productId))
+	// 	try {
+	// 		await productService.deleteProduct(shopId, productId);
+	// 		fetchProducts();
+	// 	} catch (error) {
+	// 		console.error("Error eliminando producto:", error);
+	// 	}
+	// }
+
 	const handleDelete = async (productId: string) => {
-		setProducts(products.filter((p) => p.id !== productId))
 		try {
-			await productService.deleteProduct(shopId, productId);
-			fetchProducts();
+			await productService.deleteProduct(shopId, productId); // Llamada al backend para eliminar el producto
+			deleteProduct(productId); // Actualiza el estado global para que se muestre instantaneamente
 		} catch (error) {
 			console.error("Error eliminando producto:", error);
 		}
-	}
+	};
 
 	const handleFilterChange = (field: string, value: string) => {
 		setFilters(prev => ({ ...prev, [field]: value }))
@@ -118,27 +127,21 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 			{products.length === 0 ? (
 				<>
 					<div className="flex w-full h-full items-center justify-center flex-col gap-4">
-						<h1 className="text-xl font-open font-semibold text-gray-800">No hay productos disponibles para esta tienda.</h1>
-						<Button
-							onClick={() => setIsCreateFormOpen(true)}
-						>
-							<Plus className="mr-2 h-4 w-4" />
-							Nuevo Producto
-						</Button>
+						<h1 className="text-xl font-open font-semibold text-gray-800">No hay productos disponibles para este negocio.</h1>
 					</div>
 				</>
 			) : (
 				<>
-					<div className="container mx-auto py-10 h-full">
+					<div className="h-full">
 						<div className="mb-4 flex items-center justify-between">
-							<div className="flex items-center space-x-4">
+							<div className="flex justify-between w-full flex-row-reverse items-center">
 								<Button
-									variant="outline"
+									variant={showFilters ? "default" : "outline"}
 									size="sm"
 									onClick={() => setShowFilters(!showFilters)}
 								>
 									<Filter className="mr-2 h-4 w-4" />
-									{showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+									Filtros
 								</Button>
 								<Input
 									placeholder="Buscar por detalles"
@@ -147,15 +150,9 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 									className="max-w-sm"
 								/>
 							</div>
-							<Button
-								onClick={() => setIsCreateFormOpen(true)}
-							>
-								<Plus className="mr-2 h-4 w-4" />
-								Nuevo Producto
-							</Button>
 						</div>
 						{showFilters && (
-							<div className="mb-4 flex items-center space-x-4">
+							<div className="mb-4 flex items-center gap-2 justify-end">
 								<Select onValueChange={(value) => handleFilterChange("stock", value)}>
 									<SelectTrigger className="w-[180px]">
 										<SelectValue placeholder="Filtrar por cantidad" />
@@ -181,7 +178,7 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 						)}
 						<Table>
 							<TableHeader>
-								<TableRow className="bg-mantis-500 hover:bg-mantis-600 border-mantis-700 text-mantis-50 ">
+								<TableRow className="bg-mantis-500 border-mantis-700 text-mantis-50 ">
 									<TableHead>Cantidad</TableHead>
 									<TableHead>Detalles</TableHead>
 									<TableHead>Costo</TableHead>
@@ -297,18 +294,6 @@ const ProductsTable: React.FC<{ shopId: string; onProductCreated: () => void }> 
 					</div>
 				</>
 			)}
-
-			{shopId && (
-				<CreateProductForm
-					isOpen={isCreateFormOpen}
-					onClose={() => setIsCreateFormOpen(false)}
-					shopId={shopId}
-					onProductCreated={handleProductCreated}
-					onCancel={handleCancelCreate}
-				/>
-			)}
 		</>
 	);
 };
-
-export default ProductsTable;

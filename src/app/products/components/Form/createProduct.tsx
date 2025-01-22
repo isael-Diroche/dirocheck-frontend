@@ -6,6 +6,7 @@ import { Product } from '@/app/products/types/productTypes';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
 import { Button } from "@/app/shop/components/ui/button";
 import { ProductService } from '../../services/productService';
+import { useProduct } from '../../hooks/useProduct';
 
 const productService = new ProductService();
 interface CreateProductFormProps {
@@ -13,11 +14,11 @@ interface CreateProductFormProps {
     onProductCreated: (product: Product) => void;
     isOpen: boolean;
     onClose: () => void;
-    onCancel: () => void;
 }
 
-const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProductCreated, isOpen, onClose, onCancel }) => {
-    const [products, setProducts] = useState<Product[]>([]);
+const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProductCreated, isOpen, onClose }) => {
+    // const [products, setProducts] = useState<Product[]>([]);
+    const { fetchProducts, addProduct } = useProduct();
     const [formData, setFormData] = useState<Product>({
         id: "0",
         shop: shopId,
@@ -58,9 +59,11 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
 
         try {
             const createdProduct = await productService.createProduct(shopId, formData);
+            // const createdProduct = await addProduct(form);
 
             // Actualizar la lista de productos
-            setProducts((prevProducts) => [...prevProducts, createdProduct]);
+            // setProducts((prevProducts) => [...prevProducts, createdProduct]);
+            fetchProducts(shopId);
 
             // Limpiar el formulario
             setFormData({
@@ -83,17 +86,17 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
         }
     };
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const data = products;
-                setProducts(data);
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
-        fetchProducts();
-    }, []);
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         try {
+    //             const data = products;
+    //             setProducts(data);
+    //         } catch (error) {
+    //             console.error('Error fetching products:', error);
+    //         }
+    //     };
+    //     fetchProducts();
+    // }, []);
 
     return (
         <>

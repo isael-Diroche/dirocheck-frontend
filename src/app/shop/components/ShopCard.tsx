@@ -119,5 +119,4 @@ export default function ShopCard({ shop, onUpdate, onDelete }: ShopCardProps) {
             />
         </Card>
     )
-}
-
+};
