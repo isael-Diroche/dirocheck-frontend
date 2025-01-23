@@ -1,10 +1,9 @@
-import { Shop } from "@/app/shop/types/shopType";
 import { GenericService } from "@/shared/generic/service";
-
-const API = "http://127.0.0.1:8000/api/v1";
+import { Shop } from "@/app/shop/types/shopType";
+import API from "@/core/api";
 
 export interface IShopService {
-    getAllShop(): Promise<Shop[]>;
+    getAllShops(): Promise<Shop[]>;
     getShop(shopId: string): Promise<Shop>;
     createShop(formData: FormData): Promise<Shop>;
     updateShop(updatedShop: Shop): Promise<Shop>;
@@ -13,22 +12,23 @@ export interface IShopService {
 
 export class ShopService implements IShopService {
     private shopService: GenericService<Shop>;
-    constructor() { this.shopService = new GenericService<Shop>(); }
+    static getAllShops: any;
+
+    constructor() {
+        this.shopService = new GenericService<Shop>();
+    }
 
     // Utility to generate the full API URL
     private getShopUrl(shopId?: string): string {
         return shopId ? `${API}/shop/${shopId}/` : `${API}/shop/`;
     }
 
-    async getAllShop(): Promise<Shop[]> {
-        try {
-            const shops = await this.shopService.getAllItems(this.getShopUrl());
-            if (shops.length === 0) {
-                throw new Error("No se encontraron negocios.");
-            }
+    async getAllShops(): Promise<Shop[]> {
+        const shops = await this.shopService.getAllItems(this.getShopUrl());
+        if (shops) {
             return shops;
-        } catch (error) {
-            throw new Error(`Error al obtener los negocios: ${error instanceof Error ? error.message : "Desconocido"}`);
+        } else {
+            throw new Error("No se encontraron negocios.");
         }
     }
 

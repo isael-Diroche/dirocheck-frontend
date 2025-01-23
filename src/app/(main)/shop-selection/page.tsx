@@ -12,9 +12,9 @@ const shopService = new ShopService();
 
 export default function ShopSelectionPage() {
     const [shops, setShops] = useState<Shop[]>([]);
-    const [error, setError] = useState<string | null>(null);
 
     const {
+        fetchShops,
         openCreateForm,
     } = useShop();
 
@@ -29,20 +29,20 @@ export default function ShopSelectionPage() {
         setShops(prevShops => prevShops.filter(shop => shop.id !== id));
     };
 
-    const fetchShops = async () => {
-        handleUpdateShop;
-        try {
-            const data = await shopService.getAllShop();
-            setShops(data);
-        } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError("Ha ocurrido un error desconocido");
-            }
-            console.error("Error obteniendo negocio:", error);
-        }
-    };
+    // const fetchShops = async () => {
+    //     handleUpdateShop;
+    //     try {
+    //         const data = await shopService.getAllShop();
+    //         setShops(data);
+    //     } catch (error) {
+    //         if (error instanceof Error) {
+    //             setError(error.message);
+    //         } else {
+    //             setError("Ha ocurrido un error desconocido");
+    //         }
+    //         console.error("Error obteniendo negocio:", error);
+    //     }
+    // };
 
     const handleShopCreated = (newShop: Shop) => {
         setShops((prevShops) => [...prevShops, newShop]);
@@ -63,16 +63,27 @@ export default function ShopSelectionPage() {
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {shops.map((shop) => (
-                    <ShopCard
-                        key={shop.id}
-                        shop={shop}
-                        onUpdate={handleUpdateShop}
-                        onDelete={handleDelete}
-                    />
-                ))}
-            </div>
+            {shops.length === 0 ? (
+                <>
+                    <div className="flex w-full h-full items-center justify-center flex-col gap-4">
+                        <h1 className="text-xl font-open font-semibold text-gray-800">No hay negocios disponibles.</h1>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {shops.map((shop) => (
+                            <ShopCard
+                                key={shop.id}
+                                shop={shop}
+                                onUpdate={handleUpdateShop}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
+
 
             <CreateShopForm
                 onShopCreated={handleShopCreated}

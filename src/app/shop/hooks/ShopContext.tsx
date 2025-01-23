@@ -1,8 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { ShopService } from '../services/shopService';
+import { Shop } from '../types/shopType';
 
 interface ShopContextType {
+    shops: Shop[];
+    fetchShops: () => Promise<void>;
     isCreateFormOpen: boolean;
     openCreateForm: () => void;
     closeCreateForm: () => void;
@@ -12,9 +16,12 @@ interface ShopContextType {
     closeUpdateForm: (shopId: string) => void;
 }
 
+const shopService = new ShopService();
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [shops, setShops] = useState<Shop[]>([]);
+    const [error, setError] = useState<string | null>(null);
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
     const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false)
     const openCreateForm = () => setIsCreateFormOpen(true);
@@ -30,8 +37,19 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setUpdateFormStates((prev) => ({ ...prev, [shopId]: false }));
     };
 
+    const fetchShops = async () => {
+        try {
+            const data = await shopService.getAllShops();
+            setShops(data);
+        } catch (error) {
+            console.error("Error al obtener los negocios desde el context:", error);
+        }
+    };
+
     return (
         <ShopContext.Provider value={{
+            shops,
+            fetchShops,
             isCreateFormOpen,
             openCreateForm,
             closeCreateForm,
