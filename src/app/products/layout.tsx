@@ -4,11 +4,11 @@ import { Plus } from "lucide-react";
 import { Button } from "./components/Shared/button";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Shop } from "../shop/lib/model";
+import { Shop } from "../shop/types/shopType";
 import CreateProductForm from "./components/Form/createProduct";
-import { useProduct } from "./hooks/useProduct";
+import { useProduct } from "./hooks/productContext";
 import { Product } from "./types/productType";
-import { ShopService } from "../shop/lib/service";
+import { ShopService } from "../shop/services/shopService";
 import { ProductService } from "./services/productService";
 
 // const productService = new ProductService();

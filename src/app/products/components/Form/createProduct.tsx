@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { Product } from '@/app/products/types/productType';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
-import { Button } from "@/app/shop/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/Shared/dialog';
+import { Button } from "@/app/shop/components/Shared/button";
 import { ProductService } from '../../services/productService';
-import { useProduct } from '../../hooks/useProduct';
+import { useProduct } from '../../hooks/productContext';
 
 const productService = new ProductService();
 interface CreateProductFormProps {

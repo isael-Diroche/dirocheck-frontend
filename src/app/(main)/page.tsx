@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shop } from '../shop/lib/model';
-import { ShopService } from '../shop/lib/service';
+import { Shop } from '../shop/types/shopType';
+import { ShopService } from '../shop/services/shopService';
 
 const shopService = new ShopService();
 

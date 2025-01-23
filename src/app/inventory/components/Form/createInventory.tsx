@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { Inventory } from "../../types/inventoryType";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/ui/dialog';
-import { Button } from "@/app/shop/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/app/shop/components/Shared/dialog';
+import { Button } from "@/app/shop/components/Shared/button";
 
 import { InventoryService } from "@/app/inventory/services/inventoryService";
 const inventoryService = new InventoryService();

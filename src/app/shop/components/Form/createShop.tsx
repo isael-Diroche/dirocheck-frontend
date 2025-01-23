@@ -1,23 +1,21 @@
 "use client"
 
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/app/shop/components/ui/dialog"
-import { Button } from "@/app/shop/components/ui/button"
-import { Input } from "@/app/shop/components/ui/input"
-import { Label } from "@/app/shop/components/ui/label"
-import { ShopService } from "../../lib/service"
-import { Shop } from "../../lib/model"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/app/shop/components/Shared/dialog"
+import { Button } from "@/app/shop/components/Shared/button"
+import { Input } from "@/app/shop/components/Shared/input"
+import { Label } from "@/app/shop/components/Shared/label"
+import { ShopService } from "../../services/shopService"
+import { Shop } from "../../types/shopType"
+import { useShop } from "../../hooks/ShopContext"
 
 const shopService = new ShopService();
 
 interface CreateShopFormProps {
 	onShopCreated: (shop: Shop) => void;
-	isOpen: boolean;
-	// onCancel: () => void;
-	onClose: () => void;
 }
 
-const CreateShopForm: React.FC<CreateShopFormProps> = ({ isOpen, onShopCreated, onClose}) => {
+const CreateShopForm: React.FC<CreateShopFormProps> = ({ onShopCreated }) => {
 	const [shops, setShops] = useState<Shop[]>([]);
 	const [formData, setFormData] = useState<Shop>({
 		id: "0",
@@ -27,6 +25,11 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ isOpen, onShopCreated, 
 		type: "",
 	})
 	const [imageFile, setImageFile] = useState<File | null>(null)
+
+	const {
+		isCreateFormOpen,
+		closeCreateForm,
+	} = useShop();
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
@@ -72,12 +75,13 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ isOpen, onShopCreated, 
 			onShopCreated(createdShop);
 		} catch (error) {
 			console.error("Error creando la tienda:", error);
+		} finally {
+			closeCreateForm();
 		}
-		onClose();
 	}
 
 	return (
-		<Dialog open={isOpen} onOpenChange={onClose}>
+		<Dialog open={isCreateFormOpen} onOpenChange={closeCreateForm}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle className="text-center">Crear Nueva Tienda</DialogTitle>
@@ -131,9 +135,9 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ isOpen, onShopCreated, 
 							/>
 						</div>
 					</div>
-					
+
 					<DialogFooter>
-						<Button type="button" variant="outline" onClick={onClose}>
+						<Button type="button" variant="outline" onClick={closeCreateForm}>
 							Cancelar
 						</Button>
 						<Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">

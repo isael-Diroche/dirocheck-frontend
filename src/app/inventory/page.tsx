@@ -1,7 +1,7 @@
 'use client'
 
-import { Shop } from '@/app/shop/lib/model';
-import { ShopService } from '@/app/shop/lib/service';
+import { Shop } from '@/app/shop/types/shopType';
+import { ShopService } from '@/app/shop/services/shopService';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import InventoryList from "@/app/inventory/components/inventoryList";

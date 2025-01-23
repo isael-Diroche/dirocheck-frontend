@@ -6,8 +6,8 @@ import Link from "next/link";
 
 import { IoIosAlbums, IoMdContact, IoMdCube } from "react-icons/io";
 import { IoDocumentText, IoReceipt, IoBarChart, IoSettings, IoLockClosed } from "react-icons/io5";
-import { Shop } from '@/app/shop/lib/model';
-import { ShopService } from '@/app/shop/lib/service';
+import { Shop } from '@/app/shop/types/shopType';
+import { ShopService } from '@/app/shop/services/shopService';
 
 const shopService = new ShopService();
 

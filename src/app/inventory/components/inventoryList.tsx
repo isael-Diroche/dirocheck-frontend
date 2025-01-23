@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { InventoryService } from "../services/inventoryService";
 import Link from 'next/link';
 import { BiTrash } from 'react-icons/bi';
-import { useInventory } from '../hooks/useInventory';
+import { useInventory } from '../hooks/inventoryContext';
 
 // import { Inventory } from "../types/inventoryType";
-import { ShopService } from '@/app/shop/lib/service';
-import { Shop } from '@/app/shop/lib/model';
+import { ShopService } from '@/app/shop/services/shopService';
+import { Shop } from '@/app/shop/types/shopType';
 // import CreateInventoryForm from './Form/createInventory';
 // import { Button } from '@/app/shop/components/ui/button';
 // import { useProduct } from '@/app/products/hooks/useProduct';

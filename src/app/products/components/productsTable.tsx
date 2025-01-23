@@ -10,7 +10,7 @@ import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filte
 import { ProductService } from "@/app/products/services/productService";
 // import CreateProductForm from "@/app/products/components/Form/createProduct";
 import { Product } from "../types/productType";
-import { useProduct } from "../hooks/useProduct";
+import { useProduct } from "../hooks/productContext";
 const productService = new ProductService();
 
 const ITEMS_PER_PAGE = 8

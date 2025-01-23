@@ -2,11 +2,11 @@ import "@/styles/globals.scss";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { ShopProvider } from "@/app/shop/ShopContext";
+import { ShopProvider } from "@/app/shop/hooks/ShopContext";
 import Sidebar from "@/shared/navigation/sideBar"
 import TopBar from "@/shared/navigation/topBar";
-import { ProductProvider } from "./products/hooks/useProduct";
-import { InventoryProvider } from "./inventory/hooks/useInventory";
+import { ProductProvider } from "./products/hooks/productContext";
+import { InventoryProvider } from "./inventory/hooks/inventoryContext";
 
 const inter = Inter({
     variable: "--font-inter",

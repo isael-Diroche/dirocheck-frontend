@@ -2,17 +2,21 @@
 
 import { useEffect, useState } from "react"
 import ShopCard from "@/app/shop/components/ShopCard"
-import CreateShopForm from "@/app/shop/components/actions/createShopForm"
-import { Button } from "@/app/shop/components/ui/button"
-import { Shop } from "../../shop/lib/model"
-import { ShopService } from "../../shop/lib/service"
+import { ShopService } from "@/app/shop/services/shopService";
+import CreateShopForm from "@/app/shop/components/Form/createShop";
+import { Shop } from "@/app/shop/types/shopType";
+import { useShop } from "@/app/shop/hooks/ShopContext";
+import { Button } from "@/app/products/components/Shared/button";
 
 const shopService = new ShopService();
 
 export default function ShopSelectionPage() {
     const [shops, setShops] = useState<Shop[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
+
+    const {
+        openCreateForm,
+    } = useShop();
 
     const handleUpdateShop = async (updatedShop: Shop) => {
         // Actualizar el estado con el negocio modificado
@@ -51,9 +55,9 @@ export default function ShopSelectionPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Select a Business</h1>
+                <h1 className="text-3xl text-gray-800 font-semibold font-golos">Seleccionar negocio</h1>
                 <Button
-                    onClick={() => setIsCreateFormOpen(true)}
+                    onClick={openCreateForm}
                 >
                     Crear negocio
                 </Button>
@@ -71,9 +75,7 @@ export default function ShopSelectionPage() {
             </div>
 
             <CreateShopForm
-                isOpen={isCreateFormOpen}
                 onShopCreated={handleShopCreated}
-                onClose={() => setIsCreateFormOpen(false)}
             />
         </div>
     )

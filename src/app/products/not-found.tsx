@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Button } from "./components/Shared/button";
+import { Button } from "../products/components/Shared/button";
 
 const NotFound = () => {
     return (

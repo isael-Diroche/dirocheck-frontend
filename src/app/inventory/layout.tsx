@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Inventory } from "./types/inventoryType";
 import CreateInventoryForm from "./components/Form/createInventory";
-import { ShopService } from "../shop/lib/service";
-import { Shop } from "../shop/lib/model";
-import { useInventory } from "@/app/inventory/hooks/useInventory";
+import { ShopService } from "../shop/services/shopService";
+import { Shop } from "../shop/types/shopType";
+import { useInventory } from "@/app/inventory/hooks/inventoryContext";
 
 const shopService = new ShopService();
 

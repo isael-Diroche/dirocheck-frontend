@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/app/shop/components/ui/dialog"
-import { Button } from "@/app/shop/components/ui/button"
-import { Input } from "@/app/shop/components/ui/input"
-import { Label } from "@/app/shop/components/ui/label"
-import { Shop } from "../../lib/model"
-import { ShopService } from "../../lib/service"
+import { ShopService } from "../../services/shopService";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/app/shop/components/Shared/dialog"
+import { Label } from "@radix-ui/react-label";
+import { Shop } from "../../types/shopType";
+import { Button } from "../Shared/button";
+import { Input } from "../Shared/input";
 
 const shopService = new ShopService();
 
