@@ -24,13 +24,12 @@ export class ProductService implements IProductService {
 
     async getAllProducts(shopId: string): Promise<Product[]> {
         const products = await this.productService.getAllItems(this.getProductUrl());
-        if (!products.length) {
+        if (products) {
+            const shop_products: Product[] = products.filter((product) => product.shop == shopId)
+            return shop_products;
+        } else {
             throw new Error("No se encontraron productos");
-        } else if (products instanceof Error) {
-            throw new Error("Error obteniendo productos");
         }
-        const shop_products: Product[] = products.filter((product) => product.shop == shopId)
-        return shop_products;
     }
 
     async getProduct(shopId: string, productId: string): Promise<Product> {

@@ -57,7 +57,7 @@ export class ShopService implements IShopService {
 
     async updateShop(updatedShop: Shop): Promise<Shop> {
         if (!updatedShop.id) {
-            throw new Error("El ID de la tienda es obligatorio para actualizarla.");
+            throw new Error("El ID del negocio es obligatorio para actualizarlo.");
         }
 
         const formData = new FormData();

@@ -7,6 +7,9 @@ import { Shop } from '../types/shopType';
 interface ShopContextType {
     shops: Shop[];
     fetchShops: () => Promise<void>;
+    addShop: (newShop: Shop) => void;
+    updateShop: (updatedShop: Shop) => void;
+    deleteShop: (shopId: string) => void;
     isCreateFormOpen: boolean;
     openCreateForm: () => void;
     closeCreateForm: () => void;
@@ -46,10 +49,28 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
+    const addShop = (newShop: Shop) => {
+        setShops((prevShops) => [...prevShops, newShop]);
+    };
+
+    const updateShop = async (updatedShop: Shop) => {
+        // Actualizar el estado con el negocio modificado
+        setShops(prevShops =>
+            prevShops.map(shop => (shop.id === updatedShop.id ? updatedShop : shop))
+        );
+    };
+
+    const deleteShop = async (shopId: string) => {
+        setShops(prevShops => prevShops.filter(shop => shop.id !== shopId));
+    };
+
     return (
         <ShopContext.Provider value={{
             shops,
             fetchShops,
+            addShop,
+            updateShop,
+            deleteShop,
             isCreateFormOpen,
             openCreateForm,
             closeCreateForm,

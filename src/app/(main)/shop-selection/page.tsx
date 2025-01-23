@@ -7,45 +7,32 @@ import CreateShopForm from "@/app/shop/components/Form/createShop";
 import { Shop } from "@/app/shop/types/shopType";
 import { useShop } from "@/app/shop/hooks/ShopContext";
 import { Button } from "@/app/products/components/Shared/button";
-
-const shopService = new ShopService();
+import { Plus } from "lucide-react";
 
 export default function ShopSelectionPage() {
-    const [shops, setShops] = useState<Shop[]>([]);
+    // const [shops, setShops] = useState<Shop[]>([]);
 
     const {
+        shops,
         fetchShops,
+        addShop,
+        updateShop,
+        deleteShop,
         openCreateForm,
     } = useShop();
 
     const handleUpdateShop = async (updatedShop: Shop) => {
         // Actualizar el estado con el negocio modificado
-        setShops(prevShops =>
-            prevShops.map(shop => (shop.id === updatedShop.id ? updatedShop : shop))
-        );
+        updateShop(updatedShop);
     };
 
     const handleDelete = async (id: string) => {
-        setShops(prevShops => prevShops.filter(shop => shop.id !== id));
+        deleteShop(id);
     };
 
-    // const fetchShops = async () => {
-    //     handleUpdateShop;
-    //     try {
-    //         const data = await shopService.getAllShop();
-    //         setShops(data);
-    //     } catch (error) {
-    //         if (error instanceof Error) {
-    //             setError(error.message);
-    //         } else {
-    //             setError("Ha ocurrido un error desconocido");
-    //         }
-    //         console.error("Error obteniendo negocio:", error);
-    //     }
-    // };
-
     const handleShopCreated = (newShop: Shop) => {
-        setShops((prevShops) => [...prevShops, newShop]);
+        addShop(newShop);
+        fetchShops();
     };
 
     useEffect(() => {
@@ -53,37 +40,42 @@ export default function ShopSelectionPage() {
     }, []);
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl text-gray-800 font-semibold font-golos">Seleccionar negocio</h1>
-                <Button
-                    onClick={openCreateForm}
-                >
-                    Crear negocio
+        <div className="flex flex-col gap-6 w-full h-full">
+            <header className="flex justify-between items-center">
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-[28px] font-golos font-semibold text-gray-800">Seleccionar negocio</h1>
+                    <p className="text-sm font-golos font-normal text-gray-600">
+                        Vista de todos los negocios.
+                    </p>
+                </div>
+                <Button variant="default" onClick={openCreateForm}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Crear Negocio
                 </Button>
-            </div>
+            </header>
 
-            {shops.length === 0 ? (
-                <>
-                    <div className="flex w-full h-full items-center justify-center flex-col gap-4">
-                        <h1 className="text-xl font-open font-semibold text-gray-800">No hay negocios disponibles.</h1>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {shops.map((shop) => (
-                            <ShopCard
-                                key={shop.id}
-                                shop={shop}
-                                onUpdate={handleUpdateShop}
-                                onDelete={handleDelete}
-                            />
-                        ))}
-                    </div>
-                </>
-            )}
-
+            <main className="flex w-full h-full">
+                {shops.length === 0 ? (
+                    <>
+                        <div className="flex w-full h-full items-center justify-center flex-col gap-4">
+                            <h1 className="text-xl font-open font-semibold text-gray-800">No hay negocios disponibles.</h1>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-fit">
+                            {shops.map((shop) => (
+                                <ShopCard
+                                    key={shop.id}
+                                    shop={shop}
+                                    onUpdate={handleUpdateShop}
+                                    onDelete={handleDelete}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
+            </main>
 
             <CreateShopForm
                 onShopCreated={handleShopCreated}
