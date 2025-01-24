@@ -30,21 +30,12 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 	const [filters, setFilters] = useState({
 		stock: "",
 		price: "",
+		category: "",
 		search: "",
 	})
 	const [currentPage, setCurrentPage] = useState(1)
 	const [showFilters, setShowFilters] = useState(false)
-	// const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
-
-	// const fetchProducts = async () => {
-	// 	try {
-	// 		const data = await productService.getAllProducts(shopId);
-	// 		setProducts(data);
-	// 	} catch (error) {
-	// 		console.error("Error obteniendo productos:", error);
-	// 	}
-	// };
-
+	
 	useEffect(() => {
 		fetchProducts(shopId); // Llamada inicial para cargar los productos
 	}, []);
@@ -54,6 +45,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 		const filtered = products.filter(product =>
 			(filters.stock === "" || product.stock >= parseInt(filters.stock)) &&
 			(filters.price === "" || product.price <= parseInt(filters.price)) &&
+			(filters.category === "all" || product.category.toLowerCase().includes(filters.category.toLowerCase())) &&
 			(filters.search === "" || product.details.toLowerCase().includes(filters.search.toLowerCase()))
 		);
 
@@ -163,6 +155,18 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 										<SelectItem value="20">20+</SelectItem>
 									</SelectContent>
 								</Select>
+								<Select onValueChange={(value) => handleFilterChange("category", value)}>
+									<SelectTrigger className="w-[180px]">
+										<SelectValue placeholder="Filtrar por categoria" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="all">Todos</SelectItem>
+										<SelectItem value="none">Sin categoria</SelectItem>
+										<SelectItem value="cereales">Cereales</SelectItem>
+										<SelectItem value="papeleria">Papeleria</SelectItem>
+										<SelectItem value="herrería">Herreria</SelectItem>
+									</SelectContent>
+								</Select>
 								<Select onValueChange={(value) => handleFilterChange("price", value)}>
 									<SelectTrigger className="w-[180px]">
 										<SelectValue placeholder="Filtrar por precio" />
@@ -228,7 +232,9 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 											</TableCell>
 											<TableCell>{product.total}</TableCell>
 											<TableCell>
-												<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-2 px-4">{product.category}</span>
+												<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-1 px-3">
+													{product.category}
+												</span>
 											</TableCell>
 											<TableCell>
 												{editingProductId === product.id ? (
