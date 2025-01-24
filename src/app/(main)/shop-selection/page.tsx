@@ -7,6 +7,7 @@ import { Shop } from "@/app/shop/types/shopType";
 import { useShop } from "@/app/shop/hooks/ShopContext";
 import { Button } from "@/app/products/components/Shared/button";
 import { Plus } from "lucide-react";
+import ModuleHeader from "@/shared/ui/Header";
 
 export default function ShopSelectionPage() {
     const {
@@ -27,18 +28,12 @@ export default function ShopSelectionPage() {
 
     return (
         <div className="flex flex-col gap-6 w-full h-full">
-            <header className="flex justify-between items-center">
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-[28px] font-golos font-semibold text-gray-800">Seleccionar negocio</h1>
-                    <p className="text-sm font-golos font-normal text-gray-600">
-                        Vista de todos los negocios.
-                    </p>
-                </div>
-                <Button variant="default" onClick={openCreateForm}>
-                    <Plus className="mr-2 h-4 w-4" />
-                    Crear Negocio
-                </Button>
-            </header>
+            <ModuleHeader
+                title="Seleccionar negocio"
+                description="Vista de todos los negocios."
+                buttonLabel="Crear Negocio"
+                buttonFunction={openCreateForm}
+            />
 
             <main className="flex w-full h-full">
                 {shops.length === 0 ? (

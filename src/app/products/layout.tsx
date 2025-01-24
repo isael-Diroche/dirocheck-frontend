@@ -10,6 +10,7 @@ import { useProduct } from "./hooks/productContext";
 import { Product } from "./types/productType";
 import { ShopService } from "../shop/services/shopService";
 import { ProductService } from "./services/productService";
+import ModuleHeader from "@/shared/ui/Header";
 
 // const productService = new ProductService();
 const shopService = new ShopService();
@@ -54,18 +55,13 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =
             )}
 
             <div className="flex flex-col gap-6 w-full h-full">
-                <header className="flex justify-between items-center">
-                    <div className="flex flex-col gap-1">
-                        <h1 className="text-[28px] font-golos font-semibold text-gray-800">Productos</h1>
-                        <p className="text-sm font-golos font-normal text-gray-600">
-                            Vista de todos los productos de tu negocio.
-                        </p>
-                    </div>
-                    <Button variant="default" onClick={openCreateForm}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Nuevo Producto
-                    </Button>
-                </header>
+
+                <ModuleHeader
+                    title="Productos"
+                    description="Vista de todos los productos de tu negocio."
+                    buttonLabel="Nuevo Producto"
+                    buttonFunction={openCreateForm}
+                />
 
                 <main className="flex w-full h-full">
                     {children}

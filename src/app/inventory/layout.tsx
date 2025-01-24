@@ -9,6 +9,7 @@ import CreateInventoryForm from "./components/Form/createInventory";
 import { ShopService } from "../shop/services/shopService";
 import { Shop } from "../shop/types/shopType";
 import { useInventory } from "@/app/inventory/hooks/inventoryContext";
+import ModuleHeader from "@/shared/ui/Header";
 
 const shopService = new ShopService();
 
@@ -52,20 +53,15 @@ const InventoryLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
                     />
                 )
             }
-                
+
             <div className="flex flex-col gap-6 w-full h-full">
-                <header className="flex justify-between items-center">
-                    <div className="flex flex-col gap-1">
-                        <h1 className="text-[28px] font-golos font-semibold text-gray-800">Inventarios</h1>
-                        <p className="text-sm font-golos font-normal text-gray-600">
-                            Vista de todos los inventarios de tu negocio.
-                        </p>
-                    </div>
-                    <Button variant="default" onClick={openCreateForm}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Nuevo Inventario
-                    </Button>
-                </header>
+                
+                <ModuleHeader
+                    title="Inventarios"
+                    description="Vista de todos los inventarios de tu negocio."
+                    buttonLabel="Nuevo Inventario"
+                    buttonFunction={openCreateForm}
+                />
 
                 <main className="flex w-full h-full">
                     {children}
