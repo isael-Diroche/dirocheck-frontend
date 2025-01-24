@@ -1,9 +1,7 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import { CalendarIcon, MapPinIcon, PhoneIcon, InfoIcon, Edit2Icon } from "lucide-react"
-
 import { useRouter } from "next/navigation"
 import default_image from "@/public/images/image_default.webp"
 import { Shop } from "../types/shopType"
@@ -16,17 +14,11 @@ import { Button } from "@/app/products/components/Shared/button"
 
 interface ShopCardProps {
     shop: Shop
-    onUpdate: (updatedShop: Shop) => void;
-    onDelete: (id: string) => void;
 }
 
-export default function ShopCard({ shop, onUpdate, onDelete }: ShopCardProps) {
+export default function ShopCard({ shop }: ShopCardProps) {
     const router = useRouter();
-    const {
-        closeUpdateForm,
-        openUpdateForm,
-        updateFormStates,
-    } = useShop();
+    const { openUpdateForm } = useShop();
 
     const handleSelectShop = (shopId: string) => {
         localStorage.setItem('selectedShop', shopId);
@@ -34,30 +26,21 @@ export default function ShopCard({ shop, onUpdate, onDelete }: ShopCardProps) {
         router.push('/');
     };
 
-    const isUpdateFormOpen = updateFormStates[shop.id] || false;
-
     return (
         <>
             <Card className="overflow-hidden">
                 <div className="relative">
                     {
-                        shop.image ? (
-                            <Image
-                                src={shop.image}
-                                alt={shop.name}
-                                width={300}
-                                height={200}
-                                className="w-full h-48 object-cover"
-                            />
-
-                        ) : (
-                            <Image
-                                src={default_image}
-                                alt={shop.name}
-                                width={300}
-                                height={200}
-                                className="w-full h-48 object-cover"
-                            />
+                        shop.image && (
+                            <>
+                                <Image
+                                    src={shop.image || default_image}
+                                    alt={shop.name}
+                                    width={300}
+                                    height={200}
+                                    className="w-full h-48 object-cover"
+                                />
+                            </>
                         )
                     }
 
@@ -118,16 +101,9 @@ export default function ShopCard({ shop, onUpdate, onDelete }: ShopCardProps) {
                         Seleccionar
                     </Button>
                 </CardFooter>
-
             </Card>
 
-            <UpdateShopForm
-                isOpen={isUpdateFormOpen}
-                onClose={() => closeUpdateForm(shop.id)}
-                shop={shop}
-                onUpdate={onUpdate}
-                onDelete={onDelete}
-            />
+            <UpdateShopForm shop={shop} />
         </>
     )
 };

@@ -6,7 +6,7 @@ import { Button } from "@/app/products/components/Shared/button"
 import { Input } from "@/app/products/components/Shared/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/app/products/components/Shared/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/products/components/Shared/select"
-import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filter } from "lucide-react"
+import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filter, Search } from "lucide-react"
 import { ProductService } from "@/app/products/services/productService";
 // import CreateProductForm from "@/app/products/components/Form/createProduct";
 import { Product } from "../types/productType";
@@ -140,12 +140,15 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 									<Filter className="mr-2 h-4 w-4" />
 									Filtros
 								</Button>
-								<Input
-									placeholder="Buscar por detalles"
-									value={filters.search}
-									onChange={(e) => handleFilterChange("search", e.target.value)}
-									className="max-w-sm"
-								/>
+								<div className="relative">
+									<Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground text-gray-500" />
+									<Input
+										value={filters.search}
+										placeholder="Buscar por detalles"
+										onChange={(e) => handleFilterChange("search", e.target.value)}
+										className="pl-9 w-[300px] max-w-sm placeholder:font-golos font-golos text-md"
+									/>
+								</div>
 							</div>
 						</div>
 						{showFilters && (
@@ -173,121 +176,123 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								</Select>
 							</div>
 						)}
-						<Table>
-							<TableHeader>
-								<TableRow className="bg-mantis-500 border-mantis-700 text-mantis-50 ">
-									<TableHead>Cantidad</TableHead>
-									<TableHead>Detalles</TableHead>
-									<TableHead>Costo</TableHead>
-									<TableHead>Total</TableHead>
-									<TableHead>Categoria</TableHead>
-									<TableHead>Acciones</TableHead>
-								</TableRow>
-							</TableHeader>
-							<TableBody>
-								{paginatedProducts.map((product) => (
-									<TableRow key={product.id}>
-										<TableCell>
-											{editingProductId === product.id ? (
-												<Input
-													type="number"
-													value={editedProduct?.stock}
-													onChange={(e) => handleInputChange("stock", parseInt(e.target.value))}
-													className="w-20"
-												/>
-											) : (
-												product.stock
-											)}
-										</TableCell>
-										<TableCell>
-											{editingProductId === product.id ? (
-												<Input
-													type="text"
-													value={editedProduct?.details}
-													onChange={(e) => handleInputChange("details", e.target.value)}
-												/>
-											) : (
-												product.details
-											)}
-										</TableCell>
-										<TableCell>
-											{editingProductId === product.id ? (
-												<Input
-													type="number"
-													value={editedProduct?.price}
-													onChange={(e) => handleInputChange("price", parseFloat(e.target.value))}
-													className="w-24"
-												/>
-											) : (
-												product.price
-											)}
-										</TableCell>
-										<TableCell>{product.total}</TableCell>
-										<TableCell>
-											<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-2 px-4">{product.category}</span>
-										</TableCell>
-										<TableCell>
-											{editingProductId === product.id ? (
-												<div className="flex space-x-2">
-													<Button size="sm" onClick={handleSaveEdit}>
-														<Save className="w-4 h-4 mr-1" />
-														Guardar
-													</Button>
-													<Button size="sm" variant="outline" onClick={handleCancelEdit}>
-														<X className="w-4 h-4 mr-1" />
-														Cancelar
-													</Button>
-												</div>
-											) : (
-												<DropdownMenu>
-													<DropdownMenuTrigger asChild>
-														<Button variant="ghost" className="h-8 w-8 p-0">
-															<span className="sr-only">Abrir menú</span>
-															<MoreHorizontal className="h-4 w-4" />
-														</Button>
-													</DropdownMenuTrigger>
-													<DropdownMenuContent align="end">
-														<DropdownMenuItem onClick={() => handleEditClick(product)}>
-															<Edit className="mr-2 h-4 w-4" />
-															<span>Editar</span>
-														</DropdownMenuItem>
-														<DropdownMenuItem onClick={() => handleDelete(product.id)}>
-															<Trash2 className="mr-2 h-4 w-4" />
-															<span>Eliminar</span>
-														</DropdownMenuItem>
-													</DropdownMenuContent>
-												</DropdownMenu>
-											)}
-										</TableCell>
+						<div className="border rounded-lg">
+							<Table>
+								<TableHeader>
+									<TableRow>
+										<TableHead>Cantidad</TableHead>
+										<TableHead>Detalles</TableHead>
+										<TableHead>Costo</TableHead>
+										<TableHead>Total</TableHead>
+										<TableHead>Categoria</TableHead>
+										<TableHead>Acciones</TableHead>
 									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-						{totalPages > 1 && (
-							<div className="flex items-center justify-end space-x-2 py-4">
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-									disabled={currentPage === 1}
-								>
-									<ChevronLeft className="h-4 w-4" />
-									Anterior
-								</Button>
-								<div className="text-sm font-medium">
-									Página {currentPage} de {totalPages}
+								</TableHeader>
+								<TableBody>
+									{paginatedProducts.map((product) => (
+										<TableRow key={product.id}>
+											<TableCell>
+												{editingProductId === product.id ? (
+													<Input
+														type="number"
+														value={editedProduct?.stock}
+														onChange={(e) => handleInputChange("stock", parseInt(e.target.value))}
+														className="w-20"
+													/>
+												) : (
+													product.stock
+												)}
+											</TableCell>
+											<TableCell>
+												{editingProductId === product.id ? (
+													<Input
+														type="text"
+														value={editedProduct?.details}
+														onChange={(e) => handleInputChange("details", e.target.value)}
+													/>
+												) : (
+													product.details
+												)}
+											</TableCell>
+											<TableCell>
+												{editingProductId === product.id ? (
+													<Input
+														type="number"
+														value={editedProduct?.price}
+														onChange={(e) => handleInputChange("price", parseFloat(e.target.value))}
+														className="w-24"
+													/>
+												) : (
+													product.price
+												)}
+											</TableCell>
+											<TableCell>{product.total}</TableCell>
+											<TableCell>
+												<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-2 px-4">{product.category}</span>
+											</TableCell>
+											<TableCell>
+												{editingProductId === product.id ? (
+													<div className="flex space-x-2">
+														<Button size="sm" onClick={handleSaveEdit}>
+															<Save className="w-4 h-4 mr-1" />
+															Guardar
+														</Button>
+														<Button size="sm" variant="outline" onClick={handleCancelEdit}>
+															<X className="w-4 h-4 mr-1" />
+															Cancelar
+														</Button>
+													</div>
+												) : (
+													<DropdownMenu>
+														<DropdownMenuTrigger asChild>
+															<Button variant="ghost" className="h-8 w-8 p-0">
+																<span className="sr-only">Abrir menú</span>
+																<MoreHorizontal className="h-4 w-4" />
+															</Button>
+														</DropdownMenuTrigger>
+														<DropdownMenuContent align="end">
+															<DropdownMenuItem onClick={() => handleEditClick(product)}>
+																<Edit className="mr-2 h-4 w-4" />
+																<span>Editar</span>
+															</DropdownMenuItem>
+															<DropdownMenuItem onClick={() => handleDelete(product.id)}>
+																<Trash2 className="mr-2 h-4 w-4" />
+																<span>Eliminar</span>
+															</DropdownMenuItem>
+														</DropdownMenuContent>
+													</DropdownMenu>
+												)}
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+							{totalPages > 1 && (
+								<div className="flex items-center justify-end space-x-2 py-4">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+										disabled={currentPage === 1}
+									>
+										<ChevronLeft className="h-4 w-4" />
+										Anterior
+									</Button>
+									<div className="text-sm font-medium">
+										Página {currentPage} de {totalPages}
+									</div>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+										disabled={currentPage === totalPages}
+									>
+										Siguiente
+										<ChevronRight className="h-4 w-4" />
+									</Button>
 								</div>
-								<Button
-									variant="outline"
-									size="sm"
-									onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-									disabled={currentPage === totalPages}
-								>
-									Siguiente
-									<ChevronRight className="h-4 w-4" />
-								</Button>
-							</div>
-						)}
+							)}
+						</div>
 					</div>
 				</>
 			)}

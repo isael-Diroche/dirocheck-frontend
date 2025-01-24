@@ -1,8 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import ShopCard from "@/app/shop/components/ShopCard"
-import { ShopService } from "@/app/shop/services/shopService";
 import CreateShopForm from "@/app/shop/components/Form/createShop";
 import { Shop } from "@/app/shop/types/shopType";
 import { useShop } from "@/app/shop/hooks/ShopContext";
@@ -10,25 +9,12 @@ import { Button } from "@/app/products/components/Shared/button";
 import { Plus } from "lucide-react";
 
 export default function ShopSelectionPage() {
-    // const [shops, setShops] = useState<Shop[]>([]);
-
     const {
         shops,
         fetchShops,
         addShop,
-        updateShop,
-        deleteShop,
         openCreateForm,
     } = useShop();
-
-    const handleUpdateShop = async (updatedShop: Shop) => {
-        // Actualizar el estado con el negocio modificado
-        updateShop(updatedShop);
-    };
-
-    const handleDelete = async (id: string) => {
-        deleteShop(id);
-    };
 
     const handleShopCreated = (newShop: Shop) => {
         addShop(newShop);
@@ -65,12 +51,7 @@ export default function ShopSelectionPage() {
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full h-fit">
                             {shops.map((shop) => (
-                                <ShopCard
-                                    key={shop.id}
-                                    shop={shop}
-                                    onUpdate={handleUpdateShop}
-                                    onDelete={handleDelete}
-                                />
+                                <ShopCard key={shop.id} shop={shop} />
                             ))}
                         </div>
                     </>

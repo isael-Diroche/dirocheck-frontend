@@ -7,20 +7,24 @@ import { Label } from "@radix-ui/react-label";
 import { Shop } from "../../types/shopType";
 import { Button } from "../Shared/button";
 import { Input } from "../Shared/input";
+import { useShop } from "../../hooks/ShopContext";
 
 const shopService = new ShopService();
 
 interface UpdateShopFormProps {
-    isOpen: boolean
-    onClose: () => void
     shop: Shop
-    onUpdate: (updatedShop: Shop) => void;
-    onDelete: (id: string) => void;
 }
 
-export function UpdateShopForm({ isOpen, onClose, shop, onUpdate, onDelete }: UpdateShopFormProps) {
+export function UpdateShopForm({ shop }: UpdateShopFormProps) {
+    const {
+        updateShop,
+        deleteShop,
+        closeUpdateForm,
+        updateFormStates,
+    } = useShop();
     const [formData, setFormData] = useState(shop)
     const [imageFile, setImageFile] = useState<File>()
+    const isUpdateFormOpen = updateFormStates[shop.id] || false;
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -33,28 +37,14 @@ export function UpdateShopForm({ isOpen, onClose, shop, onUpdate, onDelete }: Up
         }
     }
 
-    // const handleDelete = async (id: string) => {
-    //     try {
-    //         await shopService.deleteShop(id); // Asegúrate de que esto sea una operación asíncrona
-    //         console.log(`Tienda con ID ${id} eliminada correctamente.`);
-
-    //         // Filtra el negocio eliminado de la lista
-    //         onUpdate({ ...formData, id: "" }); // Notifica al componente padre que se eliminó
-    //     } catch (error) {
-    //         console.error("Error eliminando la tienda:", error);
-    //     } finally {
-    //         onClose(); // Cierra el formulario
-    //     }
-    // };
-
     const handleDelete = async (id: string) => {
         try {
             await shopService.deleteShop(id);
-            onDelete(id); // Notifica al componente padre que se eliminó
+            deleteShop(id);
         } catch (error) {
             console.error("Error eliminando la tienda:", error);
         } finally {
-            onClose();
+            closeUpdateForm(id);
         }
     };
 
@@ -62,17 +52,16 @@ export function UpdateShopForm({ isOpen, onClose, shop, onUpdate, onDelete }: Up
         e.preventDefault()
 
         // Actualizar el objeto Shop con los nuevos datos
-        const updatedShop: Shop = {
+        const updateForm: Shop = {
             ...formData,
-            image: imageFile || undefined,
+            image: imageFile,
         }
 
         try {
-            // Llamar al servicio para actualizar la tienda
-            await shopService.updateShop(updatedShop)
-            onUpdate(updatedShop);
-            console.log("Tienda actualizada:", updatedShop)
-            onClose()
+            await shopService.updateShop(updateForm)
+            updateShop(updateForm);
+            console.log("Negocio actualizado:", updateForm)
+            closeUpdateForm(updateForm.id)
         } catch (error) {
             console.error("Error actualizando la tienda:", error)
         }
@@ -83,7 +72,7 @@ export function UpdateShopForm({ isOpen, onClose, shop, onUpdate, onDelete }: Up
     }, [shop])
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={isUpdateFormOpen} onOpenChange={() => closeUpdateForm(shop.id)}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle className="text-center">Actualizar Tienda</DialogTitle>
@@ -142,7 +131,7 @@ export function UpdateShopForm({ isOpen, onClose, shop, onUpdate, onDelete }: Up
                             Eliminar
                         </Button>
                         <div className="flex gap-2 justify-end w-full">
-                            <Button type="button" variant="outline" onClick={onClose}>
+                            <Button type="button" variant="outline" onClick={() => closeUpdateForm(shop.id)}>
                                 Cancelar
                             </Button>
                             <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
