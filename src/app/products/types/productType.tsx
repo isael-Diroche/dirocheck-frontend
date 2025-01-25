@@ -7,7 +7,7 @@ export type Product = {
     category: string;
     price: number;
     stock: number;
-    unit_type: 'units' | 'lbs';
+    unit_type: 'units' | 'lbs' | 'paqs';
     expiration_date: string | null;
     image: File | null;
     total: number;
