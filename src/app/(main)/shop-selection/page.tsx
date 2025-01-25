@@ -13,12 +13,12 @@ export default function ShopSelectionPage() {
     const {
         shops,
         fetchShops,
-        addShop,
+        addShopStatus,
         openCreateForm,
     } = useShop();
 
     const handleShopCreated = (newShop: Shop) => {
-        addShop(newShop);
+        addShopStatus(newShop);
         fetchShops();
     };
 

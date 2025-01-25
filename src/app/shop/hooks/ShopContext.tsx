@@ -7,9 +7,9 @@ import { Shop } from '../types/shopType';
 interface ShopContextType {
     shops: Shop[];
     fetchShops: () => Promise<void>;
-    addShop: (newShop: Shop) => void;
-    updateShop: (updatedShop: Shop) => void;
-    deleteShop: (shopId: string) => void;
+    addShopStatus: (newShop: Shop) => void;
+    updateShopStatus: (updatedShop: Shop) => void;
+    deleteShopStatus: (shopId: string) => void;
     isCreateFormOpen: boolean;
     openCreateForm: () => void;
     closeCreateForm: () => void;
@@ -17,6 +17,13 @@ interface ShopContextType {
     updateFormStates: Record<string, boolean>;
     openUpdateForm: (shopId: string) => void;
     closeUpdateForm: (shopId: string) => void;
+
+    isDeleting: boolean;
+    setIsDeleting: (isDeleting: boolean) => void;
+
+    deleteFormStates: Record<string, boolean>;
+    openDeleteDialog: (shopId: string) => void;
+    closeDeleteDialog: (shopId: string) => void;
 }
 
 const shopService = new ShopService();
@@ -24,11 +31,23 @@ const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [shops, setShops] = useState<Shop[]>([]);
-    const [error, setError] = useState<string | null>(null);
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
     const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false)
     const openCreateForm = () => setIsCreateFormOpen(true);
     const closeCreateForm = () => setIsCreateFormOpen(false);
+    
+    const [isDeleting, setIsDeleting] = useState(false)
+
+    const [deleteFormStates, setDeleteFormStates] = useState<Record<string, boolean>>({});
+    
+    const openDeleteDialog = (shopId: string) => {
+        setUpdateFormStates((prev) => ({ ...prev, [shopId]: false })); // Cerrar el formulario de edición si está abierto
+        setDeleteFormStates((prev) => ({ ...prev, [shopId]: true })); // Abrir el diálogo de confirmación de eliminación
+    };
+
+    const closeDeleteDialog = (shopId: string) => {
+        setDeleteFormStates((prev) => ({ ...prev, [shopId]: false }));
+    };
 
     const [updateFormStates, setUpdateFormStates] = useState<Record<string, boolean>>({});
     
@@ -49,18 +68,18 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     };
 
-    const addShop = (newShop: Shop) => {
+    const addShopStatus = (newShop: Shop) => {
         setShops((prevShops) => [...prevShops, newShop]);
     };
 
-    const updateShop = async (updatedShop: Shop) => {
+    const updateShopStatus = async (updatedShop: Shop) => {
         // Actualizar el estado con el negocio modificado
         setShops(prevShops =>
             prevShops.map(shop => (shop.id === updatedShop.id ? updatedShop : shop))
         );
     };
 
-    const deleteShop = async (shopId: string) => {
+    const deleteShopStatus = async (shopId: string) => {
         setShops(prevShops => prevShops.filter(shop => shop.id !== shopId));
     };
 
@@ -68,9 +87,9 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         <ShopContext.Provider value={{
             shops,
             fetchShops,
-            addShop,
-            updateShop,
-            deleteShop,
+            addShopStatus,
+            updateShopStatus,
+            deleteShopStatus,
             isCreateFormOpen,
             openCreateForm,
             closeCreateForm,
@@ -78,6 +97,11 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             updateFormStates,
             openUpdateForm,
             closeUpdateForm,
+            isDeleting,
+            setIsDeleting,
+            deleteFormStates,
+            openDeleteDialog,
+            closeDeleteDialog,
         }}>
             {children}
         </ShopContext.Provider>

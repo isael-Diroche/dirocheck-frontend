@@ -18,7 +18,7 @@ interface CreateInventoryFormProps {
 const CreateInventoryForm: React.FC<CreateInventoryFormProps> = ({ shopId, onInventoryCreated, isOpen, onClose }) => {
     const [inventories, setInventories] = useState<Inventory[]>([]);
     const [formData, setFormData] = useState<Inventory>({
-        id: 0,
+        id: "0",
         shop: shopId,
         name: "",
     });

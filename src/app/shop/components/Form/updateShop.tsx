@@ -17,10 +17,10 @@ interface UpdateShopFormProps {
 
 export function UpdateShopForm({ shop }: UpdateShopFormProps) {
     const {
-        updateShop,
-        deleteShop,
+        updateShopStatus,
         closeUpdateForm,
         updateFormStates,
+        openDeleteDialog,
     } = useShop();
     const [formData, setFormData] = useState(shop)
     const [imageFile, setImageFile] = useState<File>()
@@ -37,17 +37,6 @@ export function UpdateShopForm({ shop }: UpdateShopFormProps) {
         }
     }
 
-    const handleDelete = async (id: string) => {
-        try {
-            await shopService.deleteShop(id);
-            deleteShop(id);
-        } catch (error) {
-            console.error("Error eliminando la tienda:", error);
-        } finally {
-            closeUpdateForm(id);
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
@@ -59,7 +48,7 @@ export function UpdateShopForm({ shop }: UpdateShopFormProps) {
 
         try {
             await shopService.updateShop(updateForm)
-            updateShop(updateForm);
+            updateShopStatus(updateForm);
             console.log("Negocio actualizado:", updateForm)
             closeUpdateForm(updateForm.id)
         } catch (error) {
@@ -127,7 +116,7 @@ export function UpdateShopForm({ shop }: UpdateShopFormProps) {
                         </div>
                     </div>
                     <DialogFooter className="flex flex-col justify-between items-center">
-                        <Button type="button" variant="destructive" onClick={() => handleDelete(shop.id)}>
+                        <Button type="button" variant="destructive" onClick={() => openDeleteDialog(shop.id)}>
                             Eliminar
                         </Button>
                         <div className="flex gap-2 justify-end w-full">

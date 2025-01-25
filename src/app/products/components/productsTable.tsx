@@ -11,6 +11,9 @@ import { ProductService } from "@/app/products/services/productService";
 // import CreateProductForm from "@/app/products/components/Form/createProduct";
 import { Product } from "../types/productType";
 import { useProduct } from "../hooks/productContext";
+import Image from "next/image";
+import image_default from "@/public/images/image_default.webp";
+
 const productService = new ProductService();
 
 const ITEMS_PER_PAGE = 8
@@ -35,7 +38,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 	})
 	const [currentPage, setCurrentPage] = useState(1)
 	const [showFilters, setShowFilters] = useState(false)
-	
+
 	useEffect(() => {
 		fetchProducts(shopId); // Llamada inicial para cargar los productos
 	}, []);
@@ -87,16 +90,6 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 		setEditingProductId(null)
 		setEditedProduct(null)
 	}
-
-	// const handleDelete = async (productId: string) => {
-	// 	setProducts(products.filter((p) => p.id !== productId))
-	// 	try {
-	// 		await productService.deleteProduct(shopId, productId);
-	// 		fetchProducts();
-	// 	} catch (error) {
-	// 		console.error("Error eliminando producto:", error);
-	// 	}
-	// }
 
 	const handleDelete = async (productId: string) => {
 		try {
@@ -185,9 +178,10 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								<TableHeader>
 									<TableRow>
 										<TableHead>Cantidad</TableHead>
-										<TableHead>Detalles</TableHead>
+										<TableHead className="text-start">Detalles</TableHead>
 										<TableHead>Costo</TableHead>
 										<TableHead>Total</TableHead>
+										<TableHead>imagen</TableHead>
 										<TableHead>Categoria</TableHead>
 										<TableHead>Acciones</TableHead>
 									</TableRow>
@@ -195,19 +189,19 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								<TableBody>
 									{paginatedProducts.map((product) => (
 										<TableRow key={product.id}>
-											<TableCell>
+											<TableCell width={20} className="text-center">
 												{editingProductId === product.id ? (
 													<Input
 														type="number"
 														value={editedProduct?.stock}
 														onChange={(e) => handleInputChange("stock", parseInt(e.target.value))}
-														className="w-20"
+														className="w-20 text-center"
 													/>
 												) : (
 													product.stock
 												)}
 											</TableCell>
-											<TableCell>
+											<TableCell className="text-start">
 												{editingProductId === product.id ? (
 													<Input
 														type="text"
@@ -224,28 +218,35 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 														type="number"
 														value={editedProduct?.price}
 														onChange={(e) => handleInputChange("price", parseFloat(e.target.value))}
-														className="w-24"
+														className="w-24 text-center mx-auto	"
 													/>
 												) : (
 													product.price
 												)}
 											</TableCell>
 											<TableCell>{product.total}</TableCell>
+											<TableCell className="text-center">
+												<Image
+													src={product.image || image_default}
+													alt={product.details}
+													width={48}
+													height={48}
+													className="rounded-full mx-auto"
+												/>
+											</TableCell>
 											<TableCell>
 												<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-1 px-3">
 													{product.category}
 												</span>
 											</TableCell>
-											<TableCell>
+											<TableCell className="w-40">
 												{editingProductId === product.id ? (
-													<div className="flex space-x-2">
+													<div className="flex space-x-2 justify-center">
 														<Button size="sm" onClick={handleSaveEdit}>
-															<Save className="w-4 h-4 mr-1" />
-															Guardar
+															<Save className="w-4 h-4" />
 														</Button>
 														<Button size="sm" variant="outline" onClick={handleCancelEdit}>
-															<X className="w-4 h-4 mr-1" />
-															Cancelar
+															<X className="w-4 h-4" />
 														</Button>
 													</div>
 												) : (

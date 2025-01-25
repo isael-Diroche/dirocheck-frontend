@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from "@/app/shop/components/Shared/button";
 import { ProductService } from '../../services/productService';
 import { useProduct } from '../../hooks/productContext';
+// import default_image from '@/assets/images/default_image.png';
 
 const productService = new ProductService();
 interface CreateProductFormProps {
@@ -17,10 +18,10 @@ interface CreateProductFormProps {
 
 const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProductCreated, isOpen, onClose }) => {
     const { fetchProducts } = useProduct();
+
     const [formData, setFormData] = useState<Product>({
         id: "0",
         shop: shopId,
-        image_url: null,
         details: '',
         category: 'none',
         price: 0,
@@ -28,6 +29,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
         unit_type: 'units',
         expiration_date: null,
         image: null,
+        image_url: null,
         total: 0,
     });
 
@@ -42,28 +44,30 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
             setFormData({ ...formData, [name]: files[0] });
         }
     };
-
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const form = new FormData();
-
-        // Añadir solo los campos que tienen valores
+    
+        // Añadir todos los campos al FormData
         Object.entries(formData).forEach(([key, value]) => {
-            if (key === 'image' && !value) {
-                return;
+            if (key === 'image') {
+                // Si no hay imagen, enviar null para que el backend asigne la predeterminada
+                form.append(key, value || '');
+            } else {
+                form.append(key, value as any);
             }
-            form.append(key, value as any);
         });
-
+    
         try {
+            // Envía los datos al backend
             const createdProduct = await productService.createProduct(shopId, formData);
             fetchProducts(shopId);
-
-            // Limpiar el formulario
+    
+            // Limpiar el formulario después de crear el producto
             setFormData({
                 id: "0",
                 shop: shopId,
-                image_url: null,
                 details: '',
                 category: 'none',
                 price: 0,
@@ -71,14 +75,17 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
                 unit_type: 'units',
                 expiration_date: null,
                 image: null,
+                image_url: null,
                 total: 0,
             });
+    
             onProductCreated(createdProduct);
             onClose();
         } catch (error) {
             console.error('Error creating product:', error);
         }
     };
+    
 
     return (
         <>
@@ -138,6 +145,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                 >
                                     <option value="units">Unidades</option>
+                                    <option value="paqs">Paquetes</option>
                                     <option value="lbs">Libras</option>
                                 </select>
                             </div>

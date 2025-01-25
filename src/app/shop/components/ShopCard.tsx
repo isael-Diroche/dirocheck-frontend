@@ -11,6 +11,7 @@ import { useShop } from "../hooks/ShopContext"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./Shared/tooltip"
 import { Badge } from "./Shared/badge"
 import { Button } from "@/app/products/components/Shared/button"
+import DeleteShop from "./Dialog/deleteShop"
 
 interface ShopCardProps {
     shop: Shop
@@ -104,6 +105,7 @@ export default function ShopCard({ shop }: ShopCardProps) {
             </Card>
 
             <UpdateShopForm shop={shop} />
+            <DeleteShop shop={shop} />
         </>
     )
 };
