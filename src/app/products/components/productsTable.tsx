@@ -181,7 +181,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 										<TableHead className="text-start">Detalles</TableHead>
 										<TableHead>Costo</TableHead>
 										<TableHead>Total</TableHead>
-										<TableHead>imagen</TableHead>
+										{/* <TableHead>imagen</TableHead> */}
 										<TableHead>Categoria</TableHead>
 										<TableHead>Acciones</TableHead>
 									</TableRow>
@@ -225,7 +225,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 												)}
 											</TableCell>
 											<TableCell>{product.total}</TableCell>
-											<TableCell className="text-center">
+											{/* <TableCell className="text-center">
 												<Image
 													src={product.image || image_default}
 													alt={product.details}
@@ -233,7 +233,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 													height={48}
 													className="rounded-full mx-auto"
 												/>
-											</TableCell>
+											</TableCell> */}
 											<TableCell>
 												<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-1 px-3">
 													{product.category}

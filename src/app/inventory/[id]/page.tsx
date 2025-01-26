@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 
 import { Inventory } from '@/app/inventory/types/inventoryType';
 import { InventoryService } from "@/app/inventory/services/inventoryService";
-// import { Shop } from '@/app/shop/lib/model';
-import { ProductService } from '@/app/products/services/productService'; 
+import { ProductService } from '@/app/products/services/productService';
+import { Product } from '@/app/products/types/productType';
 
 const inventoryService = new InventoryService();
 const productService = new ProductService(); // Instancia del servicio de productos
@@ -16,10 +16,9 @@ const InventoryDetails = () => {
     const inventoryId = params.id;
 
     const [selectedShop, setSelectedShop] = useState<string | null>(() => localStorage.getItem('selectedShop'));
-    // const [shop, setShop] = useState<Shop | null>(null);
-    const [selectedInventoryProducts, setSelectedInventoryProducts] = useState<any[]>([]); // Array de productos con información detallada
+    const [selectedInventoryProducts, setSelectedInventoryProducts] = useState<Product[]>([]); // Array de productos con información detallada
     const [inventory, setInventory] = useState<Inventory>({
-        id: 0,
+        id: "0",
         shop: "",
         products: [],
         name: "",
@@ -30,12 +29,16 @@ const InventoryDetails = () => {
         const shop = localStorage.getItem('selectedShop');
         setSelectedShop(shop);
 
-        fetchInventories(shop?.toString());
-
-        if (inventoryId) {
-            fetchSelectedInventoryProducts();
+        if (shop && inventoryId) {
+            fetchInventories(shop.toString());
         }
     }, [inventoryId]);
+
+    useEffect(() => {
+        if (inventory.products.length > 0) {
+            fetchSelectedInventoryProducts();
+        }
+    }, [inventory.products]);
 
     const fetchInventories = async (shopId?: string) => {
         try {
@@ -71,15 +74,17 @@ const InventoryDetails = () => {
                     Inventario: {inventoryId?.toString()} del negocio: {selectedShop} llamado: {inventory?.name}
                 </h1>
                 <div>
-                    <h2>Productos en el inventario:</h2>
                     {selectedInventoryProducts.length > 0 ? (
-                        <ul>
-                            {selectedInventoryProducts.map((product, index) => (
-                                <li key={index}>
-                                    <strong>{product.name}</strong> - {product.description}
-                                </li>
-                            ))}
-                        </ul>
+                        <>
+                            <h2>Productos en el inventario:</h2>
+                            <ul>
+                                {selectedInventoryProducts.map((product, index) => (
+                                    <li key={index}>
+                                        - {product.details}
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
                     ) : (
                         <p>No hay productos en este inventario.</p>
                     )}
@@ -90,3 +95,4 @@ const InventoryDetails = () => {
 };
 
 export default InventoryDetails;
+// Compare this snippet from src/app/inventory/components/InventoryDetails/index.tsx:
