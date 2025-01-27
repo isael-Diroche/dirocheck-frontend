@@ -1,20 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { InventoryService } from "../services/inventoryService";
 import Link from 'next/link';
 import { BiTrash } from 'react-icons/bi';
 import { useInventory } from '../hooks/inventoryContext';
 
-// import { Inventory } from "../types/inventoryType";
-import { ShopService } from '@/app/shop/services/shopService';
-import { Shop } from '@/app/shop/types/shopType';
-// import CreateInventoryForm from './Form/createInventory';
-// import { Button } from '@/app/shop/components/ui/button';
-// import { useProduct } from '@/app/products/hooks/useProduct';
-
 const inventoryService = new InventoryService();
-// const shopService = new ShopService();
 
 interface InventoryListProps {
 	shopId: string;
@@ -22,45 +14,10 @@ interface InventoryListProps {
 
 export default function InventoryList({ shopId }: InventoryListProps) {
     const { inventories, fetchInventories, deleteInventory } = useInventory();
-    // const [inventories, setInventories] = useState<Inventory[]>([]);
-    // const [shops, setShops] = useState<Shop[]>([]);
-    // const [isCreateFormOpen, setIsCreateFormOpen] = useState(false)
-
-    // Fetch all shops once when the component mounts
-    // const fetchShops = async () => {
-    //     try {
-    //         const data = await shopService.getAllShop();
-    //         setShops(data);
-    //     } catch (error) {
-    //         console.error("Error obteniendo tiendas:", error);
-    //     }
-    // };
-
-    // Fetch inventories for the current shop
-    // const fetchInventories = async () => {
-    //     try {
-    //         const data = await inventoryService.getAllInventories(shopId);
-    //         setInventories(data);
-    //     } catch (error) {
-    //         console.error("Error obteniendo inventarios:", error);
-    //     }
-    // };
 
     useEffect(() => {
-        fetchInventories(shopId); // Llamada inicial para cargar inventarios
+        fetchInventories(shopId);
     }, []);
-
-    // Handle delete inventory
-    // const handleDelete = async (inventoryId: string) => {
-    //     try {
-    //         if (window.confirm("¿Está seguro de que desea eliminar este inventario?")) {
-    //             await inventoryService.deleteInventory(shopId, inventoryId);
-    //             fetchInventories(); // Refresh inventory list after deletion
-    //         }
-    //     } catch (error) {
-    //         console.error("Error eliminando inventario:", error);
-    //     }
-    // };
 
     const handleDelete = async (inventoryId: string) => {
 		try {
@@ -70,16 +27,6 @@ export default function InventoryList({ shopId }: InventoryListProps) {
 			console.error("Error eliminando inventario:", error);
 		}
 	};
-
-    // const handleInventoryCreated = (newInventory: Inventory) => {
-    //     setInventories((prevInventories) => [...prevInventories, newInventory]);
-    // };
-
-    // const [creatingInventory, setCreatingInventory] = useState<boolean>(false);
-
-    // const handleCancelCreate = () => {
-    //     setCreatingInventory(false);
-    // };
 
     return (
         <>
@@ -91,13 +38,6 @@ export default function InventoryList({ shopId }: InventoryListProps) {
                 </>
             ) : (
                 <>
-                    {/* <Button
-                        onClick={() => setIsCreateFormOpen(true)}
-                        className='bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded whitespace-nowrap'
-                    >
-                        Crear Inventario
-                    </Button> */}
-
                     <ul className="grid grid-cols-3 gap-4">
                         {inventories.map((inventory, index) => (
                             <li key={index} className='w-full flex'>

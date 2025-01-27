@@ -6,7 +6,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from "@/app/shop/components/Shared/button";
 import { ProductService } from '../../services/productService';
 import { useProduct } from '../../hooks/productContext';
-// import default_image from '@/assets/images/default_image.png';
 
 const productService = new ProductService();
 interface CreateProductFormProps {

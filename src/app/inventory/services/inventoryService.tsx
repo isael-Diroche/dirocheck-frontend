@@ -25,7 +25,7 @@ export class InventoryService implements IInventoryService {
     async getAllInventories(shopId: string): Promise<Inventory[]> {
         const inventories = await this.inventoryService.getAllItems(this.getInventoryUrl());
         if (inventories) {
-            const shop_inventories: Inventory[] = inventories.filter((inventory) => inventory.shop == shopId) // Filtra los inventarios por el negocio
+            const shop_inventories: Inventory[] = inventories.filter((inventory) => inventory.shop == shopId)
             return shop_inventories;
         } else {
             throw new Error("No se encontraron inventarios");

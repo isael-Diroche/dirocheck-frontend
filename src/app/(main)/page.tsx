@@ -15,7 +15,6 @@ export default function Home() {
     const router = useRouter();
 
     useEffect(() => {
-        // Solo ejecuta este código en el cliente
         const shop = typeof window !== 'undefined' ? localStorage.getItem('selectedShop') : null;
         setSelectedShop(shop);
 

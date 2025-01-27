@@ -39,7 +39,7 @@ const CreateInventoryForm: React.FC<CreateInventoryFormProps> = ({ shopId, onInv
 
             // Limpiar el formulario
             setFormData({
-                id: 0,
+                id: "0",
                 shop: shopId,
                 name: "",
             });

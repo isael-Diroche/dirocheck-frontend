@@ -8,11 +8,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/products/components/Shared/select"
 import { MoreHorizontal, Edit, Save, X, Trash2, ChevronLeft, ChevronRight, Filter, Search } from "lucide-react"
 import { ProductService } from "@/app/products/services/productService";
-// import CreateProductForm from "@/app/products/components/Form/createProduct";
 import { Product } from "../types/productType";
 import { useProduct } from "../hooks/productContext";
-import Image from "next/image";
-import image_default from "@/public/images/image_default.webp";
 
 const productService = new ProductService();
 
@@ -22,13 +19,10 @@ interface ProductsTableProps {
 }
 
 export default function ProductsTable({ shopId }: ProductsTableProps) {
-	// const [products, setProducts] = useState<Product[]>([]);
-	// const { products } = useProduct();
 	const { products, fetchProducts, deleteProduct } = useProduct();
 	const [editingProductId, setEditingProductId] = useState<string | null>(null)
 	const [editedProduct, setEditedProduct] = useState<Product | null>(null)
 
-	// const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
 	const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 	const [filters, setFilters] = useState({
 		stock: "",
@@ -40,7 +34,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 	const [showFilters, setShowFilters] = useState(false)
 
 	useEffect(() => {
-		fetchProducts(shopId); // Llamada inicial para cargar los productos
+		fetchProducts(shopId);
 	}, []);
 
 	useEffect(() => {

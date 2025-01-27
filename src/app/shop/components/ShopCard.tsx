@@ -23,7 +23,7 @@ export default function ShopCard({ shop }: ShopCardProps) {
 
     const handleSelectShop = (shopId: string) => {
         localStorage.setItem('selectedShop', shopId);
-        window.dispatchEvent(new Event('shop-updated')); // Evento personalizado
+        window.dispatchEvent(new Event('shop-updated'));
         router.push('/');
     };
 

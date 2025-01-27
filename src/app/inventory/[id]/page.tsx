@@ -95,4 +95,3 @@ const InventoryDetails = () => {
 };
 
 export default InventoryDetails;
-// Compare this snippet from src/app/inventory/components/InventoryDetails/index.tsx:

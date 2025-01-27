@@ -6,7 +6,6 @@ import ForwardBackButtons from "@/shared/navigation/forwardBack";
 
 import imagen from "@/public/icons/favicon.ico";
 
-// Component: NotificationButton
 const NotificationButton = () => (
     <>
         <button
@@ -18,7 +17,6 @@ const NotificationButton = () => (
     </>
 );
 
-// Component: SearchBar
 const SearchBar = () => (
     <>
         <div className="relative w-[358px] h-full">
