@@ -23,13 +23,14 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ onShopCreated }) => {
 		address: "",
 		contact_number: "",
 		type: "",
+		image: null,
 	})
 	const [imageFile, setImageFile] = useState<File | null>(null)
-
 	const {
 		isCreateFormOpen,
 		closeCreateForm,
 	} = useShop();
+
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
@@ -43,7 +44,7 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ onShopCreated }) => {
 	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
+		e.preventDefault();
 		const form = new FormData();
 
 		// Añadir solo los campos que tienen valores
@@ -70,8 +71,9 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ onShopCreated }) => {
 				address: "",
 				contact_number: "",
 				type: "",
+				image: null,
 			});
-			setImageFile(null);
+			// setImageFile(null);
 			onShopCreated(createdShop);
 		} catch (error) {
 			console.error("Error creando la tienda:", error);

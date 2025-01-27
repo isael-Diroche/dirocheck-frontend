@@ -6,7 +6,7 @@ export interface IShopService {
     getAllShops(): Promise<Shop[]>;
     getShop(shopId: string): Promise<Shop>;
     createShop(formData: FormData): Promise<Shop>;
-    updateShop(updatedShop: Shop): Promise<Shop>;
+    updateShop(formData: FormData, shopId: string): Promise<Shop>;
     deleteShop(shopId: string): Promise<void>;
 }
 
@@ -55,34 +55,17 @@ export class ShopService implements IShopService {
         return response.json(); // Asumiendo que el backend devuelve los datos de la tienda creada
     }
 
-    async updateShop(updatedShop: Shop): Promise<Shop> {
-        if (!updatedShop.id) {
-            throw new Error("El ID del negocio es obligatorio para actualizarlo.");
-        }
-
-        const formData = new FormData();
-
-        // Agrega los campos al FormData
-        Object.entries(updatedShop).forEach(([key, value]) => {
-            if (value !== null && value !== undefined) {
-                formData.append(key, value as any);
-            }
-        });
-
-        // Realiza la solicitud PUT o PATCH
-        const url = this.getShopUrl(updatedShop.id)
-        const response = await fetch(url, {
-            method: "PATCH", // Usa PATCH si solo deseas actualizar campos específicos
+    async updateShop(formData: FormData, shopId: string): Promise<Shop> {
+        const response = await fetch(this.getShopUrl(shopId), {
+            method: 'PUT',
             body: formData,
         });
-
         if (!response.ok) {
-            throw new Error("Error al actualizar la tienda. Revisa la información enviada.");
+            throw new Error('Error editando la tienda');
         }
-
-        // Devuelve la tienda actualizada
-        return response.json();
+        return response.json(); // Asumiendo que el backend devuelve los datos de la tienda creada
     }
+
 
     async deleteShop(shopId: string): Promise<void> {
         try {

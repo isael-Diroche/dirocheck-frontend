@@ -172,6 +172,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								<TableHeader>
 									<TableRow>
 										<TableHead>Cantidad</TableHead>
+										<TableHead>tipo</TableHead>
 										<TableHead className="text-start">Detalles</TableHead>
 										<TableHead>Costo</TableHead>
 										<TableHead>Total</TableHead>
@@ -193,6 +194,18 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 													/>
 												) : (
 													product.stock
+												)}
+											</TableCell>
+											<TableCell width={20} className="text-center">
+												{editingProductId === product.id ? (
+													<Input
+														type="number"
+														value={editedProduct?.unit_type}
+														onChange={(e) => handleInputChange("stock", parseInt(e.target.value))}
+														className="w-20 text-center"
+													/>
+												) : (
+													product.unit_type
 												)}
 											</TableCell>
 											<TableCell className="text-start">

@@ -15,11 +15,12 @@ import DeleteShop from "./Dialog/deleteShop"
 
 interface ShopCardProps {
     shop: Shop
+    onShopUpdated: (shop: Shop) => void;
 }
 
-export default function ShopCard({ shop }: ShopCardProps) {
+export default function ShopCard({ shop, onShopUpdated }: ShopCardProps) {
     const router = useRouter();
-    const { openUpdateForm } = useShop();
+    const { openUpdateForm,  } = useShop();
 
     const handleSelectShop = (shopId: string) => {
         localStorage.setItem('selectedShop', shopId);
@@ -31,19 +32,19 @@ export default function ShopCard({ shop }: ShopCardProps) {
         <>
             <Card className="overflow-hidden">
                 <div className="relative">
-                    {
-                        shop.image && (
-                            <>
-                                <Image
-                                    src={shop.image || default_image}
-                                    alt={shop.name}
-                                    width={300}
-                                    height={200}
-                                    className="w-full h-48 object-cover"
-                                />
-                            </>
-                        )
-                    }
+
+                    {/* <Image
+                        src={shop.image || default_image}
+                        alt="Vista previa de la tienda"
+                        className="w-full h-auto"
+                        /> */}
+                    <img
+                        alt={shop.name}
+                        src={shop.image || default_image}
+                        width={300}
+                        height={200}
+                        className="w-full h-48 object-cover"
+                    />
 
                     <TooltipProvider>
                         <Tooltip>
@@ -104,7 +105,7 @@ export default function ShopCard({ shop }: ShopCardProps) {
                 </CardFooter>
             </Card>
 
-            <UpdateShopForm shop={shop} />
+            <UpdateShopForm shop={shop} onShopUpdated={onShopUpdated} />
             <DeleteShop shop={shop} />
         </>
     )
