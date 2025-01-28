@@ -32,12 +32,6 @@ export default function ShopCard({ shop, onShopUpdated }: ShopCardProps) {
         <>
             <Card className="overflow-hidden">
                 <div className="relative">
-
-                    {/* <Image
-                        src={shop.image || default_image}
-                        alt="Vista previa de la tienda"
-                        className="w-full h-auto"
-                        /> */}
                     <img
                         alt={shop.name}
                         src={shop.image || default_image}

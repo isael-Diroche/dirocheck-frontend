@@ -124,7 +124,7 @@ export function UpdateShopForm({ shop, onShopUpdated }: UpdateShopFormProps) {
                             />
                         </div>
                         <img
-                            src={ previewImage || formData.image || default_image}
+                            src={ previewImage || formData.image }
                             alt="Vista previa de la tienda"
                             className="w-full h-auto"
                         />
