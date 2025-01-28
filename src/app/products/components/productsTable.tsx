@@ -183,8 +183,8 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								</TableHeader>
 								<TableBody>
 									{paginatedProducts.map((product) => (
-										<TableRow key={product.id}>
-											<TableCell width={20} className="text-center">
+										<TableRow key={product.id} className={editingProductId === product.id ? "bg-gray-50" : ""}>
+											<TableCell width={24} className="text-center w-24">
 												{editingProductId === product.id ? (
 													<Input
 														type="number"
@@ -196,14 +196,18 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 													product.stock
 												)}
 											</TableCell>
-											<TableCell width={20} className="text-center">
+											<TableCell width={24} className="text-center w-24">
 												{editingProductId === product.id ? (
-													<Input
-														type="number"
+													<select
+														name="unit_type"
 														value={editedProduct?.unit_type}
-														onChange={(e) => handleInputChange("stock", parseInt(e.target.value))}
-														className="w-20 text-center"
-													/>
+														onChange={(e) => handleInputChange("unit_type", e.target.value)}
+														className="text-center bg-transparent"
+													>
+														<option value="units">Unidades</option>
+														<option value="paqs">Paquetes</option>
+														<option value="lbs">Libras</option>
+													</select>
 												) : (
 													product.unit_type
 												)}
@@ -282,28 +286,35 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								</TableBody>
 							</Table>
 							{totalPages > 1 && (
-								<div className="flex items-center justify-end space-x-2 py-4">
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-										disabled={currentPage === 1}
-									>
-										<ChevronLeft className="h-4 w-4" />
-										Anterior
-									</Button>
-									<div className="text-sm font-medium">
-										Página {currentPage} de {totalPages}
+								<div className="flex flex-row w-full items-center justify-between px-3">
+									<div className="">
+										<p className="text-gray-800 text-sm font-medium">
+											Mostrando { paginatedProducts.length } de {filteredProducts.length}
+										</p>
 									</div>
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-										disabled={currentPage === totalPages}
-									>
-										Siguiente
-										<ChevronRight className="h-4 w-4" />
-									</Button>
+									<div className="flex items-center justify-end space-x-2 py-4">
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+											disabled={currentPage === 1}
+										>
+											<ChevronLeft className="h-4 w-4" />
+											Anterior
+										</Button>
+										<div className="text-sm font-medium">
+											Página {currentPage} de {totalPages}
+										</div>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+											disabled={currentPage === totalPages}
+										>
+											Siguiente
+											<ChevronRight className="h-4 w-4" />
+										</Button>
+									</div>
 								</div>
 							)}
 						</div>

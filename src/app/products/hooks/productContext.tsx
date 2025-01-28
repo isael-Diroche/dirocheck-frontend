@@ -9,6 +9,7 @@ type ProductContextType = {
     openCreateForm: () => void;
     closeCreateForm: () => void;
     products: Product[];
+    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
     fetchProducts: (shopId: string) => Promise<void>;
     addProduct: (newProduct: Product) => void;
     updateProduct: (updatedProduct: Product) => void;
@@ -54,6 +55,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
             openCreateForm,
             closeCreateForm,
             products,
+            setProducts,
             fetchProducts,
             addProduct,
             updateProduct,

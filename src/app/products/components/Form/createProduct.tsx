@@ -10,13 +10,12 @@ import { useProduct } from '../../hooks/productContext';
 const productService = new ProductService();
 interface CreateProductFormProps {
     shopId: string;
-    onProductCreated: (product: Product) => void;
     isOpen: boolean;
     onClose: () => void;
 }
 
-const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProductCreated, isOpen, onClose }) => {
-    const { fetchProducts } = useProduct();
+const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, onClose }) => {
+    const { fetchProducts, addProduct } = useProduct();
 
     const [formData, setFormData] = useState<Product>({
         id: "0",
@@ -78,7 +77,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
                 total: 0,
             });
     
-            onProductCreated(createdProduct);
+            addProduct(createdProduct);
             onClose();
         } catch (error) {
             console.error('Error creating product:', error);
@@ -173,7 +172,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, onProduct
                             <Button type="button" variant="outline" onClick={onClose}>
                                 Cancelar
                             </Button>
-                            <Button type="submit" onClick={onClose} className="bg-green-500 hover:bg-green-600 text-white">
+                            <Button type="submit" className="bg-green-500 hover:bg-green-600 text-white">
                                 Crear Producto
                             </Button>
                         </DialogFooter>

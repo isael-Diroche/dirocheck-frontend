@@ -5,7 +5,9 @@ import { ShopService } from '../services/shopService';
 import { Shop } from '../types/shopType';
 
 interface ShopContextType {
+    shop: Shop | null;
     shops: Shop[];
+    fetchShop: (shopId: string) => Promise<void>;
     fetchShops: () => Promise<void>;
     addShopStatus: (newShop: Shop) => void;
     updateShopStatus: (updatedShop: Shop) => void;
@@ -30,16 +32,17 @@ const shopService = new ShopService();
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [shop, setShop] = useState<Shop | null>(null);
     const [shops, setShops] = useState<Shop[]>([]);
     const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
     const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false)
     const openCreateForm = () => setIsCreateFormOpen(true);
     const closeCreateForm = () => setIsCreateFormOpen(false);
-    
+
     const [isDeleting, setIsDeleting] = useState(false)
 
     const [deleteFormStates, setDeleteFormStates] = useState<Record<string, boolean>>({});
-    
+
     const openDeleteDialog = (shopId: string) => {
         setUpdateFormStates((prev) => ({ ...prev, [shopId]: false })); // Cerrar el formulario de edición si está abierto
         setDeleteFormStates((prev) => ({ ...prev, [shopId]: true })); // Abrir el diálogo de confirmación de eliminación
@@ -50,7 +53,7 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     const [updateFormStates, setUpdateFormStates] = useState<Record<string, boolean>>({});
-    
+
     const openUpdateForm = (shopId: string) => {
         setUpdateFormStates((prev) => ({ ...prev, [shopId]: true }));
     };
@@ -65,6 +68,15 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setShops(data);
         } catch (error) {
             console.error("Error al obtener los negocios desde el context:", error);
+        }
+    };
+
+    const fetchShop = async (shopId: string) => {
+        try {
+            const data = await shopService.getShop(shopId);
+            setShop(data);
+        } catch (error) {
+            console.error("Error obteniendo negocio:", error);
         }
     };
 
@@ -85,7 +97,9 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     return (
         <ShopContext.Provider value={{
+            shop,
             shops,
+            fetchShop,
             fetchShops,
             addShopStatus,
             updateShopStatus,
