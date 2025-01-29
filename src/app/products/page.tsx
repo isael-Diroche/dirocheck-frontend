@@ -6,7 +6,6 @@ import ProductsTable from '@/app/products/components/productsTable';
 import { useShop } from '../shop/hooks/ShopContext';
 
 const ProductsPage: React.FC = () => {
-    const [refresh, setRefresh] = useState<boolean>(false);
     const router = useRouter();
     const {shop, fetchShop} = useShop();
 
@@ -18,7 +17,7 @@ const ProductsPage: React.FC = () => {
         } else {
             fetchShop(shop);
         }
-    }, [refresh]);
+    }, []);
 
     return (
         <>

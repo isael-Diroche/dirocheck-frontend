@@ -43,7 +43,7 @@ export default function DeleteShopDialog({ shop }: DeleteShopDialogProps) {
                 <DialogHeader>
                     <DialogTitle>Confirmar Eliminación</DialogTitle>
                     <DialogDescription>
-                    Al eliminar <b className="font-semibold text-gray-800">{shop.name}</b> no podrás recuperarlo. ¿Confirmas la eliminación?
+                        Al eliminar <b className="font-semibold text-gray-800">{shop.name}</b> no podrás recuperarlo. ¿Confirmas la eliminación?
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
@@ -51,7 +51,7 @@ export default function DeleteShopDialog({ shop }: DeleteShopDialogProps) {
                         Cancelar
                     </Button>
                     <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-                        <Trash2 size={16} className="mr-2" />   
+                        <Trash2 size={16} className="mr-2" />
                         {isDeleting ? "Eliminando..." : "Eliminar"}
                     </Button>
                 </DialogFooter>

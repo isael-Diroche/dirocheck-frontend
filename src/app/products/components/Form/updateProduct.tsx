@@ -20,6 +20,7 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({ product, shops, o
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        // XD ya esto no se puede hacer
         if (updatedProduct.shop.toString() !== product.shop.toString()) {
             const newShop = shops.find(shop => shop.id.toString() === updatedProduct.shop)?.name;
             if (window.confirm(`Este producto dejará de aparecer en este negocio y se pasará a ${newShop}. ¿Desea continuar?`)) {

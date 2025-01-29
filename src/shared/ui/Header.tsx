@@ -1,17 +1,13 @@
 import { Plus } from 'lucide-react';
-import React from 'react';
-import { Button } from "@/app/products/components/Shared/button"
+import React, { ReactNode } from 'react';
 
 interface ModuleHeaderProps {
     title: string;
     description?: string;
-    buttonLabel?: string;
-    buttonFunction?: () => void;
+    children?: ReactNode;
 }
 
-export default function ModuleHeader({ title, description, buttonLabel, buttonFunction }: ModuleHeaderProps) {
-
-
+export default function ModuleHeader({ title, description, children }: ModuleHeaderProps) {
     return (
         <>
             <header className="flex justify-between items-center">
@@ -19,16 +15,9 @@ export default function ModuleHeader({ title, description, buttonLabel, buttonFu
                     <h1 className="text-[28px] font-golos font-semibold text-gray-800 capitalize">{title}</h1>
                     <p className="text-sm font-golos font-normal text-gray-600">{description}</p>
                 </div>
-                {buttonLabel && buttonFunction &&
-                    (
-                        <Button
-                            onClick={buttonFunction}
-                        >
-                            <Plus className="mr-2 h-4 w-4" />
-                            {buttonLabel}
-                        </Button>
-                    )
-                }
+                <div className="flex gap-2">
+                    {children}
+                </div>
             </header>
         </>
     );

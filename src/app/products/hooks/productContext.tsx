@@ -5,27 +5,31 @@ import { Product } from "../types/productType";
 import { ProductService } from "../services/productService";
 
 type ProductContextType = {
-    isCreateFormOpen: boolean;
+    products: Product[];
+    fetchProducts: (shopId: string) => Promise<void>;
+
+    // Estados para el Dialog de Creacion de productos
     openCreateForm: () => void;
     closeCreateForm: () => void;
-    products: Product[];
-    setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-    fetchProducts: (shopId: string) => Promise<void>;
+    isCreateFormOpen: boolean;
+
+    // Estados de actualizacion
     addProduct: (newProduct: Product) => void;
     updateProduct: (updatedProduct: Product) => void;
     deleteProduct: (productId: string) => void;
+
+    // Estados para el dialogo de exportar productos
+    openExportDialog: () => void;
+    closeExportDialog: () => void;
+    isExportDialogOpen: boolean;
+
 };
 
-const ProductContext = createContext<ProductContextType | undefined>(undefined);    
+const ProductContext = createContext<ProductContextType | undefined>(undefined);
 const productService = new ProductService();
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
     const [products, setProducts] = useState<Product[]>([]);
-
-    const openCreateForm = () => setIsCreateFormOpen(true);
-    const closeCreateForm = () => setIsCreateFormOpen(false);
-
     const fetchProducts = async (shopId: string) => {
         try {
             const data = await productService.getAllProducts(shopId);
@@ -35,6 +39,12 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
+    // CREATE PRODUCTS DIALOG
+    const openCreateForm = () => setIsCreateFormOpen(true);
+    const closeCreateForm = () => setIsCreateFormOpen(false);
+    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+
+    // Estados de actualizacion
     const addProduct = (newProduct: Product) => {
         setProducts((prevProducts) => [...prevProducts, newProduct]);
     };
@@ -49,17 +59,30 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setProducts((prev) => prev.filter((product) => product.id !== productId));
     };
 
+    // EXPORT PRODUCTS DIALOG
+    const openExportDialog = () => setIsExportDialogOpen(true);
+    const closeExportDialog = () => setIsExportDialogOpen(false);
+    const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+
     return (
         <ProductContext.Provider value={{
-            isCreateFormOpen,
+            products,
+            fetchProducts,
+
+            // Estados para el Dialog de Creacion de productos
             openCreateForm,
             closeCreateForm,
-            products,
-            setProducts,
-            fetchProducts,
+            isCreateFormOpen,
+
+            // Estados de actualizacion
             addProduct,
             updateProduct,
             deleteProduct,
+
+            // Estados para el dialogo de exportar productos
+            openExportDialog,
+            closeExportDialog,
+            isExportDialogOpen,
         }}>
             {children}
         </ProductContext.Provider>

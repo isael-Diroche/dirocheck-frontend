@@ -20,6 +20,11 @@ interface ProductsTableProps {
 
 export default function ProductsTable({ shopId }: ProductsTableProps) {
 	const { products, fetchProducts, deleteProduct } = useProduct();
+
+	useEffect(() => {
+		fetchProducts(shopId);
+	}, [fetchProducts, shopId]);
+
 	const [editingProductId, setEditingProductId] = useState<string | null>(null)
 	const [editedProduct, setEditedProduct] = useState<Product | null>(null)
 
@@ -32,10 +37,6 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 	})
 	const [currentPage, setCurrentPage] = useState(1)
 	const [showFilters, setShowFilters] = useState(false)
-
-	useEffect(() => {
-		fetchProducts(shopId);
-	}, []);
 
 	useEffect(() => {
 		// Filtrar productos cuando cambian los filtros o la lista de productos
@@ -289,7 +290,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 								<div className="flex flex-row w-full items-center justify-between px-3">
 									<div className="">
 										<p className="text-gray-800 text-sm font-medium">
-											Mostrando { paginatedProducts.length } de {filteredProducts.length}
+											Mostrando {paginatedProducts.length} de {filteredProducts.length}
 										</p>
 									</div>
 									<div className="flex items-center justify-end space-x-2 py-4">

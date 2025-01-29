@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shop } from '../shop/types/shopType';
 import { ShopService } from '../shop/services/shopService';
+import { useProduct } from '../products/hooks/productContext';
 
 const shopService = new ShopService();
 
@@ -11,6 +12,8 @@ export default function Home() {
     const [shop, setShop] = useState<Shop>();
     const [error, setError] = useState<string | null>(null);
     const [selectedShop, setSelectedShop] = useState<string | null>(null);
+    const { products, fetchProducts } = useProduct();
+
 
     const router = useRouter();
 
@@ -20,6 +23,8 @@ export default function Home() {
 
         if (!shop) {
             router.replace('/shop-selection');
+        } else {
+            fetchProducts(shop);
         }
     }, [router]);
 

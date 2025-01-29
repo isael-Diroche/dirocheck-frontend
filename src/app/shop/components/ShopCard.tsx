@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { CalendarIcon, MapPinIcon, PhoneIcon, InfoIcon, Edit2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import default_image from "@/public/images/image_default.webp"
@@ -12,6 +11,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./Shar
 import { Badge } from "./Shared/badge"
 import { Button } from "@/app/products/components/Shared/button"
 import DeleteShop from "./Dialog/deleteShop"
+import { useProduct } from "@/app/products/hooks/productContext"
 
 interface ShopCardProps {
     shop: Shop
@@ -20,7 +20,7 @@ interface ShopCardProps {
 
 export default function ShopCard({ shop, onShopUpdated }: ShopCardProps) {
     const router = useRouter();
-    const { openUpdateForm,  } = useShop();
+    const { openUpdateForm, } = useShop();
 
     const handleSelectShop = (shopId: string) => {
         localStorage.setItem('selectedShop', shopId);

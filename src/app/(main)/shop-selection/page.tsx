@@ -5,9 +5,9 @@ import ShopCard from "@/app/shop/components/ShopCard"
 import CreateShopForm from "@/app/shop/components/Form/createShop";
 import { Shop } from "@/app/shop/types/shopType";
 import { useShop } from "@/app/shop/hooks/ShopContext";
-import { Button } from "@/app/products/components/Shared/button";
 import { Plus } from "lucide-react";
 import ModuleHeader from "@/shared/ui/Header";
+import { Button } from "@/app/shop/components/Shared/button";
 
 export default function ShopSelectionPage() {
     const {
@@ -34,12 +34,12 @@ export default function ShopSelectionPage() {
 
     return (
         <div className="flex flex-col gap-6 w-full h-full">
-            <ModuleHeader
-                title="Seleccionar negocio"
-                description="Vista de todos los negocios."
-                buttonLabel="Crear Negocio"
-                buttonFunction={openCreateForm}
-            />
+            <ModuleHeader title={"Seleccionar negocio"} description="Vista de todos los negocios.">
+                <Button onClick={openCreateForm} >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Nuevo negocio
+                </Button>
+            </ModuleHeader>
 
             <main className="flex w-full h-full">
                 {shops.length === 0 ? (
