@@ -5,11 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Shop } from "@/app/shop/types/shopType";
 import { useProduct } from "../../hooks/productContext";
 import * as XLSX from "xlsx";
-import { useShop } from "@/app/shop/hooks/ShopContext";
 import { BiSolidDownload } from "react-icons/bi";
-// const shopService = new ShopService();
-// const productService = new ProductService();
-
 interface ExportProductsDialogProps {
     shop: Shop
     isOpen: boolean;
@@ -26,7 +22,8 @@ export default function ExportProductsDialog({ shop, isOpen, onClose }: ExportPr
         try {
             const file_name = `${shop.name.toLowerCase().replace(' ', '-')}-products.xlsx`;
             // Crear una hoja de cálculo con los datos de los productos
-            const worksheet = XLSX.utils.json_to_sheet(products);
+            const productsWithoutUnwantedFields = products.map(({ id, shop, ...rest }) => rest);
+            const worksheet = XLSX.utils.json_to_sheet(productsWithoutUnwantedFields);
 
             // Crear un libro de trabajo (workbook) y agregar la hoja
             const workbook = XLSX.utils.book_new();

@@ -7,7 +7,7 @@ import { Shop } from "@/app/shop/types/shopType";
 import { useShop } from "@/app/shop/hooks/ShopContext";
 import { Plus } from "lucide-react";
 import ModuleHeader from "@/shared/ui/Header";
-import { Button } from "@/app/shop/components/Shared/button";
+import { Button } from "@/app/products/components/Shared/button";
 
 export default function ShopSelectionPage() {
     const {

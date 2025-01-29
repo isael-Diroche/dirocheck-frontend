@@ -90,7 +90,7 @@ export default function ShopCard({ shop, onShopUpdated }: ShopCardProps) {
                         {shop.address}
                     </p>
                 </CardContent>
-                <CardFooter className="p-4 bg-gray-50">
+                <CardFooter className="p-4">
                     <Button
                         onClick={() => handleSelectShop(shop.id)}
                         className="w-full bg-green-500 hover:bg-green-600 text-white">
