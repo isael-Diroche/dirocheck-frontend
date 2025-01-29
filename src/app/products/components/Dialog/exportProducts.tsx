@@ -47,17 +47,15 @@ export default function ExportProductsDialog({ shop, isOpen, onClose }: ExportPr
                 <DialogHeader>
                     <DialogTitle>Exportar productos</DialogTitle>
                     <DialogDescription>
-                        <p>
-                            {products.length > 1 ? (
-                                <>
-                                    Al exportar los productos, se generará un <strong>archivo</strong> con la información actual de los {products.length} productos. ¿Confirmas la exportación?
-                                </>
-                            ) : (
-                                <>
-                                    Son muy pocos productos para exportar
-                                </>
-                            )}
-                        </p>
+                        {products.length > 1 ? (
+                            <>
+                                Al exportar los productos, se generará un <strong>archivo</strong> con la información actual de los {products.length} productos. ¿Confirmas la exportación?
+                            </>
+                        ) : (
+                            <>
+                                Son muy pocos productos para exportar añada mas productos e intentelo denuevo.
+                            </>
+                        )}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>

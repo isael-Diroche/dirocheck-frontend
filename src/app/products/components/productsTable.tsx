@@ -23,7 +23,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 
 	useEffect(() => {
 		fetchProducts(shopId);
-	}, [fetchProducts, shopId]);
+	}, []);
 
 	const [editingProductId, setEditingProductId] = useState<string | null>(null)
 	const [editedProduct, setEditedProduct] = useState<Product | null>(null)
