@@ -3,26 +3,35 @@
 import React, { createContext, useContext, useState } from "react";
 import { Product } from "../types/productType";
 import { ProductService } from "../services/productService";
+import * as XLSX from "xlsx";
 
 type ProductContextType = {
     products: Product[];
     fetchProducts: (shopId: string) => Promise<void>;
 
-    // Estados para el Dialog de Creacion de productos
+    // Estados para el Dialog de Creación de productos
     openCreateForm: () => void;
     closeCreateForm: () => void;
     isCreateFormOpen: boolean;
 
-    // Estados de actualizacion
+    // Estados de actualización
     addProduct: (newProduct: Product) => void;
     updateProduct: (updatedProduct: Product) => void;
     deleteProduct: (productId: string) => void;
 
-    // Estados para el dialogo de exportar productos
+    // Estados para el Dialog de exportar productos
     openExportDialog: () => void;
     closeExportDialog: () => void;
     isExportDialogOpen: boolean;
 
+    // Estados para el Dialog de importar productos
+    openImportDialog: () => void;
+    closeImportDialog: () => void;
+    isImportDialogOpen: boolean;
+
+    // Importación de productos
+    importProducts: (shopId: string, file: File) => Promise<void>;
+    isImporting: boolean;
 };
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -30,6 +39,11 @@ const productService = new ProductService();
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [products, setProducts] = useState<Product[]>([]);
+    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+    const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+    const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+    const [isImporting, setIsImporting] = useState(false);
+
     const fetchProducts = async (shopId: string) => {
         try {
             const data = await productService.getAllProducts(shopId);
@@ -42,9 +56,8 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     // CREATE PRODUCTS DIALOG
     const openCreateForm = () => setIsCreateFormOpen(true);
     const closeCreateForm = () => setIsCreateFormOpen(false);
-    const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
 
-    // Estados de actualizacion
+    // Estados de actualización
     const addProduct = (newProduct: Product) => {
         setProducts((prevProducts) => [...prevProducts, newProduct]);
     };
@@ -62,28 +75,66 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     // EXPORT PRODUCTS DIALOG
     const openExportDialog = () => setIsExportDialogOpen(true);
     const closeExportDialog = () => setIsExportDialogOpen(false);
-    const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+
+    // IMPORT PRODUCTS DIALOG
+    const openImportDialog = () => setIsImportDialogOpen(true);
+    const closeImportDialog = () => setIsImportDialogOpen(false);
+
+    // IMPORT PRODUCTS
+    const importProducts = async (shopId: string, file: File) => {
+        setIsImporting(true);
+
+        try {
+            // Leer el archivo Excel y convertirlo a JSON
+            const data = await file.arrayBuffer();
+            const workbook = XLSX.read(data, { type: "array" });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const importedProducts: Product[] = XLSX.utils.sheet_to_json(worksheet);
+
+            // Crear productos uno por uno
+            for (const product of importedProducts) {
+                const newProduct = await productService.createProduct(shopId, product);
+                addProduct(newProduct);
+            }
+        } catch (error) {
+            console.error("Error al importar productos:", error);
+        } finally {
+            setIsImporting(false);
+        }
+    };
 
     return (
-        <ProductContext.Provider value={{
-            products,
-            fetchProducts,
+        <ProductContext.Provider
+            value={{
+                products,
+                fetchProducts,
 
-            // Estados para el Dialog de Creacion de productos
-            openCreateForm,
-            closeCreateForm,
-            isCreateFormOpen,
+                // Estados para el Dialog de Creación de productos
+                openCreateForm,
+                closeCreateForm,
+                isCreateFormOpen,
 
-            // Estados de actualizacion
-            addProduct,
-            updateProduct,
-            deleteProduct,
+                // Estados de actualización
+                addProduct,
+                updateProduct,
+                deleteProduct,
 
-            // Estados para el dialogo de exportar productos
-            openExportDialog,
-            closeExportDialog,
-            isExportDialogOpen,
-        }}>
+                // Estados para el Dialog de exportar productos
+                openExportDialog,
+                closeExportDialog,
+                isExportDialogOpen,
+
+                // Estados para el Dialog de importar productos
+                openImportDialog,
+                closeImportDialog,
+                isImportDialogOpen,
+
+                // Importación de productos
+                importProducts,
+                isImporting,
+            }}
+        >
             {children}
         </ProductContext.Provider>
     );
