@@ -119,10 +119,10 @@ const CreateShopForm: React.FC<CreateShopFormProps> = ({ onShopCreated }) => {
 							/>
 						</div>
 						<div className="grid gap-2">
-							<Label htmlFor="contactNumber">Teléfono</Label>
+							<Label htmlFor="contact_number">Teléfono</Label>
 							<Input
-								id="contactNumber"
-								name="contactNumber"
+								id="contact_number"
+								name="contact_number"
 								value={formData.contact_number}
 								onChange={handleInputChange}
 							/>

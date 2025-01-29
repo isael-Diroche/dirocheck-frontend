@@ -25,7 +25,6 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
         price: 0,
         stock: 0,
         unit_type: 'units',
-        expiration_date: null,
         image: null,
         image_url: null,
         total: 0,
@@ -71,7 +70,6 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                 price: 0,
                 stock: 0,
                 unit_type: 'units',
-                expiration_date: null,
                 image: null,
                 image_url: null,
                 total: 0,
@@ -146,16 +144,6 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                                     <option value="paqs">Paquetes</option>
                                     <option value="lbs">Libras</option>
                                 </select>
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
-                                <input
-                                    type="date"
-                                    name="expiration_date"
-                                    value={formData.expiration_date || Date.now()}
-                                    onChange={handleInputChange}
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                                />
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Image</label>
