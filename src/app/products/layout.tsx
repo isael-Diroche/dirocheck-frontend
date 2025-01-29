@@ -83,10 +83,7 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({
           description="Vista de todos los productos de tu negocio."
         >
           <ExportProductsButton />
-          <Button onClick={openImportDialog}>
-            <BiPlus className="h-4 w-4" />
-            Importar Productos
-          </Button>
+          <ImportProductsButton />
           <Button onClick={openCreateForm}>
             <BiPlus className="h-4 w-4" />
             Añadir Nuevo
