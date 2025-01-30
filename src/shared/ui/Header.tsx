@@ -15,7 +15,7 @@ export default function ModuleHeader({ title, description, children }: ModuleHea
                     <h1 className="text-[28px] font-golos font-semibold text-gray-800 capitalize">{title}</h1>
                     <p className="text-sm font-golos font-normal text-gray-600">{description}</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                     {children}
                 </div>
             </header>
