@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import Link from "next/link";
 
 import { IoIosAlbums, IoMdContact, IoMdCube } from "react-icons/io";
-import { IoDocumentText, IoReceipt, IoBarChart, IoSettings, IoLockClosed } from "react-icons/io5";
+import { IoDocumentText, IoReceipt, IoBarChart, IoSettings, IoLockClosed, IoChevronDown } from "react-icons/io5";
 import { Shop } from '@/app/shop/types/shopType';
 import { ShopService } from '@/app/shop/services/shopService';
 import Image from 'next/image';
 import logo from '@/public/images/logo_vector.svg';
+import imagen from "@/public/icons/favicon.ico";
 
 const shopService = new ShopService();
 
@@ -200,6 +201,21 @@ export default function Sidebar() {
                                     </li>
                                 ))}
                             </ul>
+                            <div className="flex items-center justify-between px-4 py-1 w-full">
+                                <div className="flex items-center gap-2">
+                                    <Image
+                                        src={imagen}
+                                        alt="User profile picture"
+                                        width={40}
+                                        height={40}
+                                        className="bg-gray-300 rounded-full border border-blue-050 shadow-sm"
+                                    />
+                                    <p className="font-inter text-sm font-medium text-gray-700">
+                                        Isael Diroche
+                                    </p>
+                                </div>
+                                <IoChevronDown />
+                            </div>
                             <hr className="h-[1px] fill-[#e4e7ec] w-full" />
                             <p className="text-[#98a2b3] text-xs font-normal font-['Open Sans']">©2024 Dirocheck, v1.2</p>
                         </div>

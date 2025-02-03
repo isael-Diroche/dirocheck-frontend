@@ -13,7 +13,7 @@ import { useProduct } from "../hooks/productContext";
 
 const productService = new ProductService();
 
-const ITEMS_PER_PAGE = 8
+const ITEMS_PER_PAGE = 9
 interface ProductsTableProps {
 	shopId: string;
 }
@@ -110,64 +110,68 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 			) : (
 				<>
 					<div className="h-full">
-						<div className="mb-4 flex items-center justify-between">
-							<div className="flex justify-between w-full flex-row-reverse items-center">
-								<Button
-									variant={showFilters ? "default" : "outline"}
-									size="sm"
-									onClick={() => setShowFilters(!showFilters)}
-								>
-									<Filter className="mr-2 h-4 w-4" />
-									Filtros
-								</Button>
-								<div className="relative">
-									<Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground text-gray-500" />
-									<Input
-										value={filters.search}
-										placeholder="Buscar por detalles"
-										onChange={(e) => handleFilterChange("search", e.target.value)}
-										className="pl-9 w-[300px] max-w-sm placeholder:font-golos font-golos text-md"
-									/>
+						<div className="flex">
+							<div className="mb-4 flex items-center justify-between w-full">
+								<div className="flex justify-between w-full flex-row-reverse items-center">
+									<div className="flex items-center w-full justify-end gap-2">
+										{showFilters && (
+											<div className="flex items-center gap-2 justify-end">
+												<Select onValueChange={(value) => handleFilterChange("stock", value)}>
+													<SelectTrigger className="w-[180px]">
+														<SelectValue placeholder="Filtrar por cantidad" />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="0">Todos</SelectItem>
+														<SelectItem value="10">10+</SelectItem>
+														<SelectItem value="20">20+</SelectItem>
+													</SelectContent>
+												</Select>
+												<Select onValueChange={(value) => handleFilterChange("category", value)}>
+													<SelectTrigger className="w-[180px]">
+														<SelectValue placeholder="Filtrar por categoria" />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="all">Todos</SelectItem>
+														<SelectItem value="none">Sin categoria</SelectItem>
+														<SelectItem value="cereales">Cereales</SelectItem>
+														<SelectItem value="papeleria">Papeleria</SelectItem>
+														<SelectItem value="herrería">Herreria</SelectItem>
+													</SelectContent>
+												</Select>
+												<Select onValueChange={(value) => handleFilterChange("price", value)}>
+													<SelectTrigger className="w-[180px]">
+														<SelectValue placeholder="Filtrar por precio" />
+													</SelectTrigger>
+													<SelectContent>
+														<SelectItem value="10000">Todos</SelectItem>
+														<SelectItem value="50">Hasta $50</SelectItem>
+														<SelectItem value="100">Hasta $100</SelectItem>
+														<SelectItem value="1000">Hasta $1000</SelectItem>
+													</SelectContent>
+												</Select>
+											</div>
+										)}
+										<Button
+											variant={showFilters ? "default" : "outline"}
+											size="sm"
+											onClick={() => setShowFilters(!showFilters)}
+										>
+											<Filter className="mr-2 h-4 w-4" />
+											Filtros
+										</Button>
+									</div>
+									<div className="relative">
+										<Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground text-gray-500" />
+										<Input
+											value={filters.search}
+											placeholder="Buscar por detalles"
+											onChange={(e) => handleFilterChange("search", e.target.value)}
+											className="pl-9 w-[300px] max-w-sm placeholder:font-golos font-golos text-md"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
-						{showFilters && (
-							<div className="mb-4 flex items-center gap-2 justify-end">
-								<Select onValueChange={(value) => handleFilterChange("stock", value)}>
-									<SelectTrigger className="w-[180px]">
-										<SelectValue placeholder="Filtrar por cantidad" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="0">Todos</SelectItem>
-										<SelectItem value="10">10+</SelectItem>
-										<SelectItem value="20">20+</SelectItem>
-									</SelectContent>
-								</Select>
-								<Select onValueChange={(value) => handleFilterChange("category", value)}>
-									<SelectTrigger className="w-[180px]">
-										<SelectValue placeholder="Filtrar por categoria" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="all">Todos</SelectItem>
-										<SelectItem value="none">Sin categoria</SelectItem>
-										<SelectItem value="cereales">Cereales</SelectItem>
-										<SelectItem value="papeleria">Papeleria</SelectItem>
-										<SelectItem value="herrería">Herreria</SelectItem>
-									</SelectContent>
-								</Select>
-								<Select onValueChange={(value) => handleFilterChange("price", value)}>
-									<SelectTrigger className="w-[180px]">
-										<SelectValue placeholder="Filtrar por precio" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="10000">Todos</SelectItem>
-										<SelectItem value="50">Hasta $50</SelectItem>
-										<SelectItem value="100">Hasta $100</SelectItem>
-										<SelectItem value="1000">Hasta $1000</SelectItem>
-									</SelectContent>
-								</Select>
-							</div>
-						)}
 						<div className="border rounded-lg">
 							<Table>
 								<TableHeader>

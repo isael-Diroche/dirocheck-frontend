@@ -11,7 +11,7 @@ export default function ModuleHeader({ title, description, children }: ModuleHea
     return (
         <>
             <header className="flex justify-between items-center">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col">
                     <h1 className="text-[28px] font-golos font-semibold text-gray-800 capitalize">{title}</h1>
                     <p className="text-sm font-golos font-normal text-gray-600">{description}</p>
                 </div>
