@@ -8,6 +8,8 @@ import { IoIosAlbums, IoMdContact, IoMdCube } from "react-icons/io";
 import { IoDocumentText, IoReceipt, IoBarChart, IoSettings, IoLockClosed } from "react-icons/io5";
 import { Shop } from '@/app/shop/types/shopType';
 import { ShopService } from '@/app/shop/services/shopService';
+import Image from 'next/image';
+import logo from '@/public/images/logo_vector.svg';
 
 const shopService = new ShopService();
 
@@ -126,11 +128,12 @@ export default function Sidebar() {
                                 {/* Logo */}
                                 <div className="flex py-2 px-6 items-center gap-[10px] self-stretch group-hover:scale-105 transition-all duration-150 ease-linear">
                                     <div className="flex flex-col items-start select-none">
-                                        <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">
+                                        {/* <h1 className="text-3xl font-extrabold text-gray-800 font-golos tracking-tight">
                                             Diro<span className='text-green-500'>check</span>
                                             <span className='text-2xl mb-1'>✅</span>
-                                        </h1>
-                                        <span className='text-xs font-golos text-gray-600'>
+                                        </h1> */}
+                                        <Image src={logo} alt="Logo" className='w-48 mb-1' />
+                                        <span className='text-xs font-golos text-gray-600 tracking-widest'>
                                             Administra tu negocio
                                         </span>
                                     </div>

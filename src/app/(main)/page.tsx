@@ -57,7 +57,7 @@ export default function Home() {
                 <p className="text-base text-gray-500 font-inter">
                     Aquí podrás crear inventarios y productos para la gestión de tu negocio.
                 </p>
-                Total de productos: None
+                Total de productos: {products.length}
             </div>
         </>
     );
