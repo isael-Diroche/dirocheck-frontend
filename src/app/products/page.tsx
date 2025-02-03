@@ -7,15 +7,13 @@ import { useShop } from '../shop/hooks/ShopContext';
 
 const ProductsPage: React.FC = () => {
     const router = useRouter();
-    const {shop, fetchShop} = useShop();
+    const {shop} = useShop();
 
     useEffect(() => {
-        const shop = localStorage.getItem('selectedShop');
+        const selected_shop = localStorage.getItem('selectedShop');
 
-        if (!shop) {
+        if (!selected_shop) {
             router.replace('/shop-selection');
-        } else {
-            fetchShop(shop);
         }
     }, []);
 

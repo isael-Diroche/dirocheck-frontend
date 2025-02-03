@@ -21,9 +21,9 @@ interface ProductsTableProps {
 export default function ProductsTable({ shopId }: ProductsTableProps) {
 	const { products, fetchProducts, deleteProduct } = useProduct();
 
-	useEffect(() => {
-		fetchProducts(shopId);
-	}, []);
+	// useEffect(() => {
+	// 	fetchProducts(shopId);
+	// }, []);
 
 	const [editingProductId, setEditingProductId] = useState<string | null>(null)
 	const [editedProduct, setEditedProduct] = useState<Product | null>(null)

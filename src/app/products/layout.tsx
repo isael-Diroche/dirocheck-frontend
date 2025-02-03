@@ -30,6 +30,7 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({
 		importProducts,
 		openExportDialog,
 		openImportDialog,
+		fetchProducts,
 	} = useProduct();
 
 
@@ -42,7 +43,7 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({
 		if (!selected_shop) {
 			router.replace("/shop-selection");
 		} else {
-			fetchShop(selected_shop);
+			fetchProducts(selected_shop); // CORRECTO
 		}
 	}, []);
 
@@ -56,6 +57,10 @@ const ProductsLayout: React.FC<{ children: React.ReactNode }> = ({
 			}
 		}
 	};
+
+	// useEffect(() => {
+	// 	fetchProducts;
+	// }, []);
 
 	return (
 		<>

@@ -55,13 +55,20 @@ const InventoryLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
             }
 
             <div className="flex flex-col gap-6 w-full h-full">
-                
+
+                {/* <ModuleHeader
+                    title="Inventarios"
+                    description=""
+                    buttonLabel="Nuevo Inventario"
+                    buttonFunction={openCreateForm}
+                /> */}
+
                 <ModuleHeader
                     title="Inventarios"
                     description="Vista de todos los inventarios de tu negocio."
-                    buttonLabel="Nuevo Inventario"
-                    buttonFunction={openCreateForm}
-                />
+                >
+                    <Button onClick={openCreateForm}>Nuevo Inventario</Button>
+                </ModuleHeader>
 
                 <main className="flex w-full h-full">
                     {children}

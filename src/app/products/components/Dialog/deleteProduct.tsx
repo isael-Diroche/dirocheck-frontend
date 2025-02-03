@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ProductService } from '../../services/productService';
 import { Product } from '../../types/productType';
+import { useProduct } from '../../hooks/productContext';
 interface DeleteProductDialogProps {
     product: Product;
     shopId: string;
@@ -10,30 +11,31 @@ interface DeleteProductDialogProps {
 const productService = new ProductService();
 
 const DeleteProductDialog: React.FC<DeleteProductDialogProps> = ({ product, shopId, onSubmit }) => {
-    const [products, setProducts] = useState<Product[]>([]);
+    // const [products, setProducts] = useState<Product[]>([]);
     // const [deletedProduct, setDeletedProduct] = useState<Product>(product);
+    const { fetchProducts } = useProduct();
 
     const handleDelete = async (productId: string) => {
         try {
             await productService.deleteProduct(shopId, productId);
-            fetchProducts();
+            fetchProducts(shopId);
         } catch (error) {
             console.error("Error eliminando producto:", error);
         }
     };
 
-    const fetchProducts = async () => {
-        try {
-            const data = await productService.getAllProducts(shopId);
-            setProducts(data);
-        } catch (error) {
-            console.error("Error obteniendo productos:", error);
-        }
-    };
+    // const fetchProducts = async () => {
+    //     try {
+    //         const data = await productService.getAllProducts(shopId);
+    //         setProducts(data);
+    //     } catch (error) {
+    //         console.error("Error obteniendo productos:", error);
+    //     }
+    // };
 
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts(shopId);
     }, [shopId]);
 
     return (
