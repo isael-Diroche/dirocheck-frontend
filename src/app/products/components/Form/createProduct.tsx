@@ -21,10 +21,10 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
         id: "0",
         shop: shopId,
         details: '',
-        category: 'none',
+        // category: 'none',
         price: 0,
         stock: 0,
-        unit_type: 'units',
+        // unit_type: 'units',
         total: 0,
     });
 
@@ -64,10 +64,10 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                 id: "0",
                 shop: shopId,
                 details: '',
-                category: 'none',
+                // category: 'none',
                 price: 0,
                 stock: 0,
-                unit_type: 'units',
+                // unit_type: 'units',
                 total: 0,
             });
     
@@ -98,7 +98,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                 />
                             </div>
-                            <div className="mb-4">
+                            {/* <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Category</label>
                                 <input
                                     type="text"
@@ -107,7 +107,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                                     onChange={handleInputChange}
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                 />
-                            </div>
+                            </div> */}
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Price</label>
                                 <input
@@ -128,7 +128,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                                 />
                             </div>
-                            <div className="mb-4">
+                            {/* <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Unit Type</label>
                                 <select
                                     name="unit_type"
@@ -140,7 +140,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({ shopId, isOpen, o
                                     <option value="paqs">Paquetes</option>
                                     <option value="lbs">Libras</option>
                                 </select>
-                            </div>
+                            </div> */}
                             {/* <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Image</label>
                                 <input

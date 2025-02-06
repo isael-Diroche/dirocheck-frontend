@@ -43,7 +43,6 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 		const filtered = products.filter(product =>
 			(filters.stock === "" || product.stock >= parseInt(filters.stock)) &&
 			(filters.price === "" || product.price <= parseInt(filters.price)) &&
-			(filters.category === "all" || product.category.toLowerCase().includes(filters.category.toLowerCase())) &&
 			(filters.search === "" || product.details.toLowerCase().includes(filters.search.toLowerCase()))
 		);
 
@@ -126,18 +125,6 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 														<SelectItem value="20">20+</SelectItem>
 													</SelectContent>
 												</Select>
-												<Select onValueChange={(value) => handleFilterChange("category", value)}>
-													<SelectTrigger className="w-[180px]">
-														<SelectValue placeholder="Filtrar por categoria" />
-													</SelectTrigger>
-													<SelectContent>
-														<SelectItem value="all">Todos</SelectItem>
-														<SelectItem value="none">Sin categoria</SelectItem>
-														<SelectItem value="cereales">Cereales</SelectItem>
-														<SelectItem value="papeleria">Papeleria</SelectItem>
-														<SelectItem value="herrería">Herreria</SelectItem>
-													</SelectContent>
-												</Select>
 												<Select onValueChange={(value) => handleFilterChange("price", value)}>
 													<SelectTrigger className="w-[180px]">
 														<SelectValue placeholder="Filtrar por precio" />
@@ -175,14 +162,13 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 						<div className="border rounded-lg">
 							<Table>
 								<TableHeader>
-									<TableRow>
+									<TableRow className="uppercase">
 										<TableHead>Cantidad</TableHead>
-										<TableHead>tipo</TableHead>
+										{/* <TableHead>tipo</TableHead> */}
 										<TableHead className="text-start">Detalles</TableHead>
 										<TableHead>Costo</TableHead>
 										<TableHead>Total</TableHead>
 										{/* <TableHead>imagen</TableHead> */}
-										<TableHead>Categoria</TableHead>
 										<TableHead>Acciones</TableHead>
 									</TableRow>
 								</TableHeader>
@@ -201,7 +187,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 													product.stock
 												)}
 											</TableCell>
-											<TableCell width={24} className="text-center w-24">
+											{/* <TableCell width={24} className="text-center w-24">
 												{editingProductId === product.id ? (
 													<select
 														name="unit_type"
@@ -216,7 +202,7 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 												) : (
 													product.unit_type
 												)}
-											</TableCell>
+											</TableCell> */}
 											<TableCell className="text-start">
 												{editingProductId === product.id ? (
 													<Input
@@ -240,20 +226,8 @@ export default function ProductsTable({ shopId }: ProductsTableProps) {
 													product.price
 												)}
 											</TableCell>
-											<TableCell>{product.total}</TableCell>
-											{/* <TableCell className="text-center">
-												<Image
-													src={product.image || image_default}
-													alt={product.details}
-													width={48}
-													height={48}
-													className="rounded-full mx-auto"
-												/>
-											</TableCell> */}
 											<TableCell>
-												<span className="rounded-full border-mantis-500 text-mantis-700 hover:text-white hover:bg-mantis-500 border py-1 px-3">
-													{product.category}
-												</span>
+												{product.total}
 											</TableCell>
 											<TableCell className="w-40">
 												{editingProductId === product.id ? (
